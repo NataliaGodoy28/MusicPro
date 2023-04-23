@@ -76,8 +76,12 @@ WSGI_APPLICATION = 'TestDjango.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'musicpro',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'musicpro', # Nombre de tu base de datos
+        'USER': 'root', # Usuario de la base de datos (por defecto, 'root' en XAMPP)
+        'PASSWORD': '', # Contraseña del usuario de la base de datos (deja en blanco si no tienes contraseña en XAMPP)
+        'HOST': 'localhost', # Host de la base de datos (en XAMPP, generalmente es 'localhost')
+        'PORT': '3306', # Puerto de la base de datos de MySQL (por defecto, '3306' en XAMPP)
     }
 }
 
