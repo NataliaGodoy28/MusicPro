@@ -1,0 +1,31 @@
+{% extends 'core/plantillaGlobal.html' %}
+{% load static %}
+{% block contenido %}
+<link rel="stylesheet" href="../../static/core/css/login.css">
+
+<div class="container" id="log">
+    <div class="formulario">
+        <div class="card">
+            <div class="card-body">
+                <div>
+                    <img src=" " alt="">
+                </div>
+
+                <form action="" method="post" id="formulario">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        {{ form.as_p }}
+                    </div>
+                    <br>
+                    <!-- <input placeholder="Nombre" type="text"><br>
+                    <input placeholder="Apellido" type="text"><br>
+                    <input placeholder="Correo" type="text"><br>
+                    <input placeholder="Contraseña" type="password"><br> -->
+                    <button type="submit" class="btn btn-success">Enviar</button>
+                </form>
+                {{form.errors}}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

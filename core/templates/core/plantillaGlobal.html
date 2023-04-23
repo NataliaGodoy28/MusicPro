@@ -1,0 +1,71 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="../../static/core/css/plantilla.css">
+
+</head>
+
+<body>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+        crossorigin="anonymous"></script>
+    <header>
+        <div class="container">
+            <div class="colu">
+            <div class="colu">
+                <h1 style="color:white">Auto</h1>
+                <h1 style="color:red">servicio</h1>
+            </div>
+            <div class="container" id="nav2">
+                <nav>
+                    {% if user.username == 'usuario' %}
+                    <a href="{% url 'perfil' %}">{{user.username}}</a>
+                    {% else %}
+                    {% endif %}
+                    &nbsp;|&nbsp;
+                    <a href="{% url 'index' %}">home</a>
+                    {% if user.is_authenticated %}
+                    &nbsp;|&nbsp;
+                    <a href="{% url 'logout' %}">Cerrar sesión</a>
+                    {% else %}
+                    &nbsp;|&nbsp;
+                    &nbsp;|&nbsp;
+                 
+                    
+                    {% endif %}
+                </nav>
+            </div>
+        </div>
+            <div class="encabezado">
+                <header class="horario">Horario de atención: Lunes a Viernes 09:00 a 18:00 / Sábado 09:00 a 14:00
+                </header>
+                <div class="logos">
+                    <img src="../../static/core/img/facebook.png" alt="logo facebook">
+                    <img src="../../static/core/img/instagram.png" alt="logo instagram">
+                    <img src="../../static/core/img/gmail.png" alt="logo gmail">
+
+                </div>
+            </div>
+        </div>
+        
+    </header>
+
+
+    {% block contenido %}
+
+    {% endblock %}
+
+
+
+
+</body>
+
+</html>
