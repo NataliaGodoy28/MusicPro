@@ -1,6 +1,6 @@
 from django.shortcuts import render
-from .forms import ClienteForm
-from .models import Cliente
+from .models import *
+from .forms import *
 # Create your views here.
 
 def index(request):
@@ -23,3 +23,14 @@ def form_cliente(request):
     print(f"{Cliente.objects.all()}")
     return render(request, 'core/form_cliente.html', datos)
             
+def contador(request):
+    datos = {
+        'registro' : RegistroEntrega.objects.all(),
+        'form' : FRegistroEntrega()
+    }
+    if request.method == "POST":
+        formu = FRegistroEntrega(request.POST)
+        if formu.is_valid():
+            formu.save()
+            datos['mensaje'] = "Entrega Registrada Correctamente"
+    return render(request, 'core/contador.html', datos)

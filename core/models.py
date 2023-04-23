@@ -13,3 +13,11 @@ class Cliente(models.Model):
     
     def __str__ (self):
         return self.mailCliente
+class RegistroEntrega(models.Model):
+    id = models.AutoField(primary_key=True)
+    fecha = models.DateField()
+    descripcion = models.CharField(max_length=255)
+    cantidad = models.IntegerField()
+    identificador = models.CharField(max_length=255)
+    contador = models.CharField(max_length=255)
+    cliente = models.CharField(max_length=255)

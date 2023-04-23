@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% load static %}
+    <link href="{% static 'core/css/contador.css'%}" rel="stylesheet">
+    <link href="{% static 'core/js/contador.js'%}" rel="stylesheet">
+    <title>Contador</title>
+</head>
+<body> 
+    <form method="POST" action="" id="RegistroEntrega">
+        {% csrf_token %}
+        <div class="form-group">
+            {{ form.as_table }}
+        </div>
+        <input type="submit" value="Enviar">
+        <input type="reset" value="Limpiar">
+
+    </form>
+    <div class="mensaje" role="alert">
+    {{mensaje}}
+    </div>
+
+    {% for reg in registro %}
+    <p>{{reg.fecha}}</p>
+    {% endfor %}
+</body>
+</html>
