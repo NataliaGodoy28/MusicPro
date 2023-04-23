@@ -10,6 +10,19 @@
     <title>Contador</title>
 </head>
 <body> 
+    <form method="POST" action="" id="RegistroEntrega">
+        {% csrf_token %}
+        <div class="form-group">
+            {{ form.as_table }}
+        </div>
+        <input type="submit" value="Enviar">
+        <input type="reset" value="Limpiar">
+
+    </form>
+    <div class="mensaje" role="alert">
+    {{mensaje}}
+    </div>
+
     {% for reg in registro %}
     <p>{{reg.fecha}}</p>
     {% endfor %}
