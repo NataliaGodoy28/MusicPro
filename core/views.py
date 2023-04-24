@@ -6,8 +6,8 @@ from .forms import *
 def index(request):
     return render(request, 'core/index.html')
 
-def plantillaGlobal(request):
-    return render(request, 'core/plantillaGlobal.html')
+def bodeguero(request):
+    return render(request, 'core/bodeguero.html')
 
 def form_cliente(request):
     

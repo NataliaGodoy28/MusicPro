@@ -1,0 +1,189 @@
+{% extends 'core/plantillaGlobal.html' %}
+{% load static %}
+{% block contenido %}
+<link rel="stylesheet" href="../../static/core/css/bodeguero.css">
+
+<br>
+
+<div class="container">
+    <div class="row">
+        <div class="row">
+            <div class="col-lg-6 col-md-12">
+                <B>Orden de pedido entrante:</B>
+                
+                <div style="max-height: 300px; overflow-y: auto;">
+                    <table class="table">
+                      <br>
+                      <br>
+                  
+                      <thead>
+                        <tr>
+                          <th scope="col">N° orden</th>
+                          <th scope="col">fecha</th>
+                          <th scope="col">Vendedor</th>
+                          <th scope="col">Articulos</th>
+                        </tr>
+                      </thead>
+                  
+                      <tbody>
+                        <tr>
+                          <th scope="row">1</th>
+                          <td>Mark</td>
+                          <td>Otto</td>
+                          <td>@mdo</td>
+                        </tr>
+                        <tr>
+                          <th scope="row">2</th>
+                          <td>Jacob</td>
+                          <td>Thornton</td>
+                          <td>@fat</td>
+                        </tr>
+                        <tr>
+                          <th scope="row">3</th>
+                          <td colspan="2">Larry the Bird</td>
+                          <td>@twitter</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">3</th>
+                            <td colspan="2">Larry the Bird</td>
+                            <td>@twitter</td>
+                          </tr>
+                          <tr>
+                            <th scope="row">3</th>
+                            <td colspan="2">Larry the Bird</td>
+                            <td>@twitter</td>
+                          </tr>
+                          <tr>
+                            <th scope="row">3</th>
+                            <td colspan="2">Larry the Bird</td>
+                            <td>@twitter</td>
+                          </tr>
+                          <tr>
+                            <th scope="row">3</th>
+                            <td colspan="2">Larry the Bird</td>
+                            <td>@twitter</td>
+                          </tr>
+                          <tr>
+                            <th scope="row">3</th>
+                            <td colspan="2">Larry the Bird</td>
+                            <td>@twitter</td>
+                          </tr>
+                        <!-- Agrega más filas si es necesario -->
+                      </tbody>
+                    </table>
+                  </div>
+                  
+                
+            </div>
+            <div class="col-lg-6 col-md-12">
+                
+                <b>Orden de pedido:</b>
+                <br>
+                <br>
+                <div class="card">
+
+                    <div class="container">
+
+                        <div class="card-body">
+                            <div class="flex">
+                                <h5 class="card-title">N° Orden: 00001 </h5>
+                                <h5>Fecha: 24-04-2023</h5>
+                            </div>
+                            <p class="card-text">Vendedor: Juanito Perez</p>
+                            <div class="flex"> 
+                                <div><b>Codigo</b></div>
+                                <div><b>Un.</b></div>
+                            
+                            </div>
+                        </div>
+                        
+                            
+                        
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item">
+                                <div class="flex">
+                                    <div >C0000001</div>
+                                    <div> 4 </div>
+                                     
+                                </div>
+                            </li>
+                            <li class="list-group-item">
+                                <div class="flex">
+                                    <div >C0000005</div>
+                                    <div> 2  </div>
+                                     
+                                </div>
+                            </li>
+                            <li class="list-group-item">
+                                <div class="flex">
+                                    <div >C0000009</div>
+                                    <div> 1 </div>
+                                     
+                                </div>
+                            </li>
+                            <li class="list-group-item">
+                                <div class="flex">
+                                    <div >C0000011</div>
+                                    <div> 3 </div>
+                                     
+                                </div>
+                            </li>
+                           
+                        </ul>
+                        <div class="card-body">
+                            <p>
+                                <button class="btn btn-primary" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                                    Aceptar Pedido</button>
+                                <button type="button" class="btn btn-danger">Cancelar</button>
+    
+                            </p>
+    
+                            <div class="collapse" id="collapseExample">
+                                <div class="card card-body">
+    
+                                    <!-- Button trigger modal -->
+                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                        data-bs-target="#staticBackdrop">
+                                        Enviar pedido a vendedor
+                                    </button>
+    
+                                    <!-- Modal -->
+                                    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static"
+                                        data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel"
+                                        aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Modal title</h1>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                        aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    Enviaremos la confirmacion "Pedido listo" al vendedor
+                                                </div>
+                                                <div class="modal-footer">
+    
+                                                    <button type="button" class="btn btn-secondary"
+                                                        data-bs-dismiss="modal">Aceptar</button>
+                                                    <button type="button" class="btn btn-primary">Cancelar</button>
+    
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+                    
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+{% endblock %}
