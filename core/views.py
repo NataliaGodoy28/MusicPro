@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from .models import *
 from .forms import *
 # Create your views here.
@@ -34,3 +34,23 @@ def contador(request):
             formu.save()
             datos['mensaje'] = "Entrega Registrada Correctamente"
     return render(request, 'core/contador.html', datos)
+
+def login(request):
+    print(f"{request.POST.getlist('tags')}")
+    datos = {
+        'form': Login()
+    }
+    
+    if request.method == "POST":
+        login = Login(request.POST)
+        if login.is_valid():
+            print("sdxdssxaxadadxad")
+            usuario = Cliente.objects.filter(mailCliente__contains=login.cleaned_data["mailCliente"])
+            contra =  Cliente.objects.filter(claveCliente__contains=login.cleaned_data["claveCliente"])
+            print(usuario)
+            print(contra)
+            return redirect(to='index')
+    return render(request, 'core/login.html', datos)
+
+def logout(request):
+    return render(request, 'core/logout.html')

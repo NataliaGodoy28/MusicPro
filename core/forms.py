@@ -14,3 +14,9 @@ class FRegistroEntrega(ModelForm):
     class Meta:
         model = RegistroEntrega
         fields = ['fecha','descripcion','cantidad','identificador','contador','cliente']
+
+class Login(ModelForm):
+    claveCliente = forms.CharField(widget=forms.PasswordInput());
+    class Meta:
+        model = Cliente
+        fields = ['mailCliente', 'claveCliente']

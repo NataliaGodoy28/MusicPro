@@ -1,3 +1,7 @@
+{% extends 'core/plantillaGlobal.html' %}
+{% load static %}
+{% block contenido %}
+<link rel="stylesheet" href="../../static/core/css/login.css">
 <!DOCTYPE html>
 <html lang="en">
 
@@ -7,6 +11,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     {% load static %}
     <link href="{% static 'core/css/index.css'%}" rel="stylesheet">
+    <!-- <a href="{% url 'contador' %}">Ir a Contador</a>
+    <a href="{% url 'form_cliente' %}">Registro Cliente</a>
+    <a href="{% url 'bodeguero' %}">Bodeguero</a>
+    <a href="{% url 'login' %}">Login</a> -->
 </head>
 
 <body>
@@ -14,11 +22,14 @@
         {% load static %}
         <img class="logo" src="{% static '/core/img/guitarra.png'%}" alt="">
     </div>
-    <a href="{% url 'contador' %}">Ir a Contador</a>
+    <!-- <a href="{% url 'contador' %}">Ir a Contador</a>
     <a href="{% url 'form_cliente' %}">Registro Cliente</a>
     <a href="{% url 'bodeguero' %}">Bodeguero</a>
+    <a href="{% url 'login' %}">Login</a> -->
 
 
 </body>
 
 </html>
+
+{% endblock %}
