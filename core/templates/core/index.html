@@ -1,35 +1,181 @@
 {% extends 'core/plantillaGlobal.html' %}
 {% load static %}
 {% block contenido %}
-<link rel="stylesheet" href="../../static/core/css/login.css">
-<!DOCTYPE html>
-<html lang="en">
+<link rel="stylesheet" href="{%static 'core/css/index.css'%}">
+<script src="{% static 'core/js/index.js'%}"></script>
 
-<head>
-    <title>Inicio</title>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    {% load static %}
-    <link href="{% static 'core/css/index.css'%}" rel="stylesheet">
-    <!-- <a href="{% url 'contador' %}">Ir a Contador</a>
-    <a href="{% url 'form_cliente' %}">Registro Cliente</a>
-    <a href="{% url 'bodeguero' %}">Bodeguero</a>
-    <a href="{% url 'login' %}">Login</a> -->
-</head>
 
-<body>
-    <div>
-        {% load static %}
-        <img class="logo" src="{% static '/core/img/guitarra.png'%}" alt="">
+
+<div id="catpro">
+    <div id="filca">
+        <h2>Filtrar Por:</h2>
+        <div id="filtro">
+            <div class="fltcmpo">
+                <label for="buscar">Buscar</label>
+                <input type="text" name="buscar" id="inbu" class="buscar">
+            </div>
+            <div class="fltcmpo">
+                <label for="catbu">Buscar por Categoria</label>
+                <select name="catbu" id="sebu" class="buscar">
+                    <option value="0">Seleccione una opcion</option>
+                    <option value="1">Instrumentos</option>
+                    <option value="2">Amplificadores</option>
+                </select>
+            </div>
+        </div>
     </div>
-    <!-- <a href="{% url 'contador' %}">Ir a Contador</a>
-    <a href="{% url 'form_cliente' %}">Registro Cliente</a>
-    <a href="{% url 'bodeguero' %}">Bodeguero</a>
-    <a href="{% url 'login' %}">Login</a> -->
+    <div id="produ">
+        <div class="producto">
+
+            <div class="foto">
+
+            </div>
+            <div class="descripcion">
+                <h2>Guitarra</h2>
+                <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Facere mollitia voluptatum consequuntur
+                    commodi nulla cumque?</p>
+                <div class="addcart">
+                    <div class="incre">
+                        <button class="ad" onclick="decrementarContador()">-</button>
+                        <input type="number" id="contador" name="contador" class="conta" min="0" max="10" step="1"
+                            value="0">
+                        <button class="ad" onclick="incrementarContador()">+</button>
+                    </div>
+                    <button class="cartbtn">Agregar O</button>
+                </div>
+
+            </div>
+        </div>
+        <div class="producto">
+
+            <div class="foto">
+
+            </div>
+            <div class="descripcion">
+                <h2>Guitarra</h2>
+                <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Facere mollitia voluptatum consequuntur
+                    commodi nulla cumque?</p>
+                <div class="addcart">
+                    <div class="incre">
+                        <button class="ad" onclick="decrementarContador()">-</button>
+                        <input type="number" id="contador" name="contador" class="conta" min="0" max="10" step="1"
+                            value="0">
+                        <button class="ad" onclick="incrementarContador()">+</button>
+                    </div>
+                    <button class="cartbtn">Agregar O</button>
+                </div>
+
+            </div>
+        </div>
+        <div class="producto">
+
+            <div class="foto">
+
+            </div>
+            <div class="descripcion">
+                <h2>Guitarra</h2>
+                <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Facere mollitia voluptatum consequuntur
+                    commodi nulla cumque?</p>
+                <div class="addcart">
+                    <div class="incre">
+                        <button class="ad" onclick="decrementarContador()">-</button>
+                        <input type="number" id="contador" name="contador" class="conta" min="0" max="10" step="1"
+                            value="0">
+                        <button class="ad" onclick="incrementarContador()">+</button>
+                    </div>
+                    <button class="cartbtn">Agregar O</button>
+                </div>
+
+            </div>
+        </div>
+        <div class="producto">
+
+            <div class="foto">
+
+            </div>
+            <div class="descripcion">
+                <h2>Guitarra</h2>
+                <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Facere mollitia voluptatum consequuntur
+                    commodi nulla cumque?</p>
+                <div class="addcart">
+                    <div class="incre">
+                        <button class="ad" onclick="decrementarContador()">-</button>
+                        <input type="number" id="contador" name="contador" class="conta" min="0" max="10" step="1"
+                            value="0">
+                        <button class="ad" onclick="incrementarContador()">+</button>
+                    </div>
+                    <button class="cartbtn">Agregar O</button>
+                </div>
+
+            </div>
+        </div>
+        <div class="producto">
+
+            <div class="foto">
+
+            </div>
+            <div class="descripcion">
+                <h2>Guitarra</h2>
+                <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Facere mollitia voluptatum consequuntur
+                    commodi nulla cumque?</p>
+                <div class="addcart">
+                    <div class="incre">
+                        <button class="ad" onclick="decrementarContador()">-</button>
+                        <input type="number" id="contador" name="contador" class="conta" min="0" max="10" step="1"
+                            value="0">
+                        <button class="ad" onclick="incrementarContador()">+</button>
+                    </div>
+                    <button class="cartbtn">Agregar O</button>
+                </div>
+
+            </div>
+        </div>
+        <div class="producto">
+
+            <div class="foto">
+
+            </div>
+            <div class="descripcion">
+                <h2>Guitarra</h2>
+                <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Facere mollitia voluptatum consequuntur
+                    commodi nulla cumque?</p>
+                <div class="addcart">
+                    <div class="incre">
+                        <button class="ad" onclick="decrementarContador()">-</button>
+                        <input type="number" id="contador" name="contador" class="conta" min="0" max="10" step="1"
+                            value="0">
+                        <button class="ad" onclick="incrementarContador()">+</button>
+                    </div>
+                    <button class="cartbtn">Agregar O</button>
+                </div>
+
+            </div>
+        </div>
+        <div class="producto">
+
+            <div class="foto">
+
+            </div>
+            <div class="descripcion">
+                <h2>Guitarra</h2>
+                <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Facere mollitia voluptatum consequuntur
+                    commodi nulla cumque?</p>
+                <div class="addcart">
+                    <div class="incre">
+                        <button class="ad" onclick="decrementarContador()">-</button>
+                        <input type="number" id="contador" name="contador" class="conta" min="0" max="10" step="1"
+                            value="0">
+                        <button class="ad" onclick="incrementarContador()">+</button>
+                    </div>
+                    <button class="cartbtn">Agregar O</button>
+                </div>
+
+            </div>
+        </div>
 
 
-</body>
 
-</html>
+    </div>
 
-{% endblock %}
+
+    {% endblock %}
