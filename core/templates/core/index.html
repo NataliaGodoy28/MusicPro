@@ -6,15 +6,15 @@
 
 
 
-<div id="catpro">
-    <div id="filca">
-        <h2>Filtrar Por:</h2>
-        <div id="filtro">
-            <div class="fltcmpo">
+<div class="catalogo">
+    <div class="filtrar">
+        <h3>Filtrar Por:</h3>
+        <div class="filtro">
+            <div class="campos">
                 <label for="buscar">Buscar</label>
                 <input type="text" name="buscar" id="inbu" class="buscar">
             </div>
-            <div class="fltcmpo">
+            <div class="filtroCampo">
                 <label for="catbu">Buscar por Categoria</label>
                 <select name="catbu" id="sebu" class="buscar">
                     <option value="0">Seleccione una opcion</option>
@@ -24,158 +24,35 @@
             </div>
         </div>
     </div>
-    <div id="produ">
-        <div class="producto">
-
-            <div class="foto">
-
-            </div>
-            <div class="descripcion">
-                <h2>Guitarra</h2>
-                <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Facere mollitia voluptatum consequuntur
-                    commodi nulla cumque?</p>
-                <div class="addcart">
-                    <div class="incre">
-                        <button class="ad" onclick="decrementarContador()">-</button>
-                        <input type="number" id="contador" name="contador" class="conta" min="0" max="10" step="1"
-                            value="0">
-                        <button class="ad" onclick="incrementarContador()">+</button>
-                    </div>
-                    <button class="cartbtn">Agregar O</button>
+    <div id="fila" class="row row-cols-1 row-cols-md-2 g-4">
+        <div class="col">
+            <div class="card">
+                <img src="static/core/img/guitarra1.jpg" class="card-img-top" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title">Guitarra eléctrica Les Paul Standar 60's Ebony</h5>
+                    <p class="card-text">$690.000</p>
                 </div>
-
             </div>
         </div>
-        <div class="producto">
-
-            <div class="foto">
-
-            </div>
-            <div class="descripcion">
-                <h2>Guitarra</h2>
-                <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Facere mollitia voluptatum consequuntur
-                    commodi nulla cumque?</p>
-                <div class="addcart">
-                    <div class="incre">
-                        <button class="ad" onclick="decrementarContador()">-</button>
-                        <input type="number" id="contador" name="contador" class="conta" min="0" max="10" step="1"
-                            value="0">
-                        <button class="ad" onclick="incrementarContador()">+</button>
-                    </div>
-                    <button class="cartbtn">Agregar O</button>
+        <div class="col">
+            <div class="card">
+                <img src="static/core/img/bajo2.jpg" class="card-img-top" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title">Bajo eléctrico XGTR Precision rojo PB100-RD</h5>
+                    <p class="card-text">$170.000</p>
                 </div>
-
             </div>
         </div>
-        <div class="producto">
-
-            <div class="foto">
-
-            </div>
-            <div class="descripcion">
-                <h2>Guitarra</h2>
-                <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Facere mollitia voluptatum consequuntur
-                    commodi nulla cumque?</p>
-                <div class="addcart">
-                    <div class="incre">
-                        <button class="ad" onclick="decrementarContador()">-</button>
-                        <input type="number" id="contador" name="contador" class="conta" min="0" max="10" step="1"
-                            value="0">
-                        <button class="ad" onclick="incrementarContador()">+</button>
-                    </div>
-                    <button class="cartbtn">Agregar O</button>
+        <div class="col">
+            <div class="card">
+                <img src="static/core/img/amplificador.jpg" class="card-img-top" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title">Orange Crush 35RT Amplificador de Guitarra 35 Watts</h5>
+                    <p class="card-text">$350.000</p>
                 </div>
-
             </div>
         </div>
-        <div class="producto">
-
-            <div class="foto">
-
-            </div>
-            <div class="descripcion">
-                <h2>Guitarra</h2>
-                <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Facere mollitia voluptatum consequuntur
-                    commodi nulla cumque?</p>
-                <div class="addcart">
-                    <div class="incre">
-                        <button class="ad" onclick="decrementarContador()">-</button>
-                        <input type="number" id="contador" name="contador" class="conta" min="0" max="10" step="1"
-                            value="0">
-                        <button class="ad" onclick="incrementarContador()">+</button>
-                    </div>
-                    <button class="cartbtn">Agregar O</button>
-                </div>
-
-            </div>
-        </div>
-        <div class="producto">
-
-            <div class="foto">
-
-            </div>
-            <div class="descripcion">
-                <h2>Guitarra</h2>
-                <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Facere mollitia voluptatum consequuntur
-                    commodi nulla cumque?</p>
-                <div class="addcart">
-                    <div class="incre">
-                        <button class="ad" onclick="decrementarContador()">-</button>
-                        <input type="number" id="contador" name="contador" class="conta" min="0" max="10" step="1"
-                            value="0">
-                        <button class="ad" onclick="incrementarContador()">+</button>
-                    </div>
-                    <button class="cartbtn">Agregar O</button>
-                </div>
-
-            </div>
-        </div>
-        <div class="producto">
-
-            <div class="foto">
-
-            </div>
-            <div class="descripcion">
-                <h2>Guitarra</h2>
-                <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Facere mollitia voluptatum consequuntur
-                    commodi nulla cumque?</p>
-                <div class="addcart">
-                    <div class="incre">
-                        <button class="ad" onclick="decrementarContador()">-</button>
-                        <input type="number" id="contador" name="contador" class="conta" min="0" max="10" step="1"
-                            value="0">
-                        <button class="ad" onclick="incrementarContador()">+</button>
-                    </div>
-                    <button class="cartbtn">Agregar O</button>
-                </div>
-
-            </div>
-        </div>
-        <div class="producto">
-
-            <div class="foto">
-
-            </div>
-            <div class="descripcion">
-                <h2>Guitarra</h2>
-                <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Facere mollitia voluptatum consequuntur
-                    commodi nulla cumque?</p>
-                <div class="addcart">
-                    <div class="incre">
-                        <button class="ad" onclick="decrementarContador()">-</button>
-                        <input type="number" id="contador" name="contador" class="conta" min="0" max="10" step="1"
-                            value="0">
-                        <button class="ad" onclick="incrementarContador()">+</button>
-                    </div>
-                    <button class="cartbtn">Agregar O</button>
-                </div>
-
-            </div>
-        </div>
-
-
-
     </div>
-
+</div>
 
     {% endblock %}

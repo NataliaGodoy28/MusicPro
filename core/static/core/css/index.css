@@ -1,93 +1,31 @@
 *{
     padding: 0;
-    margin: 0;
-    
+    margin: 0;    
     box-sizing: border-box;
 }
 
+.filtrar{
+    margin:10px;
+    display: flex;
+    background-color: black;
+    color: white;
+    width: 100%;
+}
 
-#catpro{
+.filtro{
+    margin: 10px;
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-content: center;
 }
-#filca{
-    display: flex;
-    flex-direction: column;
-    align-items: center ;
-    width: 15%;
-    height: 100vh;
-    border: 1px red solid;
-}
-#filca h2{
-    margin-top: 10%;
-}
-#produ{
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: center;
-    width: 85%;
-    height: 100vh;
-    border: 1px red solid;
-}
-.fltcmpo{
-    margin: 15px;
-    border: 1px red solid;
-}
-#filtro{
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-}
-.buscar{
-    margin-top: 5px;
-    border-radius: 5px;
-    width: 90%;
-}
-.producto{
-    margin: 20px;
-    border: 1px blue solid;
-    height: 45%;
-    width: 20%;
-}
-.foto{
-    margin: 2px;
-    height: 55%;
-    border: 1px green solid;
-}
-.descripcion{
-    margin: 5px 5px 5px 10px;
-    display: flex;
-    flex-direction: column;  
 
+.row-cols-md-2>* {
+    flex: 0 0 auto;
+    width: 30%;
+    height: 20%;
 }
-.descripcion h2{
-    margin-top: 10px;
-}
-.incre{
-    margin: 5px;
-}
-.addcart{
-    display: flex;
-    justify-content: space-evenly;
-    align-items: center;
-}
-.cartbtn{
-    height: 25px;
-    width: 80px;
-}
-.conta{
-    width: 30px;
-    height: 25px;
-    text-align: center;   
-}
-.ad{
-    width: 25px;
-    height: 25px;
-}
-input[type="number"]::-webkit-outer-spin-button,
-input[type="number"]::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
+
+#fila{
+    margin-left: 10%;
+    margin-bottom: 20px;
 }
