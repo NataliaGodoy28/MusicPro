@@ -13,6 +13,7 @@ class Cliente(models.Model):
     
     def __str__ (self):
         return self.mailCliente
+    
 class RegistroEntrega(models.Model):
     id = models.AutoField(primary_key=True)
     fecha = models.DateField()

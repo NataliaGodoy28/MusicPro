@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from .models import *
 from .forms import *
+
 # Create your views here.
 
 def index(request):
@@ -23,6 +24,8 @@ def form_cliente(request):
     print(f"{Cliente.objects.all()}")
     return render(request, 'core/form_cliente.html', datos)
             
+
+
 def contador(request):
     datos = {
         'registro' : RegistroEntrega.objects.all(),
@@ -32,8 +35,9 @@ def contador(request):
         formu = FRegistroEntrega(request.POST)
         if formu.is_valid():
             formu.save()
-            datos['mensaje'] = "Entrega Registrada Correctamente"
+            return redirect('contador') # redireccionar a la misma vista
     return render(request, 'core/contador.html', datos)
+
 
 def login(request):
     print(f"{request.POST.getlist('tags')}")

@@ -1,30 +1,94 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    {% load static %}
-    <link href="{% static 'core/css/contador.css'%}" rel="stylesheet">
-    <link href="{% static 'core/js/contador.js'%}" rel="stylesheet">
-    <title>Contador</title>
-</head>
-<body> 
-    <form method="POST" action="" id="RegistroEntrega">
-        {% csrf_token %}
-        <div class="form-group">
-            {{ form.as_table }}
-        </div>
-        <input type="submit" value="Enviar">
-        <input type="reset" value="Limpiar">
+{% extends 'core/plantillaGlobal.html' %}
+{% load static %}
+{% block contenido %}
+{% load static %}
+<link href="{% static 'core/css/contador.css'%}" rel="stylesheet">
+<link href="{% static 'core/js/contador.js'%}" rel="stylesheet">
 
-    </form>
-    <div class="mensaje" role="alert">
-    {{mensaje}}
+
+
+<div id="todito">
+    <div id="regentre">
+        <h1>Registrar Entrega</h1>
+        <form method="POST" action="" id="RegistroEntrega">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="{{ form.nombre.id_for_label }}" class="form-label">{{ form.fecha.label }}:</label>
+                {{ form.fecha }}
+                <div class="invalid-feedback">{{ form.fecha.errors }}</div>
+            </div>
+            <div class="mb-3">
+                <label for="{{ form.direccion.id_for_label }}" class="form-label">{{ form.descripcion.label }}:</label>
+                {{ form.descripcion }}
+                <div class="invalid-feedback">{{ form.descripcion.errors }}</div>
+            </div>
+            <div class="mb-3">
+                <label for="{{ form.telefono.id_for_label }}" class="form-label">{{ form.cantidad.label }}:</label>
+                {{ form.cantidad }}
+                <div class="invalid-feedback">{{ form.cantidad.errors }}</div>
+            </div>
+            <div class="mb-3">
+                <label for="{{ form.email.id_for_label }}" class="form-label">{{ form.identificador.label }}:</label>
+                {{ form.identificador }}
+                <div class="invalid-feedback">{{ form.identificador.errors }}</div>
+            </div>
+            <div class="mb-3">
+                <label for="{{ form.email.id_for_label }}" class="form-label">{{ form.contador.label }}:</label>
+                {{ form.contador }}
+                <div class="invalid-feedback">{{ form.contador.errors }}</div>
+            </div>
+            <div class="mb-3">
+                <label for="{{ form.email.id_for_label }}" class="form-label">{{ form.cliente.label }}:</label>
+                {{ form.cliente }}
+                <div class="invalid-feedback">{{ form.cliente.errors }}</div>
+            </div>
+            <input type="submit" class="btn btn-primary" value="Registrar">
+        </form>
+        
     </div>
 
-    {% for reg in registro %}
-    <p>{{reg.fecha}}</p>
-    {% endfor %}
-</body>
-</html>
+
+    
+
+
+
+    <div id="entregas">
+        <h1>Registro de Entregas</h1>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">Id</th>
+                    <th scope="col">Fecha</th>
+                    <th scope="col">Descripcion</th>
+                    <th scope="col">Cantidad</th>
+                    <th scope="col">identificador</th>
+                    <th scope="col">Cliente</th>
+                    <th scope="col">Contador</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                {% for reg in registro %}
+                <tr>
+                    <th scope="row">{{ reg.id}}</th>
+                    <td>{{ reg.fecha}}</td>
+                    <td>{{ reg.descripcion }}</td>
+                    <td>{{ reg.cantidad }}</td>
+                    <td>{{ reg.identificador }}</td>
+                    <td>{{ reg.cliente }}</td>
+                    <td>{{ reg.contador }}</td>
+                </tr>
+                {% endfor %}
+
+
+            </tbody>
+        </table>
+
+
+    </div>
+</div>
+
+
+
+
+{% endblock %}
