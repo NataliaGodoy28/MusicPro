@@ -2,6 +2,7 @@
 {% load static %}
 {% block contenido %}
 <link rel="stylesheet" href="{%static 'core/css/index.css'%}">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 <script src="{% static 'core/js/index.js'%}"></script>
 
 
@@ -25,34 +26,32 @@
         </div>
     </div>
     <div id="fila" class="row row-cols-1 row-cols-md-2 g-4">
-        <div class="col">
-            <div class="card">
-                <img src="static/core/img/guitarra1.jpg" class="card-img-top" alt="...">
-                <div class="card-body">
-                    <h5 class="card-title">Guitarra eléctrica Les Paul Standar 60's Ebony</h5>
-                    <p class="card-text">$690.000</p>
-                </div>
+        {% for pr in productos %}
+        <div class="products">
+            <div class="product">
+                <img src="{{pr.imagen.url}}" alt="{{ pr.nombre }}">
+
+                <h3>{{pr.nombre}}</h3>
+                <p>{{pr.descripcion}}</p>
+                <p class="price">${{pr.precio}}</p>
+                <button class="add-to-cart" data-id={{pr.id}}>Agregar al carrito</button>
             </div>
         </div>
-        <div class="col">
-            <div class="card">
-                <img src="static/core/img/bajo2.jpg" class="card-img-top" alt="...">
-                <div class="card-body">
-                    <h5 class="card-title">Bajo eléctrico XGTR Precision rojo PB100-RD</h5>
-                    <p class="card-text">$170.000</p>
-                </div>
-            </div>
-        </div>
-        <div class="col">
-            <div class="card">
-                <img src="static/core/img/amplificador.jpg" class="card-img-top" alt="...">
-                <div class="card-body">
-                    <h5 class="card-title">Orange Crush 35RT Amplificador de Guitarra 35 Watts</h5>
-                    <p class="card-text">$350.000</p>
-                </div>
-            </div>
+        {% endfor %}
+    </div>
+    <div class="overlay"></div>
+
+    <div class="cart">
+        <h2>Carrito de Compras</h2>
+        <ul class="cart-items"></ul>
+        <div class="cart-total">
+            <strong style="margin-left: 10px;">Total:</strong>
+            <span class="total">$0</span>
+            <button class="checkout">Pagar</button>
         </div>
     </div>
+
+
 </div>
 
-    {% endblock %}
+{% endblock %}

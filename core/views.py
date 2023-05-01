@@ -5,7 +5,10 @@ from .forms import *
 # Create your views here.
 
 def index(request):
-    return render(request, 'core/index.html')
+    datos = {
+        'productos' : Producto.objects.all()
+    }
+    return render(request, 'core/index.html', datos)
 
 def bodeguero(request):
     return render(request, 'core/bodeguero.html')
