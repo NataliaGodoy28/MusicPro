@@ -199,3 +199,8 @@
     box-shadow: 0 2px #000f99;
     transform: translateY(2px);
   }
+
+  .product img{ 
+  width:100px;
+  height: 100px;
+}
