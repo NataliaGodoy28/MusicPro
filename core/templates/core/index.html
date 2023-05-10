@@ -27,7 +27,7 @@
         <div class="cart-icon">
             <i class="bi bi-cart"></i>
             <span class="cart-count">0</span>
-          </div>
+        </div>
     </div>
     <div id="fila" class="row row-cols-1 row-cols-md-2 g-4">
         {% for pr in productos %}
@@ -52,6 +52,32 @@
             <strong style="margin-left: 10px;">Total:</strong>
             <span class="total">$0</span>
             <button class="checkout">Pagar</button>
+        </div>
+    </div>
+
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div id="contemoda">
+                <p>Quieres continuar como invitado o deseas registrarte?</p>
+                <div class="btnmodal">
+                    <button id="invitado">Invitado</button>
+                    <button><a href="{% url 'form_cliente' %}">Registrarme</a></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="correo" class="modal">
+        <div class="modal-content">
+            <span class="close2">&times;</span>
+            <div id="contemoda">
+                <p>Quieres continuar como invitado o deseas registrarte?</p>
+                <div class="btnmodal">
+                    <input type="email" required>
+                    <button id="cocont">Continuar</button>
+                </div>
+            </div>
         </div>
     </div>
 

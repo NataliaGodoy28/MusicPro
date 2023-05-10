@@ -37,16 +37,34 @@ def form_cliente(request):
 
 def contador(request):
     datos = {
-        'registro': RegistroEntrega.objects.all(),
-        'form': FRegistroEntrega()
+        'confirmar' : EstadoPedido.objects.filter(estado='Pendiente'),
+        'registro' : RegistroEntrega.objects.all(),
+        'form' : FRegistroEntrega()
     }
     if request.method == "POST":
         formu = FRegistroEntrega(request.POST)
         if formu.is_valid():
             formu.save()
-            return redirect('contador')  # redireccionar a la misma vista
+            return redirect('contador') # redireccionar a la misma vista
     return render(request, 'core/contador.html', datos)
 
+def actualizar_estado_pedido(request, pedido_id, nuevo_estado):
+    # Obtener el pedido que se desea actualizar
+    pedido = EstadoPedido.objects.filter(id=pedido_id).first()
+
+    # Verificar si el pedido existe
+    if not pedido:
+        # Manejar la situación donde el pedido no existe
+        return redirect('pagina_de_error')
+
+    # Actualizar el estado del pedido
+    pedido.estado = nuevo_estado
+    
+    # Guardar los cambios en la base de datos
+    pedido.save()
+    
+    # Redireccionar a la página correspondiente
+    return redirect('contador')
 
 def login(request):
     print(f"{request.POST.getlist('tags')}")

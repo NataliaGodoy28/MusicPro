@@ -8,75 +8,39 @@
 
 
 <div id="todito">
-    <div id="regentre">
-        <h1>Registrar Entrega</h1>
-        <form method="POST" action="" id="RegistroEntrega">
-            {% csrf_token %}
-            <div class="mb-3">
-                <label for="{{ form.nombre.id_for_label }}" class="form-label">{{ form.fecha.label }}:</label>
-                {{ form.fecha }}
-                <div class="invalid-feedback">{{ form.fecha.errors }}</div>
-            </div>
-            <div class="mb-3">
-                <label for="{{ form.direccion.id_for_label }}" class="form-label">{{ form.descripcion.label }}:</label>
-                {{ form.descripcion }}
-                <div class="invalid-feedback">{{ form.descripcion.errors }}</div>
-            </div>
-            <div class="mb-3">
-                <label for="{{ form.telefono.id_for_label }}" class="form-label">{{ form.cantidad.label }}:</label>
-                {{ form.cantidad }}
-                <div class="invalid-feedback">{{ form.cantidad.errors }}</div>
-            </div>
-            <div class="mb-3">
-                <label for="{{ form.email.id_for_label }}" class="form-label">{{ form.identificador.label }}:</label>
-                {{ form.identificador }}
-                <div class="invalid-feedback">{{ form.identificador.errors }}</div>
-            </div>
-            <div class="mb-3">
-                <label for="{{ form.email.id_for_label }}" class="form-label">{{ form.contador.label }}:</label>
-                {{ form.contador }}
-                <div class="invalid-feedback">{{ form.contador.errors }}</div>
-            </div>
-            <div class="mb-3">
-                <label for="{{ form.email.id_for_label }}" class="form-label">{{ form.cliente.label }}:</label>
-                {{ form.cliente }}
-                <div class="invalid-feedback">{{ form.cliente.errors }}</div>
-            </div>
-            <input type="submit" class="btn btn-primary" value="Registrar">
-        </form>
-        
-    </div>
-
-
-    
-
-
-
-    <div id="entregas">
-        <h1>Registro de Entregas</h1>
+    <div id="confentre" style="width:60%;">
+        <h1>Confirmar Entrega</h1>
         <table class="table">
             <thead>
                 <tr>
                     <th scope="col">Id</th>
                     <th scope="col">Fecha</th>
-                    <th scope="col">Descripcion</th>
-                    <th scope="col">Cantidad</th>
-                    <th scope="col">identificador</th>
-                    <th scope="col">Cliente</th>
-                    <th scope="col">Contador</th>
+                    <th scope="col">Vendedor</th>
+                    <th scope="col">Estado</th>
+                    <th scope="col">Id Boleta</th>
+                    <th scope="col">Confirmar</th>
+                    
+                    
 
                 </tr>
             </thead>
             <tbody>
-                {% for reg in registro %}
+                {% for conf in confirmar %}
                 <tr>
-                    <th scope="row">{{ reg.id}}</th>
-                    <td>{{ reg.fecha}}</td>
-                    <td>{{ reg.descripcion }}</td>
-                    <td>{{ reg.cantidad }}</td>
-                    <td>{{ reg.identificador }}</td>
-                    <td>{{ reg.cliente }}</td>
-                    <td>{{ reg.contador }}</td>
+                    
+                    <td>{{ conf.id}}</td>
+                    <td>{{ conf.fecha }}</td>
+                    <td>{{ conf.vendedor }}</td>
+                    <td>{{ conf.estado }}</td>
+                    <td>{{ conf.id_boleta_id }}</td>
+                    <td><form method="post" action="{% url 'actualizar_pedido' pedido_id=conf.id nuevo_estado='Aceptado' %}">
+                        {% csrf_token %}
+                        <button type="submit">SI</button>
+                    </form>
+                    <form method="post" action="{% url 'actualizar_pedido' pedido_id=conf.id nuevo_estado='Rechazado' %}">
+                        {% csrf_token %}
+                        <button type="submit">No</button>
+                    </form></td>
                 </tr>
                 {% endfor %}
 

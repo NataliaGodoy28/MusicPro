@@ -42,7 +42,7 @@ class Boleta (models.Model):
     total = models.IntegerField(null=True,blank=True)
     fecha = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     vendedor = models.CharField(max_length=40, null=True, blank=True)
-
+    pago = models.IntegerField(null=True,blank=True)
     def __int__(self):
         return self.id
 

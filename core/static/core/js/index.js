@@ -16,20 +16,41 @@ document.addEventListener('DOMContentLoaded', function () {
     const cartTotal = document.querySelector('.total');
     const checkoutBtn = document.querySelector('.checkout');
     const productBtns = document.querySelectorAll('.add-to-cart');
-  
+    const invitado = document.querySelector('#invitado');
+    const cocont = document.querySelector('#cocont');
+    
     let cartCount = 0;
     let cartTotalPrice = 0;
     let cartItemsArr = [];
   
     // Event Listeners
+    cocont.addEventListener('click', cerrarcorreo)
+    invitado.addEventListener('click', ingcorreo)
     cartIcon.addEventListener('click', toggleCart);
     overlay.addEventListener('click', toggleCart);
     checkoutBtn.addEventListener('click', checkout);
     productBtns.forEach(btn => {
       btn.addEventListener('click', addToCart);
     });
-  
+    
+
+    var correo = document.getElementById("correo");
     // Functions
+    function ingcorreo(){
+      modal.style.display = "none";
+      correo.style.display = "block";
+    }
+    function cerrarcorreo(){
+      alert("Correo guardado");
+      correo.style.display = "none";
+    }
+  
+
+
+
+
+
+
     function toggleCart() {
       cart.classList.toggle('show-cart');
       overlay.classList.toggle('show-overlay');
@@ -108,8 +129,43 @@ document.addEventListener('DOMContentLoaded', function () {
       renderCartItems();
     }
   
+    // Obtener el botón y el modal
+  
+    var modal = document.getElementById("myModal");
+
+    // Obtener el elemento span que cierra el modal
+    var span = document.getElementsByClassName("close")[0];
+    var span2 = document.getElementsByClassName("close2")[0];
+    // Cuando el usuario haga clic en el botón, abra el modal
+    
+    span2.onclick = function() {
+      correo.style.display = "none";
+      
+    }
+    // Cuando el usuario haga clic en el span (x), cierre el modal
+    span.onclick = function() {
+      modal.style.display = "none";
+      
+    }
+
+    // Cuando el usuario haga clic fuera del modal, cierre el modal
+    window.onclick = function(event) {
+      if (event.target == modal) {
+        modal.style.display = "none";
+       
+      }
+      if(event.target == correo){
+        correo.style.display = "none";
+      }
+    }
+
+
+
+
+
     function checkout() {
-      alert('Gracias por su compra!');
+      modal.style.display = "block";
+
       cartItemsArr = [];
       cartCount = 0;
       cartTotalPrice = 0;
