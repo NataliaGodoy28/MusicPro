@@ -29,7 +29,7 @@
             <span class="cart-count">0</span>
         </div>
     </div>
-    <div id="fila" class="row row-cols-1 row-cols-md-2 g-4">
+    <div id="fila" style="display: flex; flex-wrap: wrap;">
         {% for pr in productos %}
         <div class="products">
             <div class="product">
@@ -39,6 +39,7 @@
                 <p>{{pr.descripcion}}</p>
                 <p class="price">${{pr.precio}}</p>
                 <button class="add-to-cart" data-id={{pr.id}}>Agregar al carrito</button>
+                <button class="ver-descripcion">Ver descripción</button>
             </div>
         </div>
         {% endfor %}
@@ -46,6 +47,16 @@
     <div class="overlay"></div>
 
     <div class="cart">
+        <h2>Carrito de Compras</h2>
+        <ul class="cart-items"></ul>
+        <div class="cart-total">
+            <strong style="margin-left: 10px;">Total:</strong>
+            <span class="total">$0</span>
+            <button class="checkout">Pagar</button>
+        </div>
+    </div>
+
+    <div class="descripcion">
         <h2>Carrito de Compras</h2>
         <ul class="cart-items"></ul>
         <div class="cart-total">

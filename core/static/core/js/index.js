@@ -17,7 +17,9 @@ document.addEventListener('DOMContentLoaded', function () {
     const checkoutBtn = document.querySelector('.checkout');
     const productBtns = document.querySelectorAll('.add-to-cart');
     const invitado = document.querySelector('#invitado');
+    const verDescripcion = document.querySelector('.ver-descripcion');
     const cocont = document.querySelector('#cocont');
+    const descripcion = document.querySelector('.descripcion');
     
     let cartCount = 0;
     let cartTotalPrice = 0;
@@ -32,10 +34,15 @@ document.addEventListener('DOMContentLoaded', function () {
     productBtns.forEach(btn => {
       btn.addEventListener('click', addToCart);
     });
-    
+    verDescripcion.addEventListener('click', funcionVerDescripcion);
 
     var correo = document.getElementById("correo");
     // Functions
+    function funcionVerDescripcion(){
+      descripcion.classList.toggle('show-descripcion')
+      overlay.classList.toggle('show-overlay')
+
+    }
     function ingcorreo(){
       modal.style.display = "none";
       correo.style.display = "block";
@@ -45,12 +52,6 @@ document.addEventListener('DOMContentLoaded', function () {
       correo.style.display = "none";
     }
   
-
-
-
-
-
-
     function toggleCart() {
       cart.classList.toggle('show-cart');
       overlay.classList.toggle('show-overlay');
