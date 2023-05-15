@@ -61,13 +61,14 @@
                 <tr>
                     <td>{{ forloop.counter }}</td>
                     <td>{{ producto.id }}</td>
+                    <td>{{ producto.codigo }}</td>
                     <td>{{ producto.nombre }}</td>
                     <td>{{ producto.descripcion }}</td>
                     <td>{{ producto.stock }}</td>
                     <td>{{ producto.precio }}</td>
                     <td>
                         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal{{ forloop.counter }}">
-                            Abrir modal
+                            Editar
                         </button>
                         <div id="modal{{ forloop.counter }}" class="modal fade" tabindex="-1" role="dialog">
                             <div class="modal-dialog" role="document">
