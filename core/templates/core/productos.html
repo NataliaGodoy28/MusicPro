@@ -1,0 +1,126 @@
+{% extends 'core/plantillaGlobal.html' %}
+{% load static %}
+{% block contenido %}
+<link rel="stylesheet" href="{%static 'core/css/productos.css'%}">
+<script src="{% static 'core/js/productos.js'%}"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/css/bootstrap.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/js/bootstrap.min.js"></script>
+
+<!-- core/productos.html -->
+<div id="todito">
+
+
+    <div id="formulario">
+        <form method="POST" id="addproduct" enctype="multipart/form-data">
+            {% csrf_token %} <!-- Agrega el token CSRF para proteger el formulario -->
+            <div class="camppr">
+                {{ pformu.codigo.label_tag }}
+                {{ pformu.codigo }}
+            </div>
+            <div class="camppr">
+                {{ pformu.nombre.label_tag }}
+                {{ pformu.nombre }}
+            </div>
+            <div class="camppr">
+                {{ pformu.descripcion.label_tag }}
+                {{ pformu.descripcion }}
+            </div>
+            <div class="camppr">
+                {{ pformu.stock.label_tag }}
+                {{ pformu.stock }}
+            </div>
+            <div class="camppr">
+                {{ pformu.imagen.label_tag }}
+                {{ pformu.imagen }}
+            </div>
+            <div class="camppr">
+                {{ pformu.precio.label_tag }}
+                {{ pformu.precio }}
+            </div>
+            <button type="submit" class="btn btn-primary">Guardar</button>
+        </form>
+    </div>
+    <div id="tblproducto">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">Id Tabla</th>
+                    <th scope="col">Id</th>
+                    <th scope="col">Codigo</th>
+                    <th scope="col">Nombre</th>
+                    <th scope="col">Descripcion</th>
+                    <th scope="col">Stock</th>
+                    <th scope="col">Precio</th>
+                    <th scope="col">Editar</th>
+                    <th scope="col">Eliminar</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for producto in productos %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ producto.id }}</td>
+                    <td>{{ producto.nombre }}</td>
+                    <td>{{ producto.descripcion }}</td>
+                    <td>{{ producto.stock }}</td>
+                    <td>{{ producto.precio }}</td>
+                    <td>
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal{{ forloop.counter }}">
+                            Abrir modal
+                        </button>
+                        <div id="modal{{ forloop.counter }}" class="modal fade" tabindex="-1" role="dialog">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">Modal título</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form method="post" action="{% url 'editar_producto' producto.id %}" enctype="multipart/form-data">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="producto_id" value="{{ producto.id }}">
+                                            <input type="text" name="nuevo_codigo" value="{{ producto.codigo }}">
+                                            <input type="text" name="nuevo_nombre" value="{{ producto.nombre }}">
+                                            <input type="text" name="nueva_descripcion" value="{{ producto.descripcion }}">
+                                            <input type="number" name="nuevo_stock" value="{{ producto.stock }}">
+                                            <input type="file" name="nueva_imagen">
+                                            <input type="number" name="nuevo_precio" value="{{ producto.precio }}">
+                                            <button type="submit" class="btn btn-primary">Editar</button>
+                                        </form>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </td>
+                    <td>
+                        <form method="post" action="{% url 'eliminar_producto' producto.id %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger">Eliminar</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        
+        
+    </div>
+
+
+</div>
+
+
+
+
+
+
+
+
+{% endblock %}

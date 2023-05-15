@@ -22,7 +22,9 @@ urlpatterns = [
     path('generar_pago', generar_pago ,name='generar_pago'),
     path('verBoleta/<id>', verBoleta ,name='verBoleta'),
     path('detalle_boleta', detalle_boleta ,name='detalle_boleta'),
-
+    path('productos', productos, name='productos'),
+    path('eliminar/<int:producto_id>/', eliminar_producto, name='eliminar_producto'),
+    path('editar/<int:producto_id>/', editar_producto, name='editar_producto'),
 
 
 

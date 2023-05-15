@@ -1,0 +1,32 @@
+#addproduct{
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: column;
+    align-items: center; 
+} 
+#addproduct button{
+    width: 50%;
+}
+#todito{ 
+    padding: 15px 0 15px 0;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    border: 1px red solid;
+}
+.camppr{
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 5px;
+    width: 80% ;
+}
+#formulario{
+    width: 35%;
+    border: 1px red solid;
+}
+#tblproducto{
+    width: 40%;
+    border: 1px red solid;
+}

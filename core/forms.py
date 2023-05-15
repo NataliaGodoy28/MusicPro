@@ -20,3 +20,8 @@ class Login(ModelForm):
     class Meta:
         model = Cliente
         fields = ['mailCliente', 'claveCliente']
+
+class ProductoForms(ModelForm):
+    class Meta:
+        model = Producto
+        fields = ['codigo','nombre','descripcion','stock','imagen','precio']
