@@ -1,0 +1,105 @@
+{% extends 'core/plantillaGlobal.html' %}
+{% load static %}
+{% block contenido %}
+<link rel="stylesheet" href="../../static/core/css/bodeguero.css">
+
+<br>
+
+<div class="container">
+    <div class="row">
+        <div class="row">
+            <div class="col-lg-6 col-md-12">
+                <B>Orden de pedido entrante:</B>
+
+                <div style="max-height: 400px; overflow-y: auto;">
+                    <table class="table">
+                        <br>
+                        <br>
+
+                        <thead>
+                            <tr>
+                                <th scope="col">N°orden</th>
+                                <th scope="col">Fecha</th>
+                                <th scope="col">Vendedor</th>
+                                <th scope="col">Estado</th>
+
+                            </tr>
+                        </thead>
+
+                        <tbody>
+
+                            {% for e in boletas %}
+
+                            <tr>
+                                <td data-label="nombre">{{e.id}}</td>
+                                <td data-label="nombre">{{e.fecha}}</td>
+                                <td data-label="nombre">{{e.vendedor}}</td>
+                                <td data-label="nombre">{% if e.estado %}Pagado{% else %}Sin Pago{% endif %}</td>
+
+
+                               
+                            </tr>
+
+                            {% endfor %}
+
+                        </tbody>
+                    </table>
+                </div>
+
+
+            </div>
+            <div class="col-lg-6 col-md-12">
+
+                <b>Orden de pedido:</b>
+                <br>
+                <br>
+                <div class="card" style="height: 400px; overflow-y: scroll;">
+
+                    <div class="container">
+
+                        <div class="card-body">
+                            <div class="flex">
+                                <h5 class="card-title">N° Orden: 00001 </h5>
+                                <h5>Fecha: 24-04-2023</h5>
+                            </div>
+                            <p class="card-text">Vendedor:  {{user.username}}</p>
+
+                        </div>
+                        <table class="table">
+
+                            <thead>
+                                <tr>
+                                    <th scope="col">Producto</th>
+                                    <th scope="col">Unidad</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+
+                                {% for e in detalle %}
+                        
+                                <tr>
+                                    <td data-label="nombre">{{e.producto}}</td>
+                                    <td data-label="nombre">{{e.cantidad}}</td>
+                                </tr>
+                                {% endfor %}    
+
+                            </tbody>
+                        </table>
+
+                    </div>
+
+                    <a href="{% url 'vendedor' %}" type="button" class="btn btn-primary"> Volver</a>
+
+
+
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+</div>
+
+{% endblock %}

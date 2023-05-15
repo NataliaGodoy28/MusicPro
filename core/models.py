@@ -13,7 +13,7 @@ class Cliente(models.Model):
     
     def __str__ (self):
         return self.mailCliente
-    
+
 class RegistroEntrega(models.Model):
     id = models.AutoField(primary_key=True)
     fecha = models.DateField()
@@ -25,6 +25,7 @@ class RegistroEntrega(models.Model):
 
 class Producto(models.Model):
     id = models.AutoField(primary_key=True)
+    codigo = models.CharField(max_length=10, null=True,blank=True)
     nombre = models.CharField(max_length=200)
     descripcion = models.TextField()
     precio = models.DecimalField(max_digits=10, decimal_places=0)
@@ -43,14 +44,14 @@ class Boleta (models.Model):
     fecha = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     vendedor = models.CharField(max_length=40, null=True, blank=True)
     pago = models.IntegerField(null=True,blank=True)
+    estado = models.BooleanField(default=False, null=True, blank=True)
     def __int__(self):
         return self.id
 
 
 class DetalleBoleta(models.Model):
 
-    id = models.AutoField(primary_key=True)
-    id_boleta = models.ForeignKey(Boleta, on_delete=models.CASCADE)
+    boleta = models.ForeignKey(Boleta, on_delete=models.CASCADE)
     producto =  models.ForeignKey(Producto, on_delete=models.CASCADE)
     cantidad = models.IntegerField(null=True, blank=True)
     precio_unitario = models.IntegerField()

@@ -15,7 +15,16 @@ urlpatterns = [
     path('logout', logout, name = 'logout'),
     path('confirmarPedido', confirmarPedido,name='confirmarPedido'),
     path('cancelarPedido', cancelarPedido,name='cancelarPedido'),
-    path('boleta/<id>', boleta,name='boleta'),
+    path('boletas/<id>', boletas,name='boletas'),
+    path('vendedor', vendedor ,name='vendedor'),
+    path('añadirElemento', añadirElemento ,name='añadirElemento'),
+    path('crearBoleta', crearBoleta ,name='crearBoleta'),
+    path('generar_pago', generar_pago ,name='generar_pago'),
+    path('verBoleta/<id>', verBoleta ,name='verBoleta'),
+    path('detalle_boleta', detalle_boleta ,name='detalle_boleta'),
+
+
+
 
 ]
 if settings.DEBUG:

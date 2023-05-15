@@ -11,30 +11,35 @@
             <div class="col-lg-6 col-md-12">
                 <B>Orden de pedido entrante:</B>
 
-                <div style="max-height: 300px; overflow-y: auto;">
+                <div style="max-height: 400px; overflow-y: auto;">
                     <table class="table">
                         <br>
                         <br>
 
                         <thead>
                             <tr>
-                                <th scope="col">N° orden</th>
+                                <th scope="col">N°orden</th>
                                 <th scope="col">Fecha</th>
                                 <th scope="col">Vendedor</th>
+                                <th scope="col">Estado</th>
+
                             </tr>
                         </thead>
 
                         <tbody>
 
-                            {% for e in boleta %}
+                            {% for e in boletas %}
 
                             <tr>
                                 <td data-label="nombre">{{e.id}}</td>
                                 <td data-label="nombre">{{e.fecha}}</td>
                                 <td data-label="nombre">{{e.vendedor}}</td>
+                                <td data-label="nombre">{% if e.estado %}Pagado{% else %}Sin Pago{% endif %}</td>
+
+
                                 <td>
 
-                                    <a href=" {% url 'boleta' e.id  %} "><img src="{% static 'core/img/ver.png' %}" width="30px" alt=""></a>
+                                    <a href=" {% url 'boletas' e.id  %} "><img src="{% static 'core/img/ver.png' %}" width="30px" alt=""></a>
 
                                 </td>
                             </tr>
@@ -52,7 +57,7 @@
                 <b>Orden de pedido:</b>
                 <br>
                 <br>
-                <div class="card">
+                <div class="card" style="height: 400px; overflow-y: scroll;">
 
                     <div class="container">
 
@@ -61,7 +66,7 @@
                                 <h5 class="card-title">N° Orden: 00001 </h5>
                                 <h5>Fecha: 24-04-2023</h5>
                             </div>
-                            <p class="card-text">Vendedor: Juanito Perez</p>
+                            <p class="card-text">Vendedor:  {{user.username}}</p>
 
                         </div>
                         <table class="table">

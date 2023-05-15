@@ -1,0 +1,271 @@
+{% extends 'core/plantillaGlobal.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block contenido %}
+
+<!-- <link rel="stylesheet" href="../../static/core/css/vendedor.css"> -->
+
+<br>
+
+<div class="container">
+    <div class="row">
+        <div class="col-7">
+
+            <div class="row col-lg-12">
+                <h1 class="col-lg-7">Punto de Venta</h1>
+
+                <form class="col-lg-5" action="{% url 'crearBoleta' %}" method="POST">
+                    {% csrf_token %}
+                    <!-- Resto de los campos del formulario -->
+                    <button type="submit" class="btn btn-danger">Generar Nueva Boleta</button>
+                </form>
+            </div>
+            <br>
+
+            {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                <li{% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+                    {% endfor %}
+            </ul>
+            {% endif %}
+
+
+            <form action="{% url 'añadirElemento' %}" method="post">
+                {% csrf_token %}
+                <label for="codigo_producto">Código:</label>
+                <input type="text" id="codigo_producto" name="codigo_producto">
+                <label for="unidad">Un. </label>
+                <input type="text" id="codigo_producto" name="unidad">
+
+                <button type="submit" class="btn btn-primary"> Añadir </button>
+            </form>
+            <br>
+
+            <div class="card" style="height: 250px; overflow-y: scroll;">
+                <div class="card-body col-lg-10">
+                    <h2>Detalle Venta</h2>
+                    <strong>Total: ${{ total_boleta }}</strong>
+                    <table class="table ">
+                        <thead>
+                            <tr>
+                                <th>Boleta</th>
+                                <th>Cantidad</th>
+                                <th>Precio</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for b in detalle %}
+                            <tr>
+                                <td>{{ b.boleta_id }}</td>
+                                <td>{{ b.cantidad }}</td>
+                                <td>{{ b.precio_unitario }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+
+                    <br>
+
+                </div>
+            </div>
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                Realizar Pago
+            </button>
+
+            <!-- Modal -->
+            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <!-- Aquí va el formulario -->
+                            <form method="post" action="{% url 'generar_pago' %}">
+                                {% csrf_token %}
+
+                                <div class="form-group">
+                                    <label for="total_boleta">Total de la boleta:</label>
+                                    <input type="text" class="form-control" id="total_boleta" name="total_boleta"
+                                        value="{{ total_boleta }}" readonly>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="metodo_pago">Método de pago:</label>
+                                    <select class="form-control" id="metodo_pago" name="metodo_pago" required>
+                                        <option value="tarjeta">Tarjeta</option>
+                                        <option value="efectivo">Efectivo</option>
+
+                                    </select>
+                                </div>
+
+                                <div id="div_efectivo" style="display: none;" class="form-group">
+                                    <label for="monto_efectivo">Monto en efectivo:</label>
+                                    <input type="text" class="form-control" id="monto_efectivo" name="monto_efectivo">
+                                </div>
+
+                                <div id="div_vuelto" style="display: none;" class="form-group">
+                                    <label for="vuelto">Vuelto:</label>
+                                    <input type="text" class="form-control" id="vuelto" name="vuelto" readonly>
+                                </div>
+
+                                <button type="submit" class="btn btn-dark">Generar pago</button>
+                            </form>
+                            <!-- Aquí termina el formulario -->
+
+                            <script>
+                                // Obtener el elemento select del método de pago
+                                var metodoPagoSelect = document.getElementById('metodo_pago');
+                                // Obtener los elementos div para el campo de monto en efectivo y vuelto
+                                var divEfectivo = document.getElementById('div_efectivo');
+                                var divVuelto = document.getElementById('div_vuelto');
+                                // Obtener el campo de monto en efectivo y vuelto
+                                var montoEfectivoInput = document.getElementById('monto_efectivo');
+                                var vueltoInput = document.getElementById('vuelto');
+                                // Obtener el campo de total de la boleta
+                                var totalBoletaInput = document.getElementById('total_boleta');
+
+                                // Agregar un evento de cambio al select del método de pago
+                                metodoPagoSelect.addEventListener('change', function () {
+                                    // Obtener el valor seleccionado
+                                    var metodoPago = this.value;
+
+                                    // Mostrar u ocultar los campos según el método de pago seleccionado
+                                    if (metodoPago === 'efectivo') {
+                                        divEfectivo.style.display = 'block';
+                                        divVuelto.style.display = 'block';
+                                    } else {
+                                        divEfectivo.style.display = 'none';
+                                        divVuelto.style.display = 'none';
+                                    }
+                                });
+
+                                // Agregar un evento de cambio al campo de monto en efectivo
+                                montoEfectivoInput.addEventListener('input', function () {
+                                    // Obtener el monto en efectivo ingresado
+                                    var montoEfectivo = parseFloat(this.value);
+                                    // Obtener el total de la boleta
+                                    var totalBoleta = parseFloat(totalBoletaInput.value);
+
+                                    // Calcular y mostrar el vuelto solo si el monto en efectivo es mayor o igual al total de la boleta
+                                    if (montoEfectivo >= totalBoleta) {
+                                        var vuelto = montoEfectivo - totalBoleta;
+                                        vueltoInput.value = vuelto.toFixed(2);
+                                    } else {
+                                        vueltoInput.value = '0.00';
+                                    }
+                                });
+                            </script>
+
+
+
+                            <!-- aqui termina -->
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="col-5">
+            <h5><b>Vendedor: </b> {{user.username}} </h5>
+            <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">N° orden</th>
+                    <th scope="col">Fecha</th>
+                    <th scope="col">Vendedor</th>
+                    <th scope="col">Total</th>
+                    <th scope="col">Estado</th>
+
+                </tr>
+            </thead>
+        </table>
+            <div style="height: 350px; overflow-y: scroll;">
+                <table class="table">
+                  
+
+                    <tbody>
+                        {% for e in boletas %}
+                        <tr>
+                            <td data-label="nombre">{{e.id}}</td>
+                            <td data-label="nombre">{{e.fecha}}</td>
+                            <td data-label="nombre">{{e.vendedor}}</td>
+                            <td data-label="nombre">{{e.total}}</td>
+                            <td data-label="nombre">{% if e.estado %}Pagado{% else %}Sin Pago{% endif %}</td>
+                            <!-- Button trigger modal -->
+                            <td>
+
+                                <!-- <a href=" {% url 'verBoleta' e.id  %} "><img src="{% static 'core/img/ver.png' %}" width="30px" alt=""></a> -->
+                                <a type="button" class="btn btn-primary" href=" {% url 'verBoleta' e.id  %} " >
+                                    ver
+                                </a>
+                            </td>
+                            
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <br>
+
+
+            <!-- modal -->
+
+            <!-- Modal -->
+            <div class="modal fade" id="exampleModal1" tabindex="-1" aria-labelledby="exampleModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="exampleModalLabel">Detalle Boleta</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <table class="table">
+
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Producto</th>
+                                        <th scope="col">Unidad</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+
+                                    {% for e in detalle %}
+
+                                    <tr>
+                                        <td data-label="nombre">{{e.producto}}</td>
+                                        <td data-label="nombre">{{e.cantidad}}</td>
+                                    </tr>
+                                    {% endfor %}
+
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary">Save changes</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- finmodal -->
+
+
+
+        </div>
+    </div>
+
+
+
+</div>
+
+</div>
+
+{% endblock %}
