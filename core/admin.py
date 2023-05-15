@@ -4,6 +4,6 @@ from .models import *
 admin.site.register(RegistroEntrega)
 admin.site.register(Producto)
 admin.site.register(Boleta)
-admin.site.register(DetalleBoleta)
+admin.site.register(DetalleBoleta   )
 
 
