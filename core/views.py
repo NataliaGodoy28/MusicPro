@@ -11,6 +11,7 @@ from django.core.files.storage import default_storage
 db = MySQLdb.connect(host='localhost', user='root', passwd='', db='musicpro')
 boleta = 0
 boletaGlobal = 0
+boleta2 = 0
 
 # Create your views here.
 def productos(request):
@@ -75,9 +76,14 @@ def index(request):
 
 
 def bodeguero(request):
-    boletas = Boleta.objects.all().order_by('-id')
 
-    return render(request, 'core/bodeguero.html', {'boletas': boletas})
+    boletas_sin_estado = Boleta.objects.filter(estadopedido__isnull=True).order_by('-id')
+
+    # boletas_sin_aceptar = Boleta.objects.exclude(estadopedido__estado='Aceptado').order_by('-id')
+    
+    # boletas = Boleta.objects.all().order_by('-id')
+
+    return render(request, 'core/bodeguero.html', {'boletas': boletas_sin_estado})
 
 def detalle_boleta(request):
     boletas = Boleta.objects.all().order_by('-id')
@@ -157,71 +163,73 @@ def logout(request):
 
 
 def boletas(request, id):
+    global boleta2
     global boleta
+    boletas_sin_estado = Boleta.objects.filter(estadopedido__isnull=True).order_by('-id')
+    # boletas_sin_aceptar = Boleta.objects.exclude(estadopedido__estado='Aceptado').order_by('-id')
     boletas = Boleta.objects.all().order_by('-id')
     print("boletas")
+    boleta2=id
+    print(boleta2 + "boleta2")
     detalleBoleta = DetalleBoleta.objects.filter(boleta=id)
-    datos = {'detalle_boleta': detalleBoleta, 'boletas': boletas}
+    # datos = {'detalle_boleta': detalleBoleta, 'boletas': boletas}
+    datos = {'detalle_boleta': detalleBoleta, 'boletas': boletas_sin_estado}
+
     print("hola2")
     return render(request, 'core/bodeguero.html', datos)
 
 
 def confirmarPedido(request):
-    global boleta
+    global boleta2
     print("confirmar pedido")
-    print("boleta :" + str(boleta))
-    cursor = db.cursor()
-    bodeguero = "juanito"
-    boleta = 0
-    guia = 0
-    estadopedido = "aceptado"
+    print(boleta2)
 
-    # Crear la tupla con los valores a insertar
-    purchases = (str(bodeguero), str(estadopedido), int(boleta), int(guia))
+    estado_pedido = EstadoPedido()
+    bol = get_object_or_404(Boleta, id=boleta2)
+    print(bol)
+    print("boleta")
+    # Establecer los valores de los campos
+    estado_pedido.id_boleta = bol
+    # guia = GuiaBodeguero.objects.get(id_boleta_id=bol)
 
-    # Ejecutar la consulta SQL y pasar la tupla de valores como parámetro
-    cursor.execute('INSERT INTO core_estadopedido (id, fecha, bodeguero, estado, id_boleta_id, id_guia_id) VALUES (NULL, NULL, %s, %s, %s, %s)', (str(
-        purchases[0]), str(purchases[1]), str(purchases[2]), str(purchases[3])))
+    # estado_pedido.fecha = tu_fecha
+    estado_pedido.bodeguero = "Bodeguero 1"
+    estado_pedido.estado = "Aceptado"
 
-    # Confirmar los cambios en la base de datos
-    db.commit()
-
-    # Cerrar el cursor y la conexión a la base de datos
-    cursor.close()
-    db.close()
+    # Guardar el objeto en la base de datos
+    estado_pedido.save()
 
     return render(request, 'core/bodeguero.html')
 
 
 def cancelarPedido(request):
+    global boleta2
     print("cancelar pedido")
+    print(boleta2)
 
-    cursor = db.cursor()
-    bodeguero = "juanito"
-    boleta = 9
-    guia = 1
-    estadopedido = "cancelado"
+    estado_pedido = EstadoPedido()
+    bol = get_object_or_404(Boleta, id=boleta2)
+    print(bol)
+    print("boleta")
+    # Establecer los valores de los campos
+    estado_pedido.id_boleta = bol
+    # guia = GuiaBodeguero.objects.get(id_boleta_id=bol)
 
-    # Crear la tupla con los valores a insertar
-    purchases = (str(bodeguero), str(estadopedido), int(boleta), int(guia))
+    # estado_pedido.fecha = tu_fecha
+    estado_pedido.bodeguero = "Bodeguero 1"
+    estado_pedido.estado = "Cancelado"
 
-    # Ejecutar la consulta SQL y pasar la tupla de valores como parámetro
-    cursor.execute('INSERT INTO core_estadopedido (id, fecha, bodeguero, estado, id_boleta_id, id_guia_id) VALUES (NULL, NULL, %s, %s, %s, %s)', (str(
-        purchases[0]), str(purchases[1]), str(purchases[2]), str(purchases[3])))
-
-    # Confirmar los cambios en la base de datos
-    db.commit()
-
-    # Cerrar el cursor y la conexión a la base de datos
-    cursor.close()
-    db.close()
+    # Guardar el objeto en la base de datos
+    estado_pedido.save()
 
     return render(request, 'core/bodeguero.html')
+
 
 
 def vendedor(request):
 
     boletas = Boleta.objects.all().order_by('-id')
+    
 
     return render(request, 'core/vendedor.html', {'boletas': boletas})
 
@@ -238,6 +246,7 @@ def crearBoleta(request):
     boletaGlobal = bol.id
     # Resto del código de la vista
     print(boletaGlobal)
+
     # Por ejemplo, redireccionar al usuario a la página de detalle de la nueva boleta
     # return redirect('añadirElemento')
     return render(request, 'core/vendedor.html', {'boletas': boletas})
