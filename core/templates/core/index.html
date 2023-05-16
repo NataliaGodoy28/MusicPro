@@ -24,10 +24,7 @@
                 </select>
             </div>
         </div>
-        <div class="cart-icon">
-            <i class="bi bi-cart"></i>
-            <span class="cart-count">0</span>
-        </div>
+        
     </div>
     <div id="fila" style="display: flex; flex-wrap: wrap;">
         {% for pr in productos %}
@@ -40,56 +37,23 @@
                 <p class="desc">{{pr.descripcion}}</p>
                 <p class="price">${{pr.precio}}</p>
                 <p class="detalle" style="visibility: hidden;">{{ pr.detalle }}</p>
-                <button class="add-to-cart" data-id={{pr.id}}>Agregar al carrito</button>
-                <button class="ver-descripcion" data-id={{pr.id}}>Ver descripción</button>
+                <button id="add-to-cart" class="botonespr" data-id={{pr.id}}>Agregar al carrito</button>
+                <button id="ver-descripcion" class="botonespr" data-id={{pr.id}}>Ver descripción</button>
             </div>
         </div>
         {% endfor %}
     </div>
-    <div class="overlay"></div>
-
-    <div class="cart">
-        <h2>Carrito de Compras</h2>
-        <ul class="cart-items"></ul>
-        <div class="cart-total">
-            <strong style="margin-left: 10px;">Total:</strong>
-            <span class="total">$0</span>
-            <button class="checkout">Pagar</button>
-        </div>
-    </div>
+   
 
     <!-- Detalle del producto -->
     <div class="descripcion">
+        <span class="close">X</span>
         <h2>Descripción</h2>
         <ul class="desc-item"></ul>
     </div>
     <!-- Detalle del producto -->
 
-    <div id="myModal" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <div id="contemoda">
-                <p>Quieres continuar como invitado o deseas registrarte?</p>
-                <div class="btnmodal">
-                    <button id="invitado">Invitado</button>
-                    <button><a href="{% url 'form_cliente' %}">Registrarme</a></button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div id="correo" class="modal">
-        <div class="modal-content">
-            <span class="close2">&times;</span>
-            <div id="contemoda">
-                <p>Quieres continuar como invitado o deseas registrarte?</p>
-                <div class="btnmodal">
-                    <input type="email" required>
-                    <button id="cocont">Continuar</button>
-                </div>
-            </div>
-        </div>
-    </div>
+   
 
 
 </div>
