@@ -28,6 +28,7 @@ class Producto(models.Model):
     codigo = models.CharField(max_length=10, null=True,blank=True)
     nombre = models.CharField(max_length=200)
     descripcion = models.TextField()
+    detalle = models.TextField(default="detalle")
     precio = models.DecimalField(max_digits=10, decimal_places=0)
     imagen = models.ImageField(upload_to='productos/')
     creado_en = models.DateTimeField(auto_now_add=True)

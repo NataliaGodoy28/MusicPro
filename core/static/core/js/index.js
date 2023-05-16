@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const checkoutBtn = document.querySelector('.checkout');
     const productBtns = document.querySelectorAll('.add-to-cart');
     const invitado = document.querySelector('#invitado');
-    const verDescripcion = document.querySelector('.ver-descripcion');
+    const verDescripcion = document.querySelectorAll('.ver-descripcion');
     const cocont = document.querySelector('#cocont');
     const descripcion = document.querySelector('.descripcion');
     const descItem = document.querySelector('.desc-item');
@@ -35,7 +35,10 @@ document.addEventListener('DOMContentLoaded', function () {
     productBtns.forEach(btn => {
       btn.addEventListener('click', addToCart);
     });
-    verDescripcion.addEventListener('click', funcionVerDescripcion);
+    // verDescripcion.addEventListener('click', funcionVerDescripcion);
+    verDescripcion.forEach(btn => {
+      btn.addEventListener('click', funcionVerDescripcion);
+    });
 
     var correo = document.getElementById("correo");
 
@@ -48,6 +51,7 @@ document.addEventListener('DOMContentLoaded', function () {
       const productTitle = product.querySelector('h3').textContent;
       const productCode = product.querySelector('.codigo').textContent;
       const productDesc = product.querySelector('.desc').textContent;
+      const productDetalle = product.querySelector('.detalle').textContent;
       const productPrice = parseFloat(product.querySelector('.price').textContent.slice(1));
       const productId = e.target.dataset.id;
       const item = {
@@ -57,6 +61,7 @@ document.addEventListener('DOMContentLoaded', function () {
         price: productPrice,
         codigo: productCode,
         desc: productDesc,
+        detalle: productDetalle,
         count: 1
       };
 
@@ -73,6 +78,7 @@ document.addEventListener('DOMContentLoaded', function () {
           <h4>${item.title}</h4>
           <p>${item.codigo}</p>
           <p>${item.desc}</p>
+          <p>${item.detalle}</p>
           <p>$${item.price.toFixed(0)}</p>
         </div>
       `;
