@@ -1,14 +1,12 @@
 from django.shortcuts import render, redirect
 from .models import *
 from .forms import *
-import MySQLdb
 from django.shortcuts import get_object_or_404
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.files.storage import default_storage
 
 
-db = MySQLdb.connect(host='localhost', user='root', passwd='', db='musicpro')
 boleta = 0
 boletaGlobal = 0
 boleta2 = 0
