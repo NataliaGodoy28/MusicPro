@@ -112,7 +112,7 @@
     transition: transform 0.3s ease;
   }
 
-  .show-desrcipcion {
+  .show-descripcion {
     transform: translateX(0);
     transition: transform 0.3s ease;
   }

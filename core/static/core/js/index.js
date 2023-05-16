@@ -20,6 +20,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const verDescripcion = document.querySelector('.ver-descripcion');
     const cocont = document.querySelector('#cocont');
     const descripcion = document.querySelector('.descripcion');
+    const descItem = document.querySelector('.desc-item');
     
     let cartCount = 0;
     let cartTotalPrice = 0;
@@ -37,22 +38,60 @@ document.addEventListener('DOMContentLoaded', function () {
     verDescripcion.addEventListener('click', funcionVerDescripcion);
 
     var correo = document.getElementById("correo");
-    // Functions
-    function funcionVerDescripcion(){
-      descripcion.classList.toggle('show-descripcion')
-      overlay.classList.toggle('show-overlay')
 
+    // Functions
+    function funcionVerDescripcion(e){
+      descripcion.classList.toggle('show-descripcion')
+      // overlay.classList.toggle('show-overlay')
+      const product = e.target.parentElement;
+      const productImg = product.querySelector('img').src;
+      const productTitle = product.querySelector('h3').textContent;
+      const productCode = product.querySelector('.codigo').textContent;
+      const productDesc = product.querySelector('.desc').textContent;
+      const productPrice = parseFloat(product.querySelector('.price').textContent.slice(1));
+      const productId = e.target.dataset.id;
+      const item = {
+        id: productId,
+        img: productImg,
+        title: productTitle,
+        price: productPrice,
+        codigo: productCode,
+        desc: productDesc,
+        count: 1
+      };
+
+      renderDescItem(item);
     }
+
+    function renderDescItem(item) {
+      descItem.innerHTML = '';
+      const li = document.createElement('li');
+
+      li.innerHTML = `
+        <img src="${item.img}" alt="${item.title}" />
+        <div>
+          <h4>${item.title}</h4>
+          <p>${item.codigo}</p>
+          <p>${item.desc}</p>
+          <p>$${item.price.toFixed(0)}</p>
+        </div>
+      `;
+
+      descItem.appendChild(li);
+    }
+
     function ingcorreo(){
       modal.style.display = "none";
       correo.style.display = "block";
     }
+
     function cerrarcorreo(){
       alert("Correo guardado");
       correo.style.display = "none";
     }
   
     function toggleCart() {
+      descripcion.classList.toggle('show-description')
       cart.classList.toggle('show-cart');
       overlay.classList.toggle('show-overlay');
     }

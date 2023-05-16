@@ -36,11 +36,11 @@
                 <img src="{{pr.imagen.url}}" alt="{{ pr.nombre }}">
 
                 <h3>{{pr.nombre}}</h3>
-                <p>{{pr.codigo}}</p>
-                <p>{{pr.descripcion}}</p>
+                <p class="codigo">{{pr.codigo}}</p>
+                <p class="desc">{{pr.descripcion}}</p>
                 <p class="price">${{pr.precio}}</p>
                 <button class="add-to-cart" data-id={{pr.id}}>Agregar al carrito</button>
-                <button class="ver-descripcion">Ver descripción</button>
+                <button class="ver-descripcion" data-id={{pr.id}}>Ver descripción</button>
             </div>
         </div>
         {% endfor %}
@@ -57,15 +57,12 @@
         </div>
     </div>
 
+    <!-- Detalle del producto -->
     <div class="descripcion">
-        <h2>Carrito de Compras</h2>
-        <ul class="cart-items"></ul>
-        <div class="cart-total">
-            <strong style="margin-left: 10px;">Total:</strong>
-            <span class="total">$0</span>
-            <button class="checkout">Pagar</button>
-        </div>
+        <h2>Descripción</h2>
+        <ul class="desc-item"></ul>
     </div>
+    <!-- Detalle del producto -->
 
     <div id="myModal" class="modal">
         <div class="modal-content">
