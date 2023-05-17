@@ -5,9 +5,8 @@ body {
 
 header {
     background-color: black;
-    padding-bottom: 20px;
     color: white;
-    height: 30%;
+    height: 20%;
 }
 
 a {
@@ -24,17 +23,20 @@ a:hover {
     flex-direction: row !important;
 }
 .encabezado{
-    display: flex;
-    padding-top: 10px;
-    text-align: center;
-    justify-content: end;
-    background-color: black;
-    color: white;
-    height:50px;
+display: flex;
+align-items:end;
+margin-top:5%
 }
+
 .logos>img{
     width: 30px;
     height: 30px;
+
+}
+.logos{
+   display:flex;
+   align-items: center;
+
 }
 #nav2{
 display: flex;

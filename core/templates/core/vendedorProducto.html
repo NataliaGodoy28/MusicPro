@@ -1,0 +1,156 @@
+{% extends 'core/plantillaGlobal.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block contenido %}
+
+<!-- <link rel="stylesheet" href="../../static/core/css/vendedor.css"> -->
+
+<br>
+<div class="container col-lg-12">
+    <div class="row" style="justify-content: space-around;">
+        <div class="col-lg-6 col-md-12 col-xs-12">
+            <!-- <h3><b>Vendedor: </b> {{user.username}} </h3> -->
+            <h3><b> Pedidos Entrantes </b> </h3>
+
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">N° orden</th>
+                        <th scope="col">Fecha</th>
+                        <th scope="col">Vendedor</th>
+                        <th scope="col">Total</th>
+                        <th scope="col">Ver</th>
+
+
+
+                    </tr>
+                </thead>
+            </table>
+            <div style="height: 350px; overflow-y: scroll;">
+                <table class="table">
+
+
+                    <tbody>
+                        {% for e in boletas %}
+                        <tr>
+                            <td data-label="nombre">{{e.id}}</td>
+                            <td data-label="nombre">{{e.fecha}}</td>
+                            <td data-label="nombre">{{e.vendedor}}</td>
+                            <td data-label="nombre">{{e.total}}</td>
+                            <td data-label="nombre">{% if e.estado %}Pagado{% else %}Sin Pago{% endif %}</td>
+                            <!-- Button trigger modal -->
+                            <td>
+
+                                <!-- <a href=" {% url 'verBoleta' e.id  %} "><img src="{% static 'core/img/ver.png' %}" width="30px" alt=""></a> -->
+                                <a type="button" class="btn btn-danger" href=" {% url 'verBoletaVendedor' e.id  %} ">
+                                    ver
+
+                                </a>
+                            </td>
+
+
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <br>
+        </div>
+        <div class="col-lg-6 col-md-12 col-xs-12">
+            <!-- <h3><b>Vendedor: </b> {{user.username}} </h3> -->
+            <h3><b> Pedidos Listos </b> </h3>
+
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">N° orden</th>
+                        <th scope="col">Fecha</th>
+                        <th scope="col">Vendedor</th>
+                        <th scope="col">Total</th>
+                        <th scope="col">Ver</th>
+
+
+
+                    </tr>
+                </thead>
+            </table>
+            <div style="height: 350px; overflow-y: scroll;">
+                <table class="table">
+
+
+                    <tbody>
+                        {% for e in boletasAceptadas %}
+                        <tr>
+                            <td data-label="nombre">{{e.id}}</td>
+                            <td data-label="nombre">{{e.fecha}}</td>
+                            <td data-label="nombre">{{e.vendedor}}</td>
+                            <td data-label="nombre">{{e.total}}</td>
+                            <td data-label="nombre">{% if e.estado %}Pagado{% else %}Sin Pago{% endif %}</td>
+                            <!-- Button trigger modal -->
+                            <td>
+
+                                <!-- <a href=" {% url 'verBoleta' e.id  %} "><img src="{% static 'core/img/ver.png' %}" width="30px" alt=""></a> -->
+                                <a type="button" class="btn btn-danger" href=" {% url 'boletaAceptada' e.id  %} ">
+                                    ver
+
+                                </a>
+                            </td>
+
+
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <br>
+        </div>
+    </div>
+
+
+
+</div>
+<div class="container">
+    <div class="col-12">
+        <h3 style="justify-content: center; text-align: center;"> <b> Productos Stock </b></h3>
+        <br>
+        <!-- aqui se muestran los productos -->
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">Cod.</th>
+                    <th scope="col">Nombre</th>
+                    <th scope="col">Precio</th>
+                    <th scope="col">imagen</th>
+                    <th scope="col">Stock</th>
+
+                </tr>
+            </thead>
+        </table>
+
+        <div style="height: 350px; overflow-y: scroll;">
+            <table class="table">
+
+
+                <tbody>
+                    {% for e in productos %}
+                    <tr>
+                        <td data-label="nombre">{{e.codigo}}</td>
+                        <td data-label="nombre">{{e.nombre}}</td>
+                        <td data-label="nombre"> ${{e.precio}}</td>
+
+                        <td data-label="nombre"> <img style="width:60px;" src="{{ e.imagen.url }}" alt="{{ e.nombre }}">
+                        </td>
+                        <td data-label="nombre">{{e.stock}}</td>
+
+
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+
+{% endblock %}

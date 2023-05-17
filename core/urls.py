@@ -15,13 +15,17 @@ urlpatterns = [
     path('logout', logout, name = 'logout'),
     path('confirmarPedido', confirmarPedido,name='confirmarPedido'),
     path('cancelarPedido', cancelarPedido,name='cancelarPedido'),
+    path('confirmarPedidoVendedor', confirmarPedidoVendedor,name='confirmarPedidoVendedor'),
+    path('cancelarPedidoVendedor', cancelarPedidoVendedor,name='cancelarPedidoVendedor'),
     path('boletas/<id>', boletas,name='boletas'),
     path('vendedor', vendedor ,name='vendedor'),
     path('añadirElemento', añadirElemento ,name='añadirElemento'),
     path('crearBoleta', crearBoleta ,name='crearBoleta'),
     path('generar_pago', generar_pago ,name='generar_pago'),
     path('verBoleta/<id>', verBoleta ,name='verBoleta'),
+    path('verBoletaVendedor/<id>', verBoletaVendedor ,name='verBoletaVendedor'),
     path('detalle_boleta', detalle_boleta ,name='detalle_boleta'),
+    path('detalle_boleta_vendedor', detalle_boleta_vendedor ,name='detalle_boleta_vendedor'),
     path('productos', productos, name='productos'),
     path('eliminar/<int:producto_id>/', eliminar_producto, name='eliminar_producto'),
     path('editar/<int:producto_id>/', editar_producto, name='editar_producto'),
@@ -29,6 +33,9 @@ urlpatterns = [
     path('eliminarc/<str:producto_carrito_id>/', eliminar_del_carrito, name='eliminar_del_carrito'),
     path('reset_carrito/', reset_carrito, name='reset_carrito'),
     path('obtener-carrito/', obtener_carrito, name='obtener_carrito'),
+    path('vendedorProducto', vendedorProducto ,name='vendedorProducto'),
+    path('boletaAceptada/<id>', boletaAceptada ,name='boletaAceptada'),
+
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

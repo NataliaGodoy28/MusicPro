@@ -7,28 +7,42 @@
 
 
 <div class="catalogo">
+
     <div class="filtrar">
-        <h3>Filtrar Por:</h3>
-        <div class="filtro">
-            <div class="campos">
-                <label for="buscar">Buscar</label>
-                <input type="text" name="buscar" id="inbu" class="buscar">
-            </div>
-            <div class="filtroCampo">
-                <label for="catbu">Buscar por Categoria</label>
-                <select name="catbu" id="sebu" class="buscar">
-                    <option value="0">Seleccione una opcion</option>
-                    <option value="1">Instrumentos</option>
-                    <option value="2">Amplificadores</option>
-                </select>
+        <div class="filt">
+            <div class="filtro">
+                <div class="row">
+                    <div class="col-md-7">
+                        <div class="campos">
+                            <input type="text" name="buscar" placeholder="Buscar en MusicPro" id="inbu" class="form-control buscar">&nbsp;
+                            <img style="width: 10%;height: 10%" src="../../static/core/img/lupa.png" alt="logo facebook">
+
+                        </div>
+                    </div>
+                    <div class="col-md-5">
+                        <div class="filtroCampo">
+                            <select name="catbu" id="sebu" class="form-control buscar">
+                                <option value="0">Seleccione una opción </option>
+                                <option value="1">Instrumentos</option>
+                                <option value="2">Amplificadores</option>
+                            </select>&nbsp;
+                            <img style="width: 10%;height: 10%; margin-top: 4%;" src="../../static/core/img/filtro.png" alt="logo facebook">
+
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-        <div id="carr">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-basket3 btncart"
-                viewBox="0 0 16 16">
-                <path
-                    d="M5.757 1.071a.5.5 0 0 1 .172.686L3.383 6h9.234L10.07 1.757a.5.5 0 1 1 .858-.514L13.783 6H15.5a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5H.5a.5.5 0 0 1-.5-.5v-1A.5.5 0 0 1 .5 6h1.717L5.07 1.243a.5.5 0 0 1 .686-.172zM3.394 15l-1.48-6h-.97l1.525 6.426a.75.75 0 0 0 .729.574h9.606a.75.75 0 0 0 .73-.574L15.056 9h-.972l-1.479 6h-9.21z" />
-            </svg>
+        
+        
+        <div>
+            <div id="carr">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-basket3 btncart"
+                    viewBox="0 0 16 16">
+                    <path
+                        d="M5.757 1.071a.5.5 0 0 1 .172.686L3.383 6h9.234L10.07 1.757a.5.5 0 1 1 .858-.514L13.783 6H15.5a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5H.5a.5.5 0 0 1-.5-.5v-1A.5.5 0 0 1 .5 6h1.717L5.07 1.243a.5.5 0 0 1 .686-.172zM3.394 15l-1.48-6h-.97l1.525 6.426a.75.75 0 0 0 .729.574h9.606a.75.75 0 0 0 .73-.574L15.056 9h-.972l-1.479 6h-9.21z" />
+                </svg>
+            </div>
         </div>
 
     </div>
@@ -47,10 +61,11 @@
                 <h3>{{ pr.nombre }}</h3>
                 <p class="codigo">{{ pr.codigo }}</p>
                 <p class="desc">{{ pr.descripcion }}</p>
-                <p class="price">${{ pr.precio }}</p>
+                <p class="price"><strong>${{ pr.precio }}</strong> </p>
+                <a style="color: red !important; text-decoration: none" class="ver-descripcion" data-id="{{ pr.id }}">Ver descripción</a>
+
                 <p class="detalle" style="visibility: hidden;">{{ pr.detalle }}</p>
                 <button class="add-to-cart botonespr" data-producto-id="{{ pr.id }}">Agregar al carrito</button>
-                <button class="ver-descripcion botonespr" data-id="{{ pr.id }}">Ver descripción</button>
             </div>
         </div>
         {% endfor %}

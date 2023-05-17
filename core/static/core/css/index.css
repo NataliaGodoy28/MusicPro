@@ -4,14 +4,30 @@
   box-sizing: border-box;
 }
 
-.filtrar {
-  margin: 0px 0 10px 0;
+.products{
   display: flex;
-  align-items: center;
-  height: 80px;
-  background-color: black;
-  color: white;
-  width: 100%;
+  justify-content:center;
+  text-align: center;
+  margin-left: 5%; 
+}
+
+.campos{
+  display:flex;
+  flex-direction: row;
+}
+.filtroCampo{
+  display:flex;
+  flex-direction: row;
+
+}
+
+.filtrar {
+ background-color: black;
+ color:white;
+ display: flex;
+ flex-direction: row;
+ justify-content: space-around;
+ height: 5%;
 }
 
 .filtro {
@@ -21,6 +37,10 @@
   align-content: center;
 }
 
+.filt{
+  display: flex;
+  flex-direction: row;
+}
 
 #fila {
   margin-left: 10%;
@@ -80,17 +100,17 @@
   text-align: center;
   text-transform: uppercase;
   color: #fff;
-  background-color: #0044ff;
+  background-color: red;
   border: none;
   border-radius: 4px;
-  box-shadow: 0 4px #001fcc;
+  box-shadow: 0 4px red;
   transition: all 0.2s ease-in-out;
   cursor: pointer;
 }
 
 .botonespr:hover {
-  background-color: #001fcc;
-  box-shadow: 0 2px #000f99;
+  background-color: rgb(144, 8, 8);
+  box-shadow: 0 2px rgb(144, 8, 8)  ;
   transform: translateY(2px);
 }
 

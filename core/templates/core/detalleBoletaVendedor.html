@@ -37,7 +37,7 @@
                                 <td data-label="nombre">{% if e.estado %}Pagado{% else %}Sin Pago{% endif %}</td>
 
 
-                               
+
                             </tr>
 
                             {% endfor %}
@@ -62,7 +62,7 @@
                                 <h5 class="card-title">N° Orden: 00001 </h5>
                                 <h5>Fecha: 24-04-2023</h5>
                             </div>
-                            <p class="card-text">Vendedor:  {{user.username}}</p>
+                            <p class="card-text">Vendedor: {{user.username}}</p>
 
                         </div>
                         <table class="table">
@@ -77,23 +77,38 @@
                             <tbody>
 
                                 {% for e in detalle %}
-                        
+
                                 <tr>
                                     <td data-label="nombre">{{e.producto}}</td>
                                     <td data-label="nombre">{{e.cantidad}}</td>
                                 </tr>
-                                {% endfor %}    
+                                {% endfor %}
 
                             </tbody>
                         </table>
 
                     </div>
+                    <div class="vuelta">
+                  
+                    <a  href="{% url 'confirmarPedidoVendedor' %}" type="button" class="btn btn-danger"> Aceptar  &nbsp;<img src="../../static/core/img/aceptar.png"
+                            style="width:20px;height:20px" alt="logo gmail">
 
-                    <a href="{% url 'vendedor' %}" type="button" class="btn btn-danger"> Volver</a>
+                    </a>
+                    <a  href="{% url 'cancelarPedidoVendedor' %}" type="button" class="btn btn-danger"> Cancelar  &nbsp;<img src="../../static/core/img/cancelar.png"
+                            style="width:20px;height:20px" alt="logo gmail">
 
+                    </a>
+                </div>
+                 
+                <br>
 
+                 
+                   
 
                 </div>
+                <br>
+                <a style="width:50% ; margin-left: 40%;" href="{% url 'vendedorProducto' %}" type="button" class="btn btn-danger"> Volver</a>
+
 
             </div>
         </div>

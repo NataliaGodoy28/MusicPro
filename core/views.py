@@ -75,6 +75,7 @@ def editar_producto(request, producto_id):
 
     return render(request, 'productos.html', {'producto': producto})
 
+
 @csrf_exempt
 def agregar_al_carrito(request, producto_id):
     producto = get_object_or_404(Producto, id=producto_id)
@@ -120,7 +121,8 @@ def eliminar_del_carrito(request, producto_carrito_id):
 
     # Verificar si el producto existe en el carrito
     if producto_carrito_id in carrito:
-        carrito[producto_carrito_id] -= 1  # Restar una unidad al producto del carrito
+        # Restar una unidad al producto del carrito
+        carrito[producto_carrito_id] -= 1
 
         # Verificar si la cantidad es cero y eliminar el producto del carrito
         if carrito[producto_carrito_id] <= 0:
@@ -144,6 +146,7 @@ def eliminar_del_carrito(request, producto_carrito_id):
 
     # Devolver una respuesta JSON con el producto eliminado y el precio total actualizado
     return JsonResponse(producto_eliminado)
+
 
 @csrf_exempt
 def obtener_carrito(request):
@@ -214,20 +217,26 @@ def reset_carrito(request):
 
 def bodeguero(request):
 
-    boletas_sin_estado = Boleta.objects.filter(
-        estadopedido__isnull=True).order_by('-id')
+    boletas_aceptadas = Boleta.objects.filter(estadopedido__estadoVendedor='Aceptado', estadopedido__estado__isnull=True).order_by('-id')
+
 
     # boletas_sin_aceptar = Boleta.objects.exclude(estadopedido__estado='Aceptado').order_by('-id')
 
     # boletas = Boleta.objects.all().order_by('-id')
 
-    return render(request, 'core/bodeguero.html', {'boletas': boletas_sin_estado})
+    return render(request, 'core/bodeguero.html', {'boletas': boletas_aceptadas})
 
 
 def detalle_boleta(request):
     boletas = Boleta.objects.all().order_by('-id')
 
     return render(request, 'core/detalle_boleta.html', {'boletas': boletas})
+
+
+def detalle_boleta_vendedor(request):
+    boletas = Boleta.objects.all().order_by('-id')
+
+    return render(request, 'core/detalleBoletaVendedor.html', {'boletas': boletas})
 
 
 def form_cliente(request):
@@ -311,16 +320,16 @@ def logout(request):
 def boletas(request, id):
     global boleta2
     global boleta
-    boletas_sin_estado = Boleta.objects.filter(
-        estadopedido__isnull=True).order_by('-id')
-    # boletas_sin_aceptar = Boleta.objects.exclude(estadopedido__estado='Aceptado').order_by('-id')
+    boletas_aceptadas = Boleta.objects.filter(estadopedido__estadoVendedor='Aceptado', estadopedido__estado__isnull=True).order_by('-id')
+
+    # boletas_sin_aceptar = Boleta.objects.filter(estadopedido__estadoVendedor='Aceptado').order_by('-id')
     boletas = Boleta.objects.all().order_by('-id')
     print("boletas")
     boleta2 = id
     print(boleta2 + "boleta2")
     detalleBoleta = DetalleBoleta.objects.filter(boleta=id)
     # datos = {'detalle_boleta': detalleBoleta, 'boletas': boletas}
-    datos = {'detalle_boleta': detalleBoleta, 'boletas': boletas_sin_estado}
+    datos = {'detalle_boleta': detalleBoleta, 'boletas': boletas_aceptadas}
 
     print("hola2")
     return render(request, 'core/bodeguero.html', datos)
@@ -328,6 +337,30 @@ def boletas(request, id):
 
 def confirmarPedido(request):
     global boleta2
+    print("confirmar pedido")
+    print(boleta2)
+
+    estado_pedido = get_object_or_404(EstadoPedido, id_boleta=boleta2)
+    # bol = get_object_or_404(Boleta, id=boleta2)
+    # print(bol)
+    # print("boleta")
+    # Establecer los valores de los campos
+    # estado_pedido.id_boleta = bol
+    # guia = GuiaBodeguero.objects.get(id_boleta_id=bol)
+
+    # estado_pedido.fecha = tu_fecha
+    estado_pedido.bodeguero = "Bodeguero 1"
+    estado_pedido.estado = "Aceptado"
+
+    # Guardar el objeto en la base de datos
+    estado_pedido.save()
+
+    return redirect('bodeguero')
+
+
+def confirmarPedidoVendedor(request):
+    global boleta2
+    print(boleta2)
     print("confirmar pedido")
     print(boleta2)
 
@@ -340,16 +373,39 @@ def confirmarPedido(request):
     # guia = GuiaBodeguero.objects.get(id_boleta_id=bol)
 
     # estado_pedido.fecha = tu_fecha
-    estado_pedido.bodeguero = "Bodeguero 1"
-    estado_pedido.estado = "Aceptado"
+    estado_pedido.vendedor = "vendedor 1"
+    estado_pedido.estadoVendedor = "Aceptado"
 
     # Guardar el objeto en la base de datos
     estado_pedido.save()
 
-    return render(request, 'core/bodeguero.html')
+    return redirect('vendedorProducto')
 
 
 def cancelarPedido(request):
+    global boleta2
+    print("cancelar pedido")
+    print(boleta2)
+
+    estado_pedido = get_object_or_404(EstadoPedido, id_boleta=boleta2)
+    # bol = get_object_or_404(Boleta, id=boleta2)
+    # print(bol)
+    # print("boleta")
+    # Establecer los valores de los campos
+    # estado_pedido.id_boleta = bol
+    # guia = GuiaBodeguero.objects.get(id_boleta_id=bol)
+
+    # estado_pedido.fecha = tu_fecha
+    estado_pedido.bodeguero = "Bodeguero 1"
+    estado_pedido.estado = "Cancelado"
+
+    # Guardar el objeto en la base de datos
+    estado_pedido.save()
+
+    return redirect('bodeguero')
+
+
+def cancelarPedidoVendedor(request):
     global boleta2
     print("cancelar pedido")
     print(boleta2)
@@ -363,13 +419,13 @@ def cancelarPedido(request):
     # guia = GuiaBodeguero.objects.get(id_boleta_id=bol)
 
     # estado_pedido.fecha = tu_fecha
-    estado_pedido.bodeguero = "Bodeguero 1"
-    estado_pedido.estado = "Cancelado"
+    estado_pedido.vendedor = "vendedor 1"
+    estado_pedido.estadoVendedor = "Cancelado"
 
     # Guardar el objeto en la base de datos
     estado_pedido.save()
 
-    return render(request, 'core/bodeguero.html')
+    return redirect('vendedorProducto')
 
 
 def vendedor(request):
@@ -497,3 +553,59 @@ def verBoleta(request, id):
     }
 
     return render(request, 'core/detalle_boleta.html', datos)
+
+def boletaAceptada(request, id):
+
+    print(id)
+    global boletaGlobal
+
+    # Obtener la boleta correspondiente
+    boletas = Boleta.objects.filter(id=id)
+    detalle = DetalleBoleta.objects.filter(boleta=id)
+    print(boletas)
+
+    datos = {
+        'detalle': detalle,
+        'boletas': boletas,
+        'abrir_modal': True  # Agrega este valor al contexto
+
+    }
+
+    return render(request, 'core/boletaAceptada.html', datos)
+
+
+def verBoletaVendedor(request, id):
+
+    print(id)
+    global boletaGlobal
+    # Obtener la boleta correspondiente
+    boletas = Boleta.objects.filter(id=id)
+    detalle = DetalleBoleta.objects.filter(boleta=id)
+    print(boletas)
+    global boleta2
+    boleta2 = id
+
+    datos = {
+        'detalle': detalle,
+        'boletas': boletas,
+        'abrir_modal': True  # Agrega este valor al contexto
+
+    }
+
+    return render(request, 'core/detalleBoletaVendedor.html', datos)
+
+
+def vendedorProducto(request):
+    productos = Producto.objects.all()
+
+    boletas_aceptadas = Boleta.objects.filter(estadopedido__estadoVendedor='Aceptado', estadopedido__estado='Aceptado').order_by('-id')
+
+
+    boletas = Boleta.objects.filter(estadopedido__estadoVendedor__isnull=True)
+    # boletas = Boleta.objects.all()
+    datos = {
+        'productos': productos,
+        'boletas': boletas,
+        'boletasAceptadas':boletas_aceptadas}
+
+    return render(request, 'core/vendedorProducto.html', datos)

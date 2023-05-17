@@ -10,6 +10,8 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link rel="stylesheet" href="../../static/core/css/plantilla.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.3/font/bootstrap-icons.css">
 
 </head>
 
@@ -18,52 +20,53 @@
         integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
         crossorigin="anonymous"></script>
     <header>
-        <div style="background-color: black;" class="container">
-            <div class="colu">
-            <div class="colu">
-                <h1 style="color:white">Music</h1>
-                <h1 style="color:red">Pro</h1>
-            </div>
-            <div class="container" id="nav2">
-                <nav>
-                    {% if user.username == 'usuario' %}
-                    <a href="{% url 'perfil' %}">{{user.username}}</a>
-                    {% else %}
-                    {% endif %}
-                    &nbsp;|&nbsp;
-                    <a href="{% url 'index' %}">home</a>
-                    {% if user.is_authenticated %}
-                    &nbsp;|&nbsp;
-                    <a href="{% url 'index' %}">Cerrar sesión</a>
-                    {% else %}
-                    &nbsp;|&nbsp;
-                    &nbsp;|&nbsp;
-                 
-                    
-                    {% endif %}
-                </nav>
-            </div>
-        </div>
-            <div class="encabezado">
-                <header class="horario">Horario de atención: Lunes a Viernes 09:00 a 18:00 / Sábado 09:00 a 14:00 <br>
-                    <a href="{% url 'contador' %}">Ir a Contador</a>
-                    <a href="{% url 'form_cliente' %}">Registro Cliente</a>
-                    <a href="{% url 'bodeguero' %}">Bodeguero</a>
-                    <a href="{% url 'vendedor' %}">Vendedor</a>
-                    <a href="{% url 'login' %}">Login</a>
-                    <a href="{% url 'productos' %}">Productos</a>
-                    <a href="{% url 'logout' %}">Cerrar Sesión</a>
-                    <a href="{% url 'index' %}">Inicio</a>
-                </header>
+        <div style="background-color: black; margin-left: 5%;margin-right: 5%;">
+            <div class="colu" style="display: flex; justify-content:space-around;">
+                <div class="colu">
+                    <div class="colu">
+                        <h1 style="color:white">Music</h1>
+                        <h1 style="color:red">Pro</h1>
+                    </div>
+                    <div id="nav2">
+                        <nav>
+                            {% if user.username == 'usuario' %}
+                            <a href="{% url 'perfil' %}">{{user.username}}</a>
+                            {% else %}
+                            {% endif %}
+                            &nbsp;|&nbsp;
+                            <a href="{% url 'index' %}">home</a>
+                            {% if user.is_authenticated %}
+                            &nbsp;|&nbsp;
+                            <a href="{% url 'index' %}">Cerrar sesión</a>
+                            {% else %}
+                            &nbsp;|&nbsp;
+                            <a href="{% url 'login' %}">Login</a>
+                            &nbsp;|&nbsp;
+                            <a href="{% url 'form_cliente' %}">Regístrate</a>
+                            &nbsp;|&nbsp;
+                            <a href="{% url 'logout' %}">Cerrar Sesión</a>
+
+
+                            {% endif %}
+                        </nav>
+
+                    </div>
+                </div>
+              
                 <div class="logos">
+                    <div class="encabezado" >
+                        <p style="font-size: 11px;">
+                            Horario de atención: Lunes a Viernes 09:00 a 18:00 / Sábado 09:00 a 14:00  </p>  &nbsp;
+                    </div>
                     <img src="../../static/core/img/facebook.png" alt="logo facebook">
                     <img src="../../static/core/img/instagram.png" alt="logo instagram">
                     <img src="../../static/core/img/gmail.png" alt="logo gmail">
 
                 </div>
             </div>
+       
         </div>
-        
+
     </header>
 
 
