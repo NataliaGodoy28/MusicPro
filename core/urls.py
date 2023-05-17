@@ -25,9 +25,10 @@ urlpatterns = [
     path('productos', productos, name='productos'),
     path('eliminar/<int:producto_id>/', eliminar_producto, name='eliminar_producto'),
     path('editar/<int:producto_id>/', editar_producto, name='editar_producto'),
-
-
-
+    path('agregar-al-carrito/<int:producto_id>/', agregar_al_carrito, name='agregar_al_carrito'),
+    path('eliminarc/<str:producto_carrito_id>/', eliminar_del_carrito, name='eliminar_del_carrito'),
+    path('reset_carrito/', reset_carrito, name='reset_carrito'),
+    path('obtener-carrito/', obtener_carrito, name='obtener_carrito'),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

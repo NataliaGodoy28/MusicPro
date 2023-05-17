@@ -2,7 +2,6 @@
 {% load static %}
 {% block contenido %}
 <link rel="stylesheet" href="{%static 'core/css/index.css'%}">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 <script src="{% static 'core/js/index.js'%}"></script>
 
 
@@ -24,38 +23,310 @@
                 </select>
             </div>
         </div>
-        
-    </div>
-    <div id="fila" style="display: flex; flex-wrap: wrap;">
-        {% for pr in productos %}
-        <div class="products">
-            <div class="product">
-                <img src="{{pr.imagen.url}}" alt="{{ pr.nombre }}">
-
-                <h3>{{pr.nombre}}</h3>
-                <p class="codigo">{{pr.codigo}}</p>
-                <p class="desc">{{pr.descripcion}}</p>
-                <p class="price">${{pr.precio}}</p>
-                <p class="detalle" style="visibility: hidden;">{{ pr.detalle }}</p>
-                <button id="add-to-cart" class="botonespr" data-id={{pr.id}}>Agregar al carrito</button>
-                <button id="ver-descripcion" class="botonespr" data-id={{pr.id}}>Ver descripción</button>
-            </div>
+        <div id="carr">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-basket3 btncart"
+                viewBox="0 0 16 16">
+                <path
+                    d="M5.757 1.071a.5.5 0 0 1 .172.686L3.383 6h9.234L10.07 1.757a.5.5 0 1 1 .858-.514L13.783 6H15.5a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5H.5a.5.5 0 0 1-.5-.5v-1A.5.5 0 0 1 .5 6h1.717L5.07 1.243a.5.5 0 0 1 .686-.172zM3.394 15l-1.48-6h-.97l1.525 6.426a.75.75 0 0 0 .729.574h9.606a.75.75 0 0 0 .73-.574L15.056 9h-.972l-1.479 6h-9.21z" />
+            </svg>
         </div>
-        {% endfor %}
-    </div>
-   
 
+    </div>
     <!-- Detalle del producto -->
     <div class="descripcion">
-        <span class="close">X</span>
+        <span class="closes botonespr">X</span>
         <h2>Descripción</h2>
         <ul class="desc-item"></ul>
     </div>
     <!-- Detalle del producto -->
+    <div id="fila" style="display: flex; flex-wrap: wrap;">
+        {% for pr in productos %}
+        <div class="products">
+            <div class="product">
+                <img src="{{ pr.imagen.url }}" alt="{{ pr.nombre }}">
+                <h3>{{ pr.nombre }}</h3>
+                <p class="codigo">{{ pr.codigo }}</p>
+                <p class="desc">{{ pr.descripcion }}</p>
+                <p class="price">${{ pr.precio }}</p>
+                <p class="detalle" style="visibility: hidden;">{{ pr.detalle }}</p>
+                <button class="add-to-cart botonespr" data-producto-id="{{ pr.id }}">Agregar al carrito</button>
+                <button class="ver-descripcion botonespr" data-id="{{ pr.id }}">Ver descripción</button>
+            </div>
+        </div>
+        {% endfor %}
 
-   
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script>
+            $(document).ready(function () {
+                $('.add-to-cart').on('click', function () {
+                    var productoId = $(this).data('producto-id');
+
+                    $.ajax({
+                        type: 'POST',
+                        url: '/agregar-al-carrito/' + productoId + '/',
+                        beforeSend: function (xhr) {
+                            // Aquí puedes mostrar una animación de carga o hacer cualquier otra acción previa a la solicitud
+                        },
+                        success: function (response) {
+                            // El producto se ha agregado correctamente al carrito
+                            var productoExistente = $('.productscar').find('.cartcosi p:first-child:contains("' + response.nombre + '")').closest('.productscar');
+
+                            if (productoExistente.length) {
+                                // El producto ya existe en el carrito, incrementar la cantidad visualmente
+                                var cantidadElement = productoExistente.find('.cartcosi p:last-child');
+                                var cantidad = response.cantidad; // Obtener la cantidad del producto actualizada desde la respuesta
+                                cantidadElement.text('$' + response.precio + ' x ' + cantidad);
+                            } else {
+                                // El producto es nuevo, agregarlo al carrito
+                                var carritoContainer = $('.desc-cart');
+                                var productoHTML = $('<div></div>').addClass('productscar');
+                                productoHTML.append($('<img>').attr('src', response.imagen_url).attr('alt', response.nombre));
+                                var cartcosiElement = $('<div></div>').addClass('cartcosi');
+                                cartcosiElement.append($('<p></p>').text(response.nombre));
+                                cartcosiElement.append($('<p></p>').text('$' + response.precio + ' x ' + response.cantidad));
+                                productoHTML.append(cartcosiElement);
+                                productoHTML.append($('<a></a>').attr('href', '#').addClass('eliminar-producto botonespr').text('Borrar').data('producto-id', response.id));
+                                carritoContainer.append(productoHTML);
+                            }
+                            $('#cartpagar h2').text('$' + response.precio_total_carrito);
+                            $('.btnmetod2 p').text('El Total de su Compra fue $' + response.precio_total_carrito + ' se enviará la boleta al correo registrado o ingresado');
+                        },
+                        error: function (xhr, textStatus, errorThrown) {
+                            // Manejar el error de la solicitud AJAX si es necesario
+                        }
+                    });
+                    actualizarCarrito();
+                });
+
+                // Manejar el evento de clic en el enlace de eliminación del producto
+                $('.desc-cart').on('click', '.eliminar-producto', function (event) {
+                    event.preventDefault();  // Evitar el comportamiento predeterminado del enlace
+
+                    var productoId = $(this).data('producto-id');  // Obtener el ID del producto
+
+                    // Enviar la solicitud AJAX al servidor para eliminar el producto del carrito
+                    $.ajax({
+                        type: 'POST',
+                        url: '/eliminarc/' + productoId + '/',
+                        beforeSend: function (xhr) {
+                            // Aquí puedes mostrar una animación de carga o hacer cualquier otra acción previa a la solicitud
+                        },
+                        success: function (response) {
+                            // Obtener el producto eliminado del carrito
+                            var productoEliminado = response;
+
+                            // Actualizar el precio total del carrito
+                            $('#cartpagar h2').text('$' + productoEliminado.precio_total_carrito);
+                            $('.btnmetod2 p').text('El Total de su Compra fue $' + response.precio_total_carrito + ' se enviará la boleta al correo registrado o ingresado');
+
+                            // Eliminar el elemento del producto del carrito
+                            var productoElement = $('.eliminar-producto[data-producto-id="' + productoEliminado.id + '"]');
+                            productoElement.closest('.productscar').remove();
+
+                            // Actualizar la interfaz del carrito después de eliminar un producto
+                            actualizarCarrito();
+                        },
+                        error: function (xhr, textStatus, errorThrown) {
+                            // Manejar el error de la solicitud AJAX si es necesario
+                        }
+                    });
+                });
+                document.getElementById("acpago").addEventListener("click", function () {
+                    var xhr = new XMLHttpRequest();
+                    xhr.open("POST", "/reset_carrito/", true);
+                    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+                    xhr.onreadystatechange = function () {
+                        if (xhr.readyState === 4 && xhr.status === 200) {
+                            // Restablecimiento del carrito exitoso, actualizar el carrito
+                            actualizarCarrito();
+                        }
+                    };
+                    xhr.send();
+                });
+                function actualizarCarrito() {
+                    // Realizar una solicitud AJAX al servidor para obtener el contenido actualizado del carrito
+                    $.ajax({
+                        type: 'GET',
+                        url: '/obtener-carrito/',  // Ajusta la URL según tu implementación
+                        success: function (response) {
+                            // Actualizar la interfaz del carrito con el contenido recibido
+                            var carritoContainer = $('.desc-cart');
+                            carritoContainer.empty();
+
+                            $.each(response.productos, function (index, producto) {
+                                var productoHTML = $('<div></div>').addClass('productscar');
+                                productoHTML.append($('<img>').attr('src', producto.imagen_url).attr('alt', producto.nombre));
+                                var cartcosiElement = $('<div></div>').addClass('cartcosi');
+                                cartcosiElement.append($('<p></p>').text(producto.nombre));
+                                cartcosiElement.append($('<p></p>').text('$' + producto.precio + ' x ' + producto.cantidad));
+                                productoHTML.append(cartcosiElement);
+                                productoHTML.append($('<a></a>').attr('href', '#').addClass('eliminar-producto botonespr').text('Borrar').data('producto-id', producto.id));
+                                carritoContainer.append(productoHTML);
+                            });
+
+                            $('#cartpagar h2').text('$' + response.precio_total_carrito);
+                            $('.btnmetod2 p').text('El Total de su Compra fue $' + response.precio_total_carrito + ' se enviará la boleta al correo registrado o ingresado');
+                        },
+                        error: function (xhr
+                            , textStatus, errorThrown) {
+                            // Manejar el error de la solicitud AJAX si es necesario
+                        }
+                    });
+                }
+            });
+
+        </script>
 
 
-</div>
 
-{% endblock %}
+
+
+
+
+
+        {% if request.session.usuario %}
+        <!-- Modal Opciones -->
+        <h1 id="session" style="display:none;">0</h1>
+        <div id="myModal0" class="modal">
+            <div class="modal-content">
+                <span class="close0 close">&times;</span>
+                <h1>Metodos de Pago</h1>
+                <div class="btnmetod">
+                    <button class="metod botonespr">Debito</button>
+                    <button class="metod botonespr">Credito</button>
+                    <button class="metod botonespr">Transferencia</button>
+                </div>
+            </div>
+        </div>
+        <!-- Modal Opciones -->
+        {% else %}
+        <!-- Modal Opciones -->
+        <h1 id="session" style="display:none;">1</h1>
+        <div id="myModal" class="modal">
+            <div class="modal-content">
+                <span class="close1 close">&times;</span>
+                <h1>Como desea continuar?</h1>
+                <div class="btnmetod">
+                    <button id="btninvitado" class="metod3 botonespr">Continuar como Invitado</button>
+                    <a class="metod3 botonespr" href="{% url 'form_cliente' %}">Registrarse</a>
+                    <a class="metod3 botonespr" href="{% url 'login' %}">Iniciar Sesion</a>
+
+                </div>
+            </div>
+        </div>
+        <div id="myModal2" class="modal">
+            <div class="modal-content">
+                <span class="closeinv close">&times;</span>
+                <h1>Ingrese su Correo</h1>
+                <div class="btnmetod">
+                    <input type="email">
+                    <button id="btnin" class="metod3 botonespr">Continuar como Invitado</button>
+
+                </div>
+            </div>
+        </div>
+        <div id="myModal3" class="modal">
+            <div class="modal-content">
+                <span class="close4 close">&times;</span>
+                <h1>Metodos de Pago</h1>
+                <div class="btnmetod">
+                    <button class="metod botonespr">Debito</button>
+                    <button class="metod botonespr">Credito</button>
+                    <button class="metod botonespr">Transferencia</button>
+                </div>
+            </div>
+        </div>
+        <!-- Modal Opciones -->
+        {% endif %}
+
+        <!-- Modal despues de metodo -->
+
+
+        <div id="myModal5" class="modal">
+            <div class="modal-content">
+                <span class="close5 close">&times;</span>
+                <h1>Gracias Por Su Compra</h1>
+                <div class="btnmetod2">
+                    <p>El Total de su Compra fue ${{ total_carrito }} se enviara la boleta al correo registrado o
+                        ingresado </p>
+                    <button id="acpago" class="metod3 botonespr">Aceptar</button>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Modal despues de metodo -->
+
+        <!-- Detalle del Carrito -->
+        <div class="carrito">
+            <div id="cartitle">
+                <h2>Carrito</h2>
+                <Button id="borrarTodo" class="botonespr">Borrar Todo</Button>
+                <script>
+                    document.getElementById("borrarTodo").addEventListener("click", function () {
+                        var xhr = new XMLHttpRequest();
+                        xhr.open("POST", "/reset_carrito/", true);
+                        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+                        xhr.onreadystatechange = function () {
+                            if (xhr.readyState === 4 && xhr.status === 200) {
+                                // Eliminar los elementos del carrito en el DOM
+                                var descCartElement = document.querySelector('.desc-cart');
+                                descCartElement.innerHTML = '';
+
+                                // Actualizar el total del carrito en el DOM
+                                var cartPagarElement = document.getElementById('cartpagar');
+                                cartPagarElement.querySelector('h2').textContent = '$0.00';
+                                $('.btnmetod p').text('El Total de su Compra fue $0 se enviara la boleta al correo registrado o ingresado');
+                            }
+                        };
+                        xhr.send();
+                    });
+                </script>
+
+                <span class="closes botonespr">X</span>
+            </div>
+            <div class="desc-cart">
+                {% for item in productos_en_carrito %}
+                <div class="productscar">
+                    <img src="{{ item.producto.imagen.url }}" alt="{{ item.producto.nombre }}">
+                    <div class="cartcosi">
+                        <p>{{ item.producto.nombre }}</p>
+                        <p>${{ item.producto.precio }} x {{ item.cantidad }}</p>
+                    </div>
+
+                    <a href="#" class="eliminar-producto botonespr"
+                        data-producto-id="{{ item.producto_carrito_id }}">Borrar</a>
+
+
+                </div>
+                {% endfor %}
+            </div>
+
+
+
+
+
+
+
+            <div id="cartpagar">
+                <h2>${{ total_carrito }}</h2>
+                <button id="pagarcar" class="botonespr">Pagar</button>
+            </div>
+        </div>
+        <!-- Detalle del Carrito -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+    </div>
+
+    {% endblock %}
