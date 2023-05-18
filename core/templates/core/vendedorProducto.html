@@ -15,11 +15,15 @@
             <table class="table">
                 <thead>
                     <tr>
-                        <th scope="col">N° orden</th>
-                        <th scope="col">Fecha</th>
-                        <th scope="col">Vendedor</th>
-                        <th scope="col">Total</th>
-                        <th scope="col">Ver</th>
+                        <th class="col-1" scope="col-1">N°</th>
+                        <th class="col-1" scope="col-1">Fecha</th>
+                        <th class="col-1" scope="col-1">Vendedor</th>
+                        <th class="col-1" scope="col-1">Total</th>
+                        <th class="col-1" scope="col-1">Estado</th>
+                        <th class="col-1" scope="col"></th>
+                        <th class="col-1" scope="col-1">Ver</th>
+                        <th class="col-1" scope="col"></th>
+
 
 
 
@@ -33,11 +37,16 @@
                     <tbody>
                         {% for e in boletas %}
                         <tr>
-                            <td data-label="nombre">{{e.id}}</td>
-                            <td data-label="nombre">{{e.fecha}}</td>
-                            <td data-label="nombre">{{e.vendedor}}</td>
-                            <td data-label="nombre">{{e.total}}</td>
-                            <td data-label="nombre">{% if e.estado %}Pagado{% else %}Sin Pago{% endif %}</td>
+                            <td  data-label="nombre">{{e.id}}</td>
+                            <td data-label="nombre">
+                                <script>
+                                  var fecha = "{{e.fecha}}";
+                                  document.write(fecha.substring(0, 6));
+                                </script>
+                              </td>
+                                                          <td  data-label="nombre">{{e.vendedor}}</td>
+                            <td  data-label="nombre">{{e.total}}</td>
+                            <td  data-label="nombre">{% if e.estado %}Pagado{% else %}Sin Pago{% endif %}</td>
                             <!-- Button trigger modal -->
                             <td>
 
@@ -63,11 +72,18 @@
             <table class="table">
                 <thead>
                     <tr>
-                        <th scope="col">N° orden</th>
-                        <th scope="col">Fecha</th>
-                        <th scope="col">Vendedor</th>
-                        <th scope="col">Total</th>
-                        <th scope="col">Ver</th>
+                        <th class="col-1" scope="col">N°</th>
+                        <th class="col-1" scope="col">Fecha</th>
+                        
+                        <th class="col-1" scope="col">Vendedor</th>
+                        <th class="col-1" scope="col"></th>
+                        <th class="col-1" scope="col">Total</th>
+                        <th class="col-1" scope="col"></th>
+                        <th class="col-1" scope="col">Estado</th>
+                        <th class="col-1" scope="col"></th>
+                        <th class="col-1" scope="col">Ver</th>
+                        <th class="col-1" scope="col"></th>
+
 
 
 
@@ -82,7 +98,12 @@
                         {% for e in boletasAceptadas %}
                         <tr>
                             <td data-label="nombre">{{e.id}}</td>
-                            <td data-label="nombre">{{e.fecha}}</td>
+                            <td data-label="nombre">
+                                <script>
+                                  var fecha = "{{e.fecha}}";
+                                  document.write(fecha.substring(0, 6));
+                                </script>
+                              </td>
                             <td data-label="nombre">{{e.vendedor}}</td>
                             <td data-label="nombre">{{e.total}}</td>
                             <td data-label="nombre">{% if e.estado %}Pagado{% else %}Sin Pago{% endif %}</td>

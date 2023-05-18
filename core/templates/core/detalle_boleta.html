@@ -49,6 +49,7 @@
 
             </div>
             <div class="col-lg-6 col-md-12">
+                {% for e in boletas %}
 
                 <b>Orden de pedido:</b>
                 <br>
@@ -59,12 +60,14 @@
 
                         <div class="card-body">
                             <div class="flex">
-                                <h5 class="card-title">N° Orden: 00001 </h5>
-                                <h5>Fecha: 24-04-2023</h5>
+                                <h5 class="card-title">N° Orden: {{e.id}} </h5>
+                                <h5>Fecha: {{e.fecha}} </h5>
                             </div>
-                            <p class="card-text">Vendedor:  {{user.username}}</p>
+                            <p class="card-text">Vendedor:  {{e.vendedor}} </p>
 
                         </div>
+                        {% endfor %}
+
                         <table class="table">
 
                             <thead>
