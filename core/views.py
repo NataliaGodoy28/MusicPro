@@ -16,6 +16,9 @@ boleta2 = 0
 # Create your views here.
 @csrf_exempt
 def crearBoletacarro(request):
+    if not request.session.get('usuario'):
+        request.session['usuario'] = 'invitado'
+
     usuario = request.session['usuario']
     
     if request.method == 'POST':
