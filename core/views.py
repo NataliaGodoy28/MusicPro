@@ -14,7 +14,92 @@ boletaGlobal = 0
 boleta2 = 0
 
 # Create your views here.
+@csrf_exempt
+def crearBoletacarro(request):
+    usuario = request.session['usuario']
+    
+    if request.method == 'POST':
+        # Obtener el carrito
+        carrito = request.session.get('carrito', {})
+        productos = []
 
+        # Calcular el total del carrito
+        total_carrito = Decimal('0.00')
+
+        for producto_carrito_id, cantidad in carrito.items():
+            producto_id, session_key = producto_carrito_id.split('_')
+            producto = get_object_or_404(Producto, id=producto_id)
+            total_producto = cantidad * producto.precio
+
+            productos.append({
+                'id': producto_carrito_id,
+                'codigo' : producto.codigo,
+                'nombre': producto.nombre,
+                'cantidad': cantidad,
+                'precio': producto.precio,
+                'imagen_url': producto.imagen.url,
+                'precio_total_producto': total_producto,
+            })
+
+            total_carrito += total_producto
+
+        if not productos:
+            # Mostrar mensaje de error si el carrito está vacío
+            messages.error(request, 'El carrito está vacío.', extra_tags='alert-danger')
+            # Redireccionar al usuario a la página de vendedor
+            return redirect('index')
+
+        try:
+            # Crear una nueva instancia de Boleta
+            boleta = Boleta.objects.create(vendedor=usuario)
+
+            # Insertar los productos del carrito en el detalle de la boleta
+            total_boleta = Decimal('0.00')
+            for producto_data in productos:
+                codigo_producto = producto_data['codigo']
+                cantidad = producto_data['cantidad']
+                producto = get_object_or_404(Producto, codigo=codigo_producto)
+
+                detalle_boleta = DetalleBoleta(
+                    boleta=boleta,
+                    producto=producto,
+                    cantidad=cantidad,
+                    precio_unitario=producto.precio
+                )
+
+                detalle_boleta.save()
+
+                total_producto = producto.precio * cantidad
+                total_boleta += total_producto
+
+            # Guardar el total en la boleta
+
+            boleta.total = total_boleta
+            boleta.save()
+
+            # Obtener todos los detalles de la boleta para mostrar en la vista
+            detalles_boleta = DetalleBoleta.objects.filter(boleta=boleta)
+            boletas = Boleta.objects.all().order_by('-id')
+
+            datos = {
+                'detalle': detalles_boleta,
+                'boletas': boletas,
+                'total_boleta': total_boleta,
+                'productos': productos,
+                'precio_total_carrito': total_carrito,
+            }
+
+            # Resto del código de la vista
+            return render(request, 'core/index.html', datos)
+
+        except Producto.DoesNotExist:
+            # Mostrar mensaje de error personalizado
+            messages.error(request, 'El producto no existe.', extra_tags='alert-danger')
+            # Redireccionar al usuario a la página de vendedor
+            return redirect('index')
+
+    # Si el método HTTP no es POST, se muestra el formulario inicial o cualquier otra lógica que desees implementar
+    return render(request, 'core/index.html')
 
 def productos(request):
     datos = {

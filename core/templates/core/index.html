@@ -14,8 +14,10 @@
                 <div class="row">
                     <div class="col-md-7">
                         <div class="campos">
-                            <input type="text" name="buscar" placeholder="Buscar en MusicPro" id="inbu" class="form-control buscar">&nbsp;
-                            <img style="width: 10%;height: 10%" src="../../static/core/img/lupa.png" alt="logo facebook">
+                            <input type="text" name="buscar" placeholder="Buscar en MusicPro" id="inbu"
+                                class="form-control buscar">&nbsp;
+                            <img style="width: 10%;height: 10%" src="../../static/core/img/lupa.png"
+                                alt="logo facebook">
 
                         </div>
                     </div>
@@ -26,15 +28,16 @@
                                 <option value="1">Instrumentos</option>
                                 <option value="2">Amplificadores</option>
                             </select>&nbsp;
-                            <img style="width: 10%;height: 10%; margin-top: 4%;" src="../../static/core/img/filtro.png" alt="logo facebook">
+                            <img style="width: 10%;height: 10%; margin-top: 4%;" src="../../static/core/img/filtro.png"
+                                alt="logo facebook">
 
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        
-        
+
+
         <div>
             <div id="carr">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-basket3 btncart"
@@ -62,7 +65,8 @@
                 <p class="codigo">{{ pr.codigo }}</p>
                 <p class="desc">{{ pr.descripcion }}</p>
                 <p class="price"><strong>${{ pr.precio }}</strong> </p>
-                <a style="color: red !important; text-decoration: none" class="ver-descripcion" data-id="{{ pr.id }}">Ver descripción</a>
+                <a style="color: red !important; text-decoration: none" class="ver-descripcion"
+                    data-id="{{ pr.id }}">Ver descripción</a>
 
                 <p class="detalle" style="visibility: hidden;">{{ pr.detalle }}</p>
                 <button class="add-to-cart botonespr" data-producto-id="{{ pr.id }}">Agregar al carrito</button>
@@ -148,7 +152,25 @@
                 });
                 document.getElementById("acpago").addEventListener("click", function () {
                     var xhr = new XMLHttpRequest();
-                    xhr.open("POST", "/reset_carrito/", true);
+                    xhr.open("POST", "/crearBoletacarro", true);     // URL para crear la boleta
+                    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+                    xhr.onreadystatechange = function () {
+                        if (xhr.readyState === 4) {
+                            if (xhr.status === 200) {
+                                // La boleta se creó correctamente, ahora se puede borrar el carrito
+                                borrarCarrito();
+                            } else {
+                                // Mostrar mensaje de error si la creación de la boleta falla
+                                alert('Error al crear la boleta.');
+                            }
+                        }
+                    };
+                    xhr.send();
+                });
+
+                function borrarCarrito() {
+                    var xhr = new XMLHttpRequest();
+                    xhr.open("POST", "/reset_carrito/", true);  // URL para borrar el carrito
                     xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
                     xhr.onreadystatechange = function () {
                         if (xhr.readyState === 4 && xhr.status === 200) {
@@ -157,7 +179,7 @@
                         }
                     };
                     xhr.send();
-                });
+                }
                 function actualizarCarrito() {
                     // Realizar una solicitud AJAX al servidor para obtener el contenido actualizado del carrito
                     $.ajax({
@@ -262,8 +284,8 @@
                 <span class="close5 close">&times;</span>
                 <h1>Gracias Por Su Compra</h1>
                 <div class="btnmetod2">
-                    <p>El Total de su Compra fue ${{ total_carrito }} se enviara la boleta al correo registrado o
-                        ingresado </p>
+                    <p>El Total de su Compra fue ${{ total_carrito }} se enviará la boleta al correo registrado o
+                        ingresado.</p>
                     <button id="acpago" class="metod3 botonespr">Aceptar</button>
                 </div>
             </div>

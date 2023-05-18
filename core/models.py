@@ -46,6 +46,7 @@ class Boleta (models.Model):
     vendedor = models.CharField(max_length=40, null=True, blank=True)
     pago = models.IntegerField(null=True,blank=True)
     estado = models.BooleanField(default=False, null=True, blank=True)
+    tipo_pago = models.CharField(max_length=40, null=True, blank=True)
     def __int__(self):
         return self.id
 
