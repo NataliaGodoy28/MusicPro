@@ -703,6 +703,6 @@ def vendedorProducto(request):
 def prueba(request):
     response = requests.get('https://cmvapp.cl/listarDelegado.php')
     data = response.json()
-    data = {'api_data': data}  # Pasar los datos al contexto
+    data = {'api_data': data} 
 
     return render(request, 'core/prueba.html', data)
