@@ -1,0 +1,15 @@
+{% extends 'core/plantillaGlobal.html' %}
+{% load static %}
+{% block contenido %}
+
+Hola
+
+<!-- prueba.html -->
+<h1>Datos de la API:</h1>
+<ul>
+  {% for item in api_data %}
+    <li>{{ item.nombre }}</li>
+  {% endfor %}
+</ul>
+
+{% endblock %}

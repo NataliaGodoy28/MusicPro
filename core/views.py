@@ -1,5 +1,6 @@
 from decimal import Decimal
 from django.shortcuts import render, redirect
+import requests
 from .models import *
 from .forms import *
 from django.shortcuts import get_object_or_404
@@ -697,3 +698,11 @@ def vendedorProducto(request):
         'boletasAceptadas':boletas_aceptadas}
 
     return render(request, 'core/vendedorProducto.html', datos)
+
+
+def prueba(request):
+    response = requests.get('https://cmvapp.cl/listarDelegado.php')
+    data = response.json()
+    data = {'api_data': data}  # Pasar los datos al contexto
+
+    return render(request, 'core/prueba.html', data)

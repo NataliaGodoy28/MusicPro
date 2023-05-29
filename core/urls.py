@@ -36,6 +36,8 @@ urlpatterns = [
     path('vendedorProducto', vendedorProducto ,name='vendedorProducto'),
     path('boletaAceptada/<id>', boletaAceptada ,name='boletaAceptada'),
     path('crearBoletacarro', crearBoletacarro ,name='crearBoletacarro'),
+    path('prueba', prueba ,name='prueba'),
+
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
