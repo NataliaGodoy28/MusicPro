@@ -1,51 +1,41 @@
-from decimal import Decimal
 from django.shortcuts import render, redirect
-import requests
 from .models import *
 from .forms import *
 from django.shortcuts import get_object_or_404
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.files.storage import default_storage
-from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-
+import json
+from django.http import JsonResponse
 boleta = 0
 boletaGlobal = 0
 boleta2 = 0
 
-# Create your views here.
+
+
 @csrf_exempt
 def crearBoletacarro(request):
     if not request.session.get('usuario'):
         request.session['usuario'] = 'invitado'
 
     usuario = request.session['usuario']
-    
+    total_boleta = 0
+
     if request.method == 'POST':
-        # Obtener el carrito
-        carrito = request.session.get('carrito', {})
+        data = json.loads(request.body)
+        cart_items = data.get("cartItems", [])
+        pago = data.get("paymentMethod")
         productos = []
 
-        # Calcular el total del carrito
-        total_carrito = Decimal('0.00')
-
-        for producto_carrito_id, cantidad in carrito.items():
-            producto_id, session_key = producto_carrito_id.split('_')
-            producto = get_object_or_404(Producto, id=producto_id)
-            total_producto = cantidad * producto.precio
-
+        for item in cart_items:
             productos.append({
-                'id': producto_carrito_id,
-                'codigo' : producto.codigo,
-                'nombre': producto.nombre,
-                'cantidad': cantidad,
-                'precio': producto.precio,
-                'imagen_url': producto.imagen.url,
-                'precio_total_producto': total_producto,
+                'codigo': item.get("code"),
+                'nombre': item.get("title"),
+                'cantidad': item.get("count"),
+                'precio': item.get("price"),
+                'imagen_url': item.get("img"),
             })
-
-            total_carrito += total_producto
 
         if not productos:
             # Mostrar mensaje de error si el carrito está vacío
@@ -57,8 +47,6 @@ def crearBoletacarro(request):
             # Crear una nueva instancia de Boleta
             boleta = Boleta.objects.create(vendedor=usuario)
 
-            # Insertar los productos del carrito en el detalle de la boleta
-            total_boleta = Decimal('0.00')
             for producto_data in productos:
                 codigo_producto = producto_data['codigo']
                 cantidad = producto_data['cantidad']
@@ -77,7 +65,7 @@ def crearBoletacarro(request):
                 total_boleta += total_producto
 
             # Guardar el total en la boleta
-
+            boleta.tipo_pago = pago
             boleta.total = total_boleta
             boleta.save()
 
@@ -90,7 +78,7 @@ def crearBoletacarro(request):
                 'boletas': boletas,
                 'total_boleta': total_boleta,
                 'productos': productos,
-                'precio_total_carrito': total_carrito,
+                'precio_total_carrito': total_boleta,
             }
 
             # Resto del código de la vista
@@ -121,7 +109,6 @@ def productos(request):
         else:
             print(pform.errors)  # Imprimir los errores del formulario
     return render(request, 'core/productos.html', datos)
-
 
 def eliminar_producto(request, producto_id):
     producto = get_object_or_404(Producto, id=producto_id)
@@ -165,143 +152,14 @@ def editar_producto(request, producto_id):
     return render(request, 'productos.html', {'producto': producto})
 
 
-@csrf_exempt
-def agregar_al_carrito(request, producto_id):
-    producto = get_object_or_404(Producto, id=producto_id)
-
-    # Obtener o crear el carrito de compras en la sesión
-    carrito = request.session.get('carrito', {})
-
-    # Verificar si el producto ya existe en el carrito
-    producto_carrito_id = f"{producto_id}_{request.session.session_key}"
-    carrito[producto_carrito_id] = carrito.get(producto_carrito_id, 0) + 1
-
-    # Verificar si la cantidad es cero y eliminar el producto del carrito
-    if carrito[producto_carrito_id] <= 0:
-        del carrito[producto_carrito_id]
-
-    # Actualizar el carrito en la sesión
-    request.session['carrito'] = carrito
-
-    # Calcular el precio total del carrito
-    total_carrito = Decimal('0.00')
-    for producto_carrito_id, cantidad in carrito.items():
-        producto_id, session_key = producto_carrito_id.split('_')
-        producto = get_object_or_404(Producto, id=producto_id)
-        total_carrito += cantidad * producto.precio
-
-    # Obtener el producto agregado al carrito
-    producto_agregado = {
-        'id': producto_carrito_id,
-        'nombre': producto.nombre,
-        'cantidad': carrito.get(producto_carrito_id, 0),
-        'precio': producto.precio,
-        'imagen_url': producto.imagen.url,
-        'precio_total_carrito': total_carrito,
-    }
-
-    return JsonResponse(producto_agregado)
-
-
-@csrf_exempt
-def eliminar_del_carrito(request, producto_carrito_id):
-    # Obtener o crear el carrito de compras en la sesión
-    carrito = request.session.get('carrito', {})
-
-    # Verificar si el producto existe en el carrito
-    if producto_carrito_id in carrito:
-        # Restar una unidad al producto del carrito
-        carrito[producto_carrito_id] -= 1
-
-        # Verificar si la cantidad es cero y eliminar el producto del carrito
-        if carrito[producto_carrito_id] <= 0:
-            del carrito[producto_carrito_id]
-
-    # Actualizar el carrito en la sesión
-    request.session['carrito'] = carrito
-
-    # Calcular el precio total del carrito
-    total_carrito = Decimal('0.00')
-    for producto_carrito_id, cantidad in carrito.items():
-        producto_id, session_key = producto_carrito_id.split('_')
-        producto = get_object_or_404(Producto, id=producto_id)
-        total_carrito += cantidad * producto.precio
-
-    # Obtener el producto eliminado del carrito
-    producto_eliminado = {
-        'id': producto_carrito_id,
-        'precio_total_carrito': total_carrito,
-    }
-
-    # Devolver una respuesta JSON con el producto eliminado y el precio total actualizado
-    return JsonResponse(producto_eliminado)
-
-
-@csrf_exempt
-def obtener_carrito(request):
-    carrito = request.session.get('carrito', {})
-    productos = []
-    total_carrito = Decimal('0.00')
-
-    for producto_carrito_id, cantidad in carrito.items():
-        producto_id, session_key = producto_carrito_id.split('_')
-        producto = get_object_or_404(Producto, id=producto_id)
-        total_producto = cantidad * producto.precio
-
-        productos.append({
-            'id': producto_carrito_id,
-            'nombre': producto.nombre,
-            'cantidad': cantidad,
-            'precio': producto.precio,
-            'imagen_url': producto.imagen.url,
-            'precio_total_producto': total_producto,
-        })
-
-        total_carrito += total_producto
-
-    response_data = {
-        'productos': productos,
-        'precio_total_carrito': total_carrito,
-    }
-
-    return JsonResponse(response_data)
-
-
 def index(request):
     productos = Producto.objects.all()
-    carrito = request.session.get('carrito', {})
-    productos_en_carrito = []
-
-    total_carrito = Decimal('0.00')  # Inicializar el precio total del carrito
-
-    for producto_carrito_id, cantidad in carrito.items():
-        producto_id, carrito_id = producto_carrito_id.split(
-            '_')  # Separar el producto_id y el carrito_id
-        producto = get_object_or_404(Producto, id=producto_id)
-        precio_producto = producto.precio * cantidad
-        total_carrito += precio_producto
-
-        productos_en_carrito.append({
-            'producto': producto,
-            'cantidad': cantidad,
-            'producto_carrito_id': producto_carrito_id,
-            'precio_total': precio_producto  # Agregar el precio total al diccionario
-        })
-
     datos = {
-        'productos': productos,
-        'productos_en_carrito': productos_en_carrito,
-        'total_carrito': total_carrito  # Pasar el precio total del carrito a la plantilla
+        'productos': productos
     }
 
     return render(request, 'core/index.html', datos)
 
-
-@csrf_exempt
-def reset_carrito(request):
-    if 'carrito' in request.session:
-        del request.session['carrito']
-    return HttpResponse("El carrito se ha restablecido.")
 
 
 def bodeguero(request):
