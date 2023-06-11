@@ -222,12 +222,20 @@ document.addEventListener('DOMContentLoaded', function () {
     pago.addEventListener('click', openModal);
     const cmodal2 = document.querySelector('#cmodal2');
     cmodal2.addEventListener('click', closeModal2);
+
     const cmodal3 = document.querySelector('#cmodal3');
     cmodal3.addEventListener('click', closeModal3);
     const conf = document.querySelector('#conf');
-    conf.addEventListener('click', closeModal3);
+    conf.addEventListener('click', confmodal3);
+
     const conftrans = document.querySelector('#conftrans');
     conftrans.addEventListener('click', openModal3);
+
+    const deb2 = document.querySelector('#debito');
+    deb2.addEventListener('click', openModal4);
+    const cred2 = document.querySelector('#credito');
+    cred2.addEventListener('click', openModal4);
+
 
 
     function openModal() {
@@ -247,12 +255,18 @@ document.addEventListener('DOMContentLoaded', function () {
       document.getElementById("modal2").style.display = "none";
       document.getElementById("modal3").style.display = "block";
     }
-    function closeModal3() {
+    function confmodal3() {
       checkout();
       document.getElementById("modal3").style.display = "none";
     }
+    function closeModal3() {
+      document.getElementById("modal3").style.display = "none";
+    }
     //Fin Modales
-  
+    function openModal4() {
+      document.getElementById("modal").style.display = "none";
+      document.getElementById("modal3").style.display = "block";
+    }
   });
   
   
