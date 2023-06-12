@@ -34,10 +34,20 @@
 
                         </div>
                     </div>
+                    
                 </div>
             </div>
         </div>
-
+        <div class="col-md-2">
+            <div class="d-flex flex-row">
+                <label for="precioSelect" class="mr-2">Moneda</label>
+                &nbsp;
+                <select id="precioSelect" class="form-control" onchange="mostrarPrecio()">
+                    <option value="chileno">CLP</option>
+                    <option value="dolar">USD</option>
+                </select>
+            </div>
+        </div>
 
         <div class="cart-icon">
             <i class="bi bi-cart"></i>
@@ -60,7 +70,11 @@
                 <h3>{{ pr.nombre }}</h3>
                 <p class="codigo">{{ pr.codigo }}</p>
                 <p class="desc">{{ pr.descripcion }}</p>
-                <p class="price"><strong>${{ pr.precio }}</strong> </p>
+                <p class="price chileno"><strong>${{ pr.precio }}</strong> </p>
+                <p class="price dolar" style="display: none;"><strong>${{ pr.precio_dolar }}</strong> </p>
+
+
+
                 <a style="color: red !important; text-decoration: none" class="ver-descripcion"
                     data-id="{{ pr.id }}">Ver descripción</a>
 
@@ -70,6 +84,27 @@
         </div>
         {% endfor %}
     </div>
+    <script>
+        function mostrarPrecio() {
+            var select = document.getElementById("precioSelect");
+            var selectedOption = select.options[select.selectedIndex].value;
+            var productos = document.getElementsByClassName("product");
+
+            for (var i = 0; i < productos.length; i++) {
+                var product = productos[i];
+                var precioChileno = product.querySelector(".price.chileno");
+                var precioDolar = product.querySelector(".price.dolar");
+
+                if (selectedOption === "chileno") {
+                    precioChileno.style.display = "block";
+                    precioDolar.style.display = "none";
+                } else if (selectedOption === "dolar") {
+                    precioChileno.style.display = "none";
+                    precioDolar.style.display = "block";
+                }
+            }
+        }
+    </script>
 
     <!-- Detalle del Carrito -->
     <div class="overlay"></div>
@@ -80,19 +115,19 @@
         <div class="cart-total">
             <strong style="margin-left: 10px;">Total:</strong>
             <span class="total">$0</span>
-            <button  id="pago" class="checkout">Pagar</button>
+            <button id="pago" class="checkout">Pagar</button>
         </div>
     </div>
     <!-- Detalle del Carrito -->
 
-    
+
 
     <div id="modal" class="modal">
         <div class="modal-content">
             <span class="close" id="cmodal1">&times;</span>
             <button id="debito" class="botonespr">Debito</button>
             <button id="credito" class="botonespr">Credito</button>
-            <button id="transferencia"  class="botonespr">Transferencia</button>
+            <button id="transferencia" class="botonespr">Transferencia</button>
         </div>
     </div>
 
@@ -111,11 +146,11 @@
 
     <div id="modal3" class="modal">
         <div class="modal-content">
-            <span class="close" id="cmodal3" >&times;</span>
+            <span class="close" id="cmodal3">&times;</span>
             <h1>Gracias por su compra</h1>
             <p>El pago esta en proceso de confirmacion, apenas este listo, se enviara su boleta</p>
-            <button  class="botonespr" id="conf" >Confirmar</button>
+            <button class="botonespr" id="conf">Confirmar</button>
         </div>
     </div>
-    
+
     {% endblock %}

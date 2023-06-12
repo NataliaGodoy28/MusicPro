@@ -8,14 +8,18 @@ from django.core.files.storage import default_storage
 from django.views.decorators.csrf import csrf_exempt
 import json
 from django.http import JsonResponse
+import requests
 boleta = 0
 boletaGlobal = 0
 boleta2 = 0
 
+dolar = None
 
 
 @csrf_exempt
 def crearBoletacarro(request):
+
+    
     if not request.session.get('usuario'):
         request.session['usuario'] = 'invitado'
 
@@ -153,13 +157,18 @@ def editar_producto(request, producto_id):
 
 
 def index(request):
+    global dolar
+    
+    if dolar is None:
+        valor_dolar()
+   
     productos = Producto.objects.all()
-    datos = {
-        'productos': productos
-    }
 
-    return render(request, 'core/index.html', datos)
+    for producto in productos:
+        precioD = float(producto.precio)
+        producto.precio_dolar = round(precioD / float(dolar), 2)
 
+    return render(request, 'core/index.html', {'productos': productos})
 
 
 def bodeguero(request):
@@ -558,9 +567,29 @@ def vendedorProducto(request):
     return render(request, 'core/vendedorProducto.html', datos)
 
 
-def prueba(request):
-    response = requests.get('https://cmvapp.cl/listarDelegado.php')
+
+def valor_dolar():
+    global dolar
+
+    clave = "SmBc4syUBeoa"
+    Usuario = "206039035"
+    serie = "F073.TCO.PRE.Z.D"
+    url = "https://si3.bcentral.cl/SieteRestWS/SieteRestWS.ashx?user=206039035&pass=SmBc4syUBeoa&firstdate=2023-06-10&lastdate=2023-06-12&timeseries=F073.TCO.PRE.Z.D&function=GetSeries"
+
+    response = requests.get(url)
     data = response.json()
-    data = {'api_data': data} 
+    
+    dolar = data.get("Series", {}).get("Obs", [])[0].get("value")
+
+
+def prueba(request):
+    global dolar
+    
+    if dolar is None:
+        valor_dolar()
+
+    precio = 5000
+    total = round(precio / float(dolar), 2)
+    data = {'api_data': total}
 
     return render(request, 'core/prueba.html', data)
