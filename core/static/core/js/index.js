@@ -64,12 +64,13 @@ document.addEventListener('DOMContentLoaded', function () {
     const cart = document.querySelector('.cart');
     const cartItems = document.querySelector('.cart-items');
     const cartTotal = document.querySelector('.total');
+    const cartTotalc = document.querySelector('.totalc');
     const productBtns = document.querySelectorAll('.add-to-cart');
   
     let cartCount = 0;
     let cartTotalPrice = 0;
     let cartItemsArr = [];
-  
+    let cartTotalPricec = 0;
     // Event Listeners
     cartIcon.addEventListener('click', toggleCart);
     overlay.addEventListener('click', toggleCart);
@@ -89,6 +90,7 @@ document.addEventListener('DOMContentLoaded', function () {
       const productTitle = product.querySelector('h3').textContent;
       const productCode = product.querySelector('.codigo').textContent;
       const productPrice = parseFloat(product.querySelector('.price').textContent.slice(1));
+      const productPriced = parseFloat(product.querySelector('.priced').textContent.slice(1));
       const productId = e.target.dataset.id;
       const item = {
         id: productId,
@@ -96,6 +98,7 @@ document.addEventListener('DOMContentLoaded', function () {
         img: productImg,
         title: productTitle,
         price: productPrice,
+        priced: productPriced,
         count: 1
       };
   
@@ -110,9 +113,10 @@ document.addEventListener('DOMContentLoaded', function () {
       // Update cart count and total price
       cartCount++;
       cartTotalPrice += productPrice;
+      cartTotalPricec += productPriced;
       cartIcon.querySelector('.cart-count').textContent = cartCount;
       cartTotal.textContent = `$${cartTotalPrice.toFixed(0)}`;
-  
+      cartTotalc.textContent = `$${cartTotalPricec.toFixed(2)}`;
       // Update cart items list
       renderCartItems();
     }
@@ -121,14 +125,30 @@ document.addEventListener('DOMContentLoaded', function () {
       cartItems.innerHTML = '';
       cartItemsArr.forEach(item => {
         const li = document.createElement('li');
-        li.innerHTML = `
-        <img src="${item.img}" alt="${item.title}" />
-        <div>
-          <h4>${item.title}</h4>
-          <p>$${item.price.toFixed(0)} x ${item.count}</p>
-          <button class="remove-item" data-id="${item.id}">Eliminar</button>
-        </div>
-      `;
+        var select = document.getElementById("precioSelect");
+        var selectedOption = select.options[select.selectedIndex].value;
+        if (selectedOption === "chileno") {
+              li.innerHTML = `
+            <img src="${item.img}" alt="${item.title}" />
+            <div class="productc">
+              <h4>${item.title}</h4>
+              <p class="pricec chileno"><strong>$${item.price.toFixed(0)} x ${item.count}</strong> </p>
+              <p class="pricecd dolar" style="display: none;"><strong>$${item.priced.toFixed(2)} x ${item.count}</strong> </p>
+              <button class="remove-item" data-id="${item.id}">Eliminar</button>
+            </div>
+          `;
+        } else if (selectedOption === "dolar") {
+          li.innerHTML = `
+          <img src="${item.img}" alt="${item.title}" />
+          <div class="productc">
+            <h4>${item.title}</h4>
+            <p class="pricec chileno" style="display: none;"><strong>$${item.price.toFixed(0)} x ${item.count}</strong> </p>
+            <p class="pricecd dolar" ><strong>$${item.priced.toFixed(2)} x ${item.count}</strong> </p>
+            <button class="remove-item" data-id="${item.id}">Eliminar</button>
+          </div>
+        `;
+        }
+        
         cartItems.appendChild(li);
       });
   
@@ -145,7 +165,7 @@ document.addEventListener('DOMContentLoaded', function () {
       item.count--;
       cartCount--;
       cartTotalPrice -= item.price;
-  
+      cartTotalPricec -= item.priced;
       if (item.count === 0) {
         cartItemsArr = cartItemsArr.filter(item => item.id !== itemId);
       }
@@ -153,6 +173,7 @@ document.addEventListener('DOMContentLoaded', function () {
       // Update cart count and total price
       cartIcon.querySelector('.cart-count').textContent = cartCount;
       cartTotal.textContent = `$${cartTotalPrice.toFixed(0)}`;
+      cartTotalc.textContent = `$${cartTotalPricec.toFixed(2)}`;
   
       // Update cart items list
       renderCartItems();
@@ -183,8 +204,10 @@ document.addEventListener('DOMContentLoaded', function () {
       cartItemsArr = [];
       cartCount = 0;
       cartTotalPrice = 0;
+      cartTotalPricec = 0;
       cartIcon.querySelector('.cart-count').textContent = cartCount;
       cartTotal.textContent = `$${cartTotalPrice.toFixed(0)}`;
+      cartTotalc.textContent = `$${cartTotalPricec.toFixed(2)}`;
       renderCartItems();
       toggleCart();
     }

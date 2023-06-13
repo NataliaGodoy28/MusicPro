@@ -50,7 +50,7 @@
         </div>
 
         <div class="cart-icon">
-            <i class="bi bi-cart"></i>
+            <i class="bi bi-cart" onclick="mostrarPrecio()"></i>
             <span class="cart-count">0</span>
         </div>
 
@@ -71,7 +71,7 @@
                 <p class="codigo">{{ pr.codigo }}</p>
                 <p class="desc">{{ pr.descripcion }}</p>
                 <p class="price chileno"><strong>${{ pr.precio }}</strong> </p>
-                <p class="price dolar" style="display: none;"><strong>${{ pr.precio_dolar }}</strong> </p>
+                <p class="priced dolar" style="display: none;"><strong>${{ pr.precio_dolar }}</strong> </p>
 
 
 
@@ -84,27 +84,6 @@
         </div>
         {% endfor %}
     </div>
-    <script>
-        function mostrarPrecio() {
-            var select = document.getElementById("precioSelect");
-            var selectedOption = select.options[select.selectedIndex].value;
-            var productos = document.getElementsByClassName("product");
-
-            for (var i = 0; i < productos.length; i++) {
-                var product = productos[i];
-                var precioChileno = product.querySelector(".price.chileno");
-                var precioDolar = product.querySelector(".price.dolar");
-
-                if (selectedOption === "chileno") {
-                    precioChileno.style.display = "block";
-                    precioDolar.style.display = "none";
-                } else if (selectedOption === "dolar") {
-                    precioChileno.style.display = "none";
-                    precioDolar.style.display = "block";
-                }
-            }
-        }
-    </script>
 
     <!-- Detalle del Carrito -->
     <div class="overlay"></div>
@@ -115,12 +94,65 @@
         <div class="cart-total">
             <strong style="margin-left: 10px;">Total:</strong>
             <span class="total">$0</span>
+            <span class="totalc" style="display: none;">$0</span>
             <button id="pago" class="checkout">Pagar</button>
         </div>
     </div>
     <!-- Detalle del Carrito -->
 
+    <script>
+        function mostrarPrecio() {
+            var select = document.getElementById("precioSelect");
+            var selectedOption = select.options[select.selectedIndex].value;
+            var productos = document.getElementsByClassName("product");
+            var productosc = document.getElementsByClassName("productc");
 
+
+            for (var i = 0; i < productos.length; i++) {
+                var product = productos[i];
+                var precioChileno = product.querySelector(".price.chileno");
+                var precioDolar = product.querySelector(".priced.dolar");
+
+                if (selectedOption === "chileno") {
+                    precioChileno.style.display = "block";
+                    precioDolar.style.display = "none";
+                } else if (selectedOption === "dolar") {
+                    precioChileno.style.display = "none";
+                    precioDolar.style.display = "block";
+                }
+            }
+                var total1 = document.querySelector(".total");
+                var totalc1 = document.querySelector(".totalc");
+                
+                
+                if (selectedOption === "chileno") {
+                    total1.style.display = "block";
+                    totalc1.style.display = "none";
+                    
+                } else if (selectedOption === "dolar") {
+                    total1.style.display = "none";
+                    totalc1.style.display = "block";
+                    
+                }
+
+                for (var i = 0; i < productosc.length; i++) {
+                    var productc = productosc[i];
+                    var precioChilenoc = productc.querySelector(".pricec.chileno");
+                    var precioDolarc = productc.querySelector(".pricecd.dolar");
+                    
+                if (selectedOption === "chileno") {
+                    precioChilenoc.style.display = "block";
+                    precioDolarc.style.display = "none";
+                    
+                } else if (selectedOption === "dolar") {
+                    precioChilenoc.style.display = "none";
+                    precioDolarc.style.display = "block";
+                    
+                }
+            }
+            
+        }
+    </script>
 
     <div id="modal" class="modal">
         <div class="modal-content">
