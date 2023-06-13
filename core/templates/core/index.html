@@ -157,8 +157,10 @@
     <div id="modal" class="modal">
         <div class="modal-content">
             <span class="close" id="cmodal1">&times;</span>
-            <button id="debito" class="botonespr">Debito</button>
-            <button id="credito" class="botonespr">Credito</button>
+            
+        
+            <button id="debito" class="botonespr">Tarjetas</button>
+           
             <button id="transferencia" class="botonespr">Transferencia</button>
         </div>
     </div>
@@ -180,8 +182,12 @@
         <div class="modal-content">
             <span class="close" id="cmodal3">&times;</span>
             <h1>Gracias por su compra</h1>
-            <p>El pago esta en proceso de confirmacion, apenas este listo, se enviara su boleta</p>
-            <button class="botonespr" id="conf">Confirmar</button>
+            <p>Clickeando el boton sera enviado a pagar</p>
+            <form action="{% url 'transbank' %}" method="post">
+                {% csrf_token %}
+                <button class="botonespr" id="conf">Ir a pagar</button>
+             </form>
+            
         </div>
     </div>
 

@@ -218,18 +218,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
     const deb = document.querySelector('#debito');
     deb.addEventListener('click', function() {
-      metodoPagoSeleccionado = 'Débito';
+      metodoPagoSeleccionado = 'Tarjeta';
+      checkout();
+      openModal4();
     });
 
-    const cred = document.querySelector('#credito');
-    cred.addEventListener('click', function() {
-      metodoPagoSeleccionado = 'Crédito';
-    });
 
-    const trans = document.querySelector('#transferencia');
-    trans.addEventListener('click', function() {
-      metodoPagoSeleccionado = 'Transferencia';
-    });
+
+  
 
     function obtenerMetodoPago() {
       return metodoPagoSeleccionado;
@@ -238,26 +234,33 @@ document.addEventListener('DOMContentLoaded', function () {
       //Modales
 
     const trans2 = document.querySelector('#transferencia');
-    trans2.addEventListener('click', openModal2);
+    trans2.addEventListener('click', function() {
+      openModal2();
+    });
     const cmodal1 = document.querySelector('#cmodal1');
     cmodal1.addEventListener('click', closeModal);
     const pago = document.querySelector('#pago');
-    pago.addEventListener('click', openModal);
+
+    pago.addEventListener('click', function() {
+      openModal();
+    });
     const cmodal2 = document.querySelector('#cmodal2');
     cmodal2.addEventListener('click', closeModal2);
 
     const cmodal3 = document.querySelector('#cmodal3');
     cmodal3.addEventListener('click', closeModal3);
+
     const conf = document.querySelector('#conf');
-    conf.addEventListener('click', confmodal3);
-
+    conf.addEventListener('click', function() {
+      confmodal3();
+    });
     const conftrans = document.querySelector('#conftrans');
-    conftrans.addEventListener('click', openModal3);
-
-    const deb2 = document.querySelector('#debito');
-    deb2.addEventListener('click', openModal4);
-    const cred2 = document.querySelector('#credito');
-    cred2.addEventListener('click', openModal4);
+    
+    conftrans.addEventListener('click', function() {
+      metodoPagoSeleccionado = 'Transferencia';
+      checkout();
+      closeModal2();
+    });
 
 
 
@@ -279,7 +282,6 @@ document.addEventListener('DOMContentLoaded', function () {
       document.getElementById("modal3").style.display = "block";
     }
     function confmodal3() {
-      checkout();
       document.getElementById("modal3").style.display = "none";
     }
     function closeModal3() {

@@ -33,7 +33,7 @@ urlpatterns = [
     path('boletaAceptada/<id>', boletaAceptada ,name='boletaAceptada'),
     path('crearBoletacarro', crearBoletacarro ,name='crearBoletacarro'),
     path('prueba', prueba ,name='prueba'),
-
+    path('transbank', transbank ,name='transbank'),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

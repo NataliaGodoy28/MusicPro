@@ -7,8 +7,10 @@ from django.contrib.auth.decorators import login_required
 from django.core.files.storage import default_storage
 from django.views.decorators.csrf import csrf_exempt
 import json
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponseRedirect
+
 import requests
+import uuid
 boleta = 0
 boletaGlobal = 0
 boleta2 = 0
@@ -593,3 +595,113 @@ def prueba(request):
     data = {'api_data': total}
 
     return render(request, 'core/prueba.html', data)
+
+
+
+
+# API WEBPAY PLUS
+def get_ws(data, method, type, endpoint):
+    if type == 'live':
+        TbkApiKeyId = '597055555532'
+        TbkApiKeySecret = '579B532A7440BB0C9079DED94D31EA1615BACEB56610332264630D42D0A36B1C'
+        url = "https://webpay3g.transbank.cl" + endpoint  # Live
+    else:
+        TbkApiKeyId = '597055555532'
+        TbkApiKeySecret = '579B532A7440BB0C9079DED94D31EA1615BACEB56610332264630D42D0A36B1C'
+        url = "https://webpay3gint.transbank.cl" + endpoint  # Testing
+
+    headers = {
+        'Tbk-Api-Key-Id': TbkApiKeyId,
+        'Tbk-Api-Key-Secret': TbkApiKeySecret,
+        'Content-Type': 'application/json'
+    }
+
+    response = requests.request(method, url, headers=headers, data=data)
+    return response.json()
+
+def transbank(request):
+    baseurl = request.build_absolute_uri('/')
+
+    action = request.GET.get("action", "init")
+    message = None
+
+    # Generar el idSesion único
+    id_sesion = str(uuid.uuid4())
+
+    # Obtener el objeto Datos_compra correspondiente a la compra más reciente
+    datos_compra = Boleta.objects.latest('id')
+    total = datos_compra.total
+    # Crear una instancia de la clase Carrito
+    
+
+    # Obtener el precio total del carrito
+    
+    if action == "init":
+        message = 'init'
+        amount = total
+        return_url = baseurl + "?action=getResult"
+        type = "sandbox"
+        data = {
+            "buy_order": datos_compra.id,
+            "session_id": id_sesion,
+            "amount": amount,
+            "return_url": return_url
+        }
+        data = json.dumps(data)
+        method = 'POST'
+        endpoint = '/rswebpaytransaction/api/webpay/v1.2/transactions'
+
+        response = get_ws(data, method, type, endpoint)
+        token = response.get("token")
+        url = response.get("url")
+        redirect_url = f"{url}?token_ws={token}"
+        return HttpResponseRedirect(redirect_url)
+
+    elif action == "getResult":
+        message = request.POST
+        if 'token_ws' not in request.POST:
+            return JsonResponse({'message': message})
+
+        token = request.POST.get('token_ws')
+
+        
+
+        data = json.dumps({'token': token})
+        method = 'PUT'
+        type = 'sandbox'
+        endpoint = f'/rswebpaytransaction/api/webpay/v1.2/transactions/{token}'
+
+        response = get_ws(data, method, type, endpoint)
+        return JsonResponse(response)
+
+    elif action == "getStatus":
+        message = request.POST
+        if 'token_ws' not in request.POST:
+            return JsonResponse({'message': message})
+
+        token = request.POST.get('token_ws')
+        data = json.dumps({'token': token})
+        method = 'GET'
+        type = 'sandbox'
+        endpoint = f'/rswebpaytransaction/api/webpay/v1.2/transactions/{token}'
+	
+        response = get_ws(data, method, type, endpoint)
+        return JsonResponse(response)
+
+    elif action == "refund":
+        message = request.POST
+        if 'token_ws' not in request.POST:
+            return JsonResponse({'message': message})
+
+        token = request.POST.get('token_ws')
+        amount = total
+
+        data = json.dumps({'amount': amount})
+        method = 'POST'
+        type = 'sandbox'
+        endpoint = f'/rswebpaytransaction/api/webpay/v1.2/transactions/{token}/refunds'
+
+        response = get_ws(data, method, type, endpoint)
+        return JsonResponse(response)
+
+    return JsonResponse({'message': message})
