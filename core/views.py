@@ -8,7 +8,7 @@ from django.core.files.storage import default_storage
 from django.views.decorators.csrf import csrf_exempt
 import json
 from django.http import JsonResponse, HttpResponseRedirect
-
+from urllib.parse import quote
 import requests
 import uuid
 boleta = 0
@@ -53,6 +53,11 @@ def crearBoletacarro(request):
             # Crear una nueva instancia de Boleta
             boleta = Boleta.objects.create(vendedor=usuario)
 
+            import decimal
+
+            total_cantidad = 0
+            total_boleta = decimal.Decimal('0')
+
             for producto_data in productos:
                 codigo_producto = producto_data['codigo']
                 cantidad = producto_data['cantidad']
@@ -64,16 +69,41 @@ def crearBoletacarro(request):
                     cantidad=cantidad,
                     precio_unitario=producto.precio
                 )
-
                 detalle_boleta.save()
 
                 total_producto = producto.precio * cantidad
                 total_boleta += total_producto
+                total_cantidad += cantidad
 
-            # Guardar el total en la boleta
-            boleta.tipo_pago = pago
-            boleta.total = total_boleta
-            boleta.save()
+            if request.session.get('usuario') == "invitado" or not request.session.get('usuario'):
+                # Aplicar descuento del 15% si hay más de 4 productos
+                if pago == "Transferencia":
+                    boleta.est_pago = "Pendiente"
+                boleta.tipo_pago = pago
+                boleta.total = total_boleta.quantize(decimal.Decimal('0'), rounding=decimal.ROUND_HALF_UP)
+                boleta.save()
+                print("no registrado")
+            else:
+                if total_cantidad > 4:
+                    descuento = total_boleta * decimal.Decimal('0.15')
+                    total_boleta -= descuento
+                    if pago == "Transferencia":
+                        boleta.est_pago = "Pendiente"
+                    boleta.tipo_pago = pago
+                    boleta.total = total_boleta.quantize(decimal.Decimal('0'), rounding=decimal.ROUND_HALF_UP)
+                    boleta.save()
+                    print("entro correcto")
+                else:
+                    if pago == "Transferencia":
+                        boleta.est_pago = "Pendiente"
+                    boleta.tipo_pago = pago
+                    boleta.total = total_boleta.quantize(decimal.Decimal('0'), rounding=decimal.ROUND_HALF_UP)
+                    boleta.save()
+
+            
+
+            
+            
 
             # Obtener todos los detalles de la boleta para mostrar en la vista
             detalles_boleta = DetalleBoleta.objects.filter(boleta=boleta)
@@ -121,7 +151,6 @@ def eliminar_producto(request, producto_id):
     producto.delete()
     return redirect('productos')
 
-
 def editar_producto(request, producto_id):
 
     producto = get_object_or_404(Producto, id=producto_id)
@@ -157,7 +186,6 @@ def editar_producto(request, producto_id):
 
     return render(request, 'productos.html', {'producto': producto})
 
-
 def index(request):
     global dolar
     
@@ -172,7 +200,6 @@ def index(request):
 
     return render(request, 'core/index.html', {'productos': productos})
 
-
 def bodeguero(request):
 
     boletas_aceptadas = Boleta.objects.filter(estadopedido__estadoVendedor='Aceptado', estadopedido__estado__isnull=True).order_by('-id')
@@ -184,18 +211,15 @@ def bodeguero(request):
 
     return render(request, 'core/bodeguero.html', {'boletas': boletas_aceptadas})
 
-
 def detalle_boleta(request):
     boletas = Boleta.objects.all().order_by('-id')
 
     return render(request, 'core/detalle_boleta.html', {'boletas': boletas})
 
-
 def detalle_boleta_vendedor(request):
     boletas = Boleta.objects.all().order_by('-id')
 
     return render(request, 'core/detalleBoletaVendedor.html', {'boletas': boletas})
-
 
 def form_cliente(request):
 
@@ -211,35 +235,33 @@ def form_cliente(request):
     print(f"{Cliente.objects.all()}")
     return render(request, 'core/form_cliente.html', datos)
 
-
 def contador(request):
     datos = {
-        'confirmar': EstadoPedido.objects.filter(estado='Pendiente'),
-        'registro': RegistroEntrega.objects.all(),
-        'form': FRegistroEntrega()
+        'confirmar': Boleta.objects.filter(est_pago='Pendiente'),
+         #'registro': RegistroEntrega.objects.all(),
+        #'form': FRegistroEntrega()
     }
-    if request.method == "POST":
-        formu = FRegistroEntrega(request.POST)
-        if formu.is_valid():
-            formu.save()
-            return redirect('contador')  # redireccionar a la misma vista
+    #if request.method == "POST":
+        #formu = FRegistroEntrega(request.POST)
+        #if formu.is_valid():
+            #formu.save()
+            #return redirect('contador')  # redireccionar a la misma vista
     return render(request, 'core/contador.html', datos)
-
 
 def actualizar_estado_pedido(request, pedido_id, nuevo_estado):
     # Obtener el pedido que se desea actualizar
-    pedido = EstadoPedido.objects.filter(id=pedido_id).first()
+    boleta = Boleta.objects.filter(id=pedido_id).first()
 
     # Verificar si el pedido existe
-    if not pedido:
+    if not boleta:
         # Manejar la situación donde el pedido no existe
         return redirect('pagina_de_error')
 
     # Actualizar el estado del pedido
-    pedido.estado = nuevo_estado
+    boleta.est_pago = nuevo_estado
 
     # Guardar los cambios en la base de datos
-    pedido.save()
+    boleta.save()
 
     # Redireccionar a la página correspondiente
     return redirect('contador')
@@ -263,7 +285,7 @@ def login(request):
             print(contra)
             if usuario.exists() and contra.exists():
                 # Almacena el ID del usuario en la sesión
-                request.session['usuario'] = usuario.first().idCliente
+                request.session['usuario'] = usuario.first().nombreCliente
                 return redirect(to='index')
 
     return render(request, 'core/login.html', datos)
@@ -620,7 +642,7 @@ def get_ws(data, method, type, endpoint):
     return response.json()
 
 def transbank(request):
-    baseurl = request.build_absolute_uri('/')
+    baseurl = request.build_absolute_uri('http://127.0.0.1:8000/transbank')
 
     action = request.GET.get("action", "init")
     message = None
@@ -658,21 +680,53 @@ def transbank(request):
         return HttpResponseRedirect(redirect_url)
 
     elif action == "getResult":
-        message = request.POST
-        if 'token_ws' not in request.POST:
+        message = request.GET
+        if 'token_ws' not in request.GET:
             return JsonResponse({'message': message})
 
-        token = request.POST.get('token_ws')
-
-        
+        token = request.GET.get('token_ws')
 
         data = json.dumps({'token': token})
+       
         method = 'PUT'
         type = 'sandbox'
         endpoint = f'/rswebpaytransaction/api/webpay/v1.2/transactions/{token}'
 
         response = get_ws(data, method, type, endpoint)
-        return JsonResponse(response)
+
+        datos = {
+            "status": response.get("status"),
+            "tipo_tarjeta": response.get("payment_type_code"),
+            "tarjeta": response.get("card_detail"),
+            "session_id": response.get("session_id"),
+            "buy_order": response.get("buy_order")
+        }
+        
+        boletaw = Boleta.objects.latest('id')
+        boletaw.est_pago = response.get("status")
+        boletaw.save()
+        
+
+            # Obtener el estado de la respuesta
+        status = response.get("status")
+
+        # Mostrar diferentes alertas dependiendo del estado
+        if status == "AUTHORIZED":
+            alert_message = "La transacción fue autorizada."
+        elif status == "FAILED":
+            alert_message = "La transacción falló."
+        else:
+            alert_message = "Estado desconocido de la transacción."
+        
+
+        # Construir la URL de redirección con el mensaje de alerta
+        redirect_url = f'/?alert={alert_message}'
+
+        return redirect(redirect_url)
+
+
+        
+
 
     elif action == "getStatus":
         message = request.POST

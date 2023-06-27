@@ -14,10 +14,10 @@
             <thead>
                 <tr>
                     <th scope="col">Id</th>
+                    <th scope="col">Total</th>
+                    <th scope="col">Usuario</th>
                     <th scope="col">Fecha</th>
-                    <th scope="col">Vendedor</th>
                     <th scope="col">Estado</th>
-                    <th scope="col">Id Boleta</th>
                     <th scope="col">Confirmar</th>
                     
                     
@@ -29,18 +29,20 @@
                 <tr>
                     
                     <td>{{ conf.id}}</td>
-                    <td>{{ conf.fecha }}</td>
+                    <td>{{ conf.total }}</td>
                     <td>{{ conf.vendedor }}</td>
-                    <td>{{ conf.estado }}</td>
-                    <td>{{ conf.id_boleta_id }}</td>
-                    <td><form method="post" action="{% url 'actualizar_pedido' pedido_id=conf.id nuevo_estado='Aceptado' %}">
+                    <td>{{ conf.fecha }}</td>
+                    <td>{{ conf.est_pago }}</td>
+                    
+                    <td><form method="post" action="{% url 'actualizar_estado_pedido' pedido_id=conf.id nuevo_estado='Aceptado' %}">
                         {% csrf_token %}
                         <button type="submit">SI</button>
                     </form>
-                    <form method="post" action="{% url 'actualizar_pedido' pedido_id=conf.id nuevo_estado='Rechazado' %}">
+                    
+                    <form method="post" action="{% url 'actualizar_estado_pedido' pedido_id=conf.id nuevo_estado='Rechazado' %}">
                         {% csrf_token %}
                         <button type="submit">No</button>
-                    </form></td>
+                    </form></td>
                 </tr>
                 {% endfor %}
 

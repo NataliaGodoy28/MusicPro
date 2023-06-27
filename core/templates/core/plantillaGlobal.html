@@ -39,14 +39,15 @@
                             &nbsp;|&nbsp;
                             <a href="{% url 'index' %}">Cerrar sesión</a>
                             {% else %}
+                            {% endif %}
+                            {% if request.session.usuario|default_if_none:"invitado" == "invitado" %}
                             &nbsp;|&nbsp;
                             <a href="{% url 'login' %}">Login</a>
                             &nbsp;|&nbsp;
                             <a href="{% url 'form_cliente' %}">Regístrate</a>
+                            {% else %}
                             &nbsp;|&nbsp;
-                            <a href="{% url 'logout' %}">Cerrar Sesión</a>
-
-
+                            <a href="{% url 'logout' %}">Cerrar Sesión</a>    
                             {% endif %}
                         </nav>
 

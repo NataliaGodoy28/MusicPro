@@ -1,11 +1,21 @@
 {% extends 'core/plantillaGlobal.html' %}
 {% load static %}
+
 {% block contenido %}
 <link rel="stylesheet" href="{%static 'core/css/index.css'%}">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 <script src="{% static 'core/js/index.js'%}"></script>
 
 
+<script>
+    // Obtener el mensaje de alerta de los parámetros de la URL
+    var urlParams = new URLSearchParams(window.location.search);
+    var alertMessage = urlParams.get('alert');
+
+    if (alertMessage) {
+        alert(alertMessage);
+    }
+</script>
 
 <div class="catalogo">
 
@@ -34,7 +44,7 @@
 
                         </div>
                     </div>
-                    
+
                 </div>
             </div>
         </div>
@@ -121,46 +131,69 @@
                     precioDolar.style.display = "block";
                 }
             }
-                var total1 = document.querySelector(".total");
-                var totalc1 = document.querySelector(".totalc");
-                
-                
-                if (selectedOption === "chileno") {
-                    total1.style.display = "block";
-                    totalc1.style.display = "none";
-                    
-                } else if (selectedOption === "dolar") {
-                    total1.style.display = "none";
-                    totalc1.style.display = "block";
-                    
-                }
+            var total1 = document.querySelector(".total");
+            var totalc1 = document.querySelector(".totalc");
 
-                for (var i = 0; i < productosc.length; i++) {
-                    var productc = productosc[i];
-                    var precioChilenoc = productc.querySelector(".pricec.chileno");
-                    var precioDolarc = productc.querySelector(".pricecd.dolar");
-                    
+
+            if (selectedOption === "chileno") {
+                total1.style.display = "block";
+                totalc1.style.display = "none";
+
+            } else if (selectedOption === "dolar") {
+                total1.style.display = "none";
+                totalc1.style.display = "block";
+
+            }
+
+            for (var i = 0; i < productosc.length; i++) {
+                var productc = productosc[i];
+                var precioChilenoc = productc.querySelector(".pricec.chileno");
+                var precioDolarc = productc.querySelector(".pricecd.dolar");
+
                 if (selectedOption === "chileno") {
                     precioChilenoc.style.display = "block";
                     precioDolarc.style.display = "none";
-                    
+
                 } else if (selectedOption === "dolar") {
                     precioChilenoc.style.display = "none";
                     precioDolarc.style.display = "block";
-                    
+
                 }
             }
-            
+
         }
     </script>
+
+    {% if request.session.usuario|default_if_none:"invitado" == "invitado" %}
+    <div id="modalinv" class="modal">
+        <div class="modal-content">
+            <span class="close" id="cmodalinv">&times;</span>
+            <h1>Invitado</h1>
+            <p>Vemos que estas intentando comprar sin estar registrado. Registrate para conseguir un descuento del 15%
+                si compras sobre 4 productos</p>
+            
+                <button id="btniv" class="botonespr">Invitado</button>
+            
+            <form action="{% url 'form_cliente' %}">
+                <button class="botonespr" type="submit">Registro</button>
+            </form>
+            <form action="{% url 'login' %}">
+                <button class="botonespr" type="submit">Iniciar Sesión</button>
+            </form>
+
+        </div>
+    </div>
+    <h1 class="session" style="display: none;">invitado</h1>
+    {% endif %}
+
+
+
 
     <div id="modal" class="modal">
         <div class="modal-content">
             <span class="close" id="cmodal1">&times;</span>
-            
-        
+            <h1>Metodos de pago</h1>
             <button id="debito" class="botonespr">Tarjetas</button>
-           
             <button id="transferencia" class="botonespr">Transferencia</button>
         </div>
     </div>
@@ -186,8 +219,9 @@
             <form action="{% url 'transbank' %}" method="post">
                 {% csrf_token %}
                 <button class="botonespr" id="conf">Ir a pagar</button>
-             </form>
-            
+                        
+            </form>
+
         </div>
     </div>
 
