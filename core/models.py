@@ -34,6 +34,7 @@ class Producto(models.Model):
     creado_en = models.DateTimeField(auto_now_add=True)
     actualizado_en = models.DateTimeField(auto_now=True)
     stock = models.PositiveIntegerField()
+    categoria = models.IntegerField(null=True, blank=True)
 
     def __str__(self):
         return self.nombre

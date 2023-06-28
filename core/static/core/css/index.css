@@ -4,12 +4,11 @@
   box-sizing: border-box;
 }
 
-.products{
-  display: flex;
-  justify-content:center;
-  text-align: center;
-  margin-left: 5%; 
-}
+
+
+.product{
+
+text-align: center;}
 
 .campos{
   display:flex;
@@ -43,7 +42,7 @@
 }
 
 #fila {
-  margin-left: 10%;
+  /* margin-left: 10%; */
   margin-bottom: 20px;
 }
 

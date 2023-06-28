@@ -72,27 +72,64 @@
         <ul class="desc-item"></ul>
     </div>
     <!-- Detalle del producto -->
-    <div id="fila" style="display: flex; flex-wrap: wrap;">
-        {% for pr in productos %}
-        <div class="products">
-            <div class="product">
-                <img src="{{ pr.imagen.url }}" alt="{{ pr.nombre }}">
-                <h3>{{ pr.nombre }}</h3>
-                <p class="codigo">{{ pr.codigo }}</p>
-                <p class="desc">{{ pr.descripcion }}</p>
-                <p class="price chileno"><strong>${{ pr.precio }}</strong> </p>
-                <p class="priced dolar" style="display: none;"><strong>${{ pr.precio_dolar }}</strong> </p>
+    <div class="container col-12">
+        <h4>Instrumentos</h4>
+        <div class="cl" style="display:flex;flex-direction:row; justify-content:space-evenly">
+            {% for pr in productosCategoria1 %}
+            <div class="prod">
+                <div class="product">
+                    <img src="{{ pr.imagen.url }}" alt="{{ pr.nombre }}">
+                    <h3>{{ pr.nombre }}</h3>
+                    <p class="codigo">{{ pr.codigo }}</p>
+                    <p class="desc">{{ pr.descripcion }}</p>
+                    <p class="price chileno"><strong>${{ pr.precio }}</strong> </p>
+                    <p class="priced dolar" style="display: none;"><strong>${{ pr.precio_dolar }}</strong> </p>
 
 
 
-                <a style="color: red !important; text-decoration: none" class="ver-descripcion"
-                    data-id="{{ pr.id }}">Ver descripción</a>
+                    <a style="color: red !important; text-decoration: none" class="ver-descripcion"
+                        data-id="{{ pr.id }}">Ver descripción</a>
 
-                <p class="detalle" style="visibility: hidden;">{{ pr.detalle }}</p>
-                <button class="add-to-cart botonespr" data-id="{{ pr.id }}">Agregar al carrito</button>
+                    <p class="detalle" style="visibility: hidden;">{{ pr.detalle }}</p>
+                    <button class="add-to-cart botonespr" data-id="{{ pr.id }}">Agregar al carrito</button>
+                </div>
             </div>
+            {% endfor %}
         </div>
-        {% endfor %}
+    </div>
+    <br>
+
+     <!-- Detalle del producto -->
+     <div class="descripcion">
+        <span class="closes botonespr">X</span>
+        <h2>Descripción</h2>
+        <ul class="desc-item"></ul>
+    </div>
+    <!-- Detalle del producto -->
+    <div class="container col-12">
+        <h4>Amplificadores</h4>
+        <div class="cl" style="display:flex;flex-direction:row; justify-content:space-evenly">
+            {% for pr in productosCategoria2 %}
+            <div class="product">
+                <div class="product">
+                    <img src="{{ pr.imagen.url }}" alt="{{ pr.nombre }}">
+                    <h3>{{ pr.nombre }}</h3>
+                    <p class="codigo">{{ pr.codigo }}</p>
+                    <p class="desc">{{ pr.descripcion }}</p>
+                    <p class="price chileno"><strong>${{ pr.precio }}</strong> </p>
+                    <p class="priced dolar" style="display: none;"><strong>${{ pr.precio_dolar }}</strong> </p>
+
+
+
+                    <a style="color: red !important; text-decoration: none" class="ver-descripcion"
+                        data-id="{{ pr.id }}">Ver descripción</a>
+
+                    <p class="detalle" style="visibility: hidden;">{{ pr.detalle }}</p>
+                    <button class="add-to-cart botonespr" data-id="{{ pr.id }}">Agregar al carrito</button>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
     </div>
 
     <!-- Detalle del Carrito -->
@@ -171,9 +208,9 @@
             <h1>Invitado</h1>
             <p>Vemos que estas intentando comprar sin estar registrado. Registrate para conseguir un descuento del 15%
                 si compras sobre 4 productos</p>
-            
-                <button id="btniv" class="botonespr">Invitado</button>
-            
+
+            <button id="btniv" class="botonespr">Invitado</button>
+
             <form action="{% url 'form_cliente' %}">
                 <button class="botonespr" type="submit">Registro</button>
             </form>

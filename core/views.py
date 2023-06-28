@@ -100,11 +100,6 @@ def crearBoletacarro(request):
                     boleta.total = total_boleta.quantize(decimal.Decimal('0'), rounding=decimal.ROUND_HALF_UP)
                     boleta.save()
 
-            
-
-            
-            
-
             # Obtener todos los detalles de la boleta para mostrar en la vista
             detalles_boleta = DetalleBoleta.objects.filter(boleta=boleta)
             boletas = Boleta.objects.all().order_by('-id')
@@ -193,12 +188,15 @@ def index(request):
         valor_dolar()
    
     productos = Producto.objects.all()
+    productosCategoria1 = Producto.objects.filter(categoria=1)
+
+    productosCategoria2 = Producto.objects.filter(categoria=2)
 
     for producto in productos:
         precioD = float(producto.precio)
         producto.precio_dolar = round(precioD / float(dolar), 2)
 
-    return render(request, 'core/index.html', {'productos': productos})
+    return render(request, 'core/index.html', {'productos': productos, 'productosCategoria1':productosCategoria1,  'productosCategoria2':productosCategoria2})
 
 def bodeguero(request):
 
@@ -604,6 +602,8 @@ def valor_dolar():
     data = response.json()
     
     dolar = data.get("Series", {}).get("Obs", [])[0].get("value")
+
+
 
 
 def prueba(request):
