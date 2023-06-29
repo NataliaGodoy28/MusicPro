@@ -35,6 +35,8 @@ urlpatterns = [
     path('prueba', prueba ,name='prueba'),
     path('transbank', transbank ,name='transbank'),
     path('actualizar_estado_pedido/<int:pedido_id>/<str:nuevo_estado>/', actualizar_estado_pedido, name='actualizar_estado_pedido'),
+    path('resumen', resumen ,name='resumen'),
+    path('transferencia', transferencia ,name='transferencia'),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -1,0 +1,137 @@
+{% extends 'core/plantillaGlobal.html' %}
+{% load static %}
+{% block contenido %}
+<link rel="stylesheet" href="{%static 'core/css/resumen.css'%}">
+<script src="{% static 'core/js/resumen.js'%}"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/css/bootstrap.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/js/bootstrap.min.js"></script>
+
+<div id="todoresumen">
+    <div id="resumenproducts">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">Id Tabla</th>
+                    <th scope="col">Nombre</th>
+                    <th scope="col">Precio</th>
+                    <th scope="col">Cantidad</th>
+                    <th scope="col">Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for detalle_id in detalles_boleta %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ detalle_id.producto }}</td>
+                    <td>{{ detalle_id.precio_unitario }}</td>
+                    <td>{{ detalle_id.cantidad }}</td>
+                    <td>{{ detalle_id }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div id="datos">
+        <h1>Resumen</h1>
+        <div class="campo">
+            <label for="">Metodo de pago</label>
+            <select name="metodo_pago" id="metodo_pago">
+                <option value="">Seleccione una Opcion:</option>
+                <option value="tarjeta">Tarjetas</option>
+                <option value="transferencia">Transferencia</option>
+            </select>
+        </div>
+        <div class="campo">
+            <label for="">Entrega</label>
+            <div class="entrega">
+                <input type="radio" id="despacho" name="opcion" value="despacho" onchange="mostrarInfo()">
+                <label for="despacho">Despacho a domicilio</label>
+            </div>
+            <div id="info" style="display: none;">
+                {% if datosinv %}
+                {% for inv in datosinv %}
+
+                <p>{{ inv.correo }}</p>
+                <p>{{ inv.direccion }}</p>
+
+
+                {% endfor %}
+                {% else %}
+                {% for reg in datosregi %}
+
+                <p>{{ reg.mailCliente }}</p>
+                <p>{{ reg.direccion }}</p>
+
+
+                {% endfor %}
+                {% endif %}
+
+            </div>
+
+            <div class="entrega">
+                <input type="radio" id="retiro" name="opcion" value="retiro" onchange="mostrarInfo()">
+                <label for="retiro">Retiro en tienda</label>
+            </div>
+            <div id="info2" style="display: none;">
+                <p>Direccion de la empresa</p>
+
+            </div>
+            <script>
+                function mostrarInfo() {
+                    var infoDiv = document.getElementById("info");
+                    var info2Div = document.getElementById("info2");
+                    var despachoRadio = document.getElementById("despacho");
+                    var retiroRadio = document.getElementById("retiro");
+                    if (despachoRadio.checked) {
+                        infoDiv.style.display = "block";
+                        info2Div.style.display = "none"
+                    } else if (retiroRadio.checked) {
+                        infoDiv.style.display = "none";
+                        info2Div.style.display = "block"
+                    }
+                }
+            </script>
+        </div>
+
+        <form id="form_transferencia" action="{% url 'transferencia' %}" method="post">
+            {% csrf_token %}
+            <button>Ir a pagar</button>
+        </form>
+
+        <form id="form_tarjeta" action="{% url 'transbank' %}" method="post">
+            {% csrf_token %}
+            <button>Ir a pagar</button>
+        </form>
+        <script>
+            const selectElement = document.getElementById('metodo_pago');
+            const formTarjeta = document.getElementById('form_tarjeta');
+            const formTransferencia = document.getElementById('form_transferencia');
+
+            // Ocultar los formularios al cargar la página
+            formTarjeta.style.display = 'none';
+            formTransferencia.style.display = 'none';
+
+            // Mostrar el formulario correspondiente cuando cambie la opción seleccionada
+            selectElement.addEventListener('change', function () {
+                if (selectElement.value === 'tarjeta') {
+                    formTarjeta.style.display = 'block';
+                    formTransferencia.style.display = 'none';
+                } else if (selectElement.value === 'transferencia') {
+                    formTarjeta.style.display = 'none';
+                    formTransferencia.style.display = 'block';
+                } else {
+                    // Si no se selecciona ninguna opción válida, ocultar ambos formularios
+                    formTarjeta.style.display = 'none';
+                    formTransferencia.style.display = 'none';
+                }
+            });
+        </script>
+    </div>
+
+</div>
+
+
+
+{% endblock %}

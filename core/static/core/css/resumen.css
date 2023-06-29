@@ -1,0 +1,26 @@
+#todoresumen{
+    display: flex;
+    flex-direction: row;
+    margin: 10px;
+}
+#datos{
+    margin: 10px;
+}
+
+#resumenproducts{
+    margin: 10px;
+    width: 60%;
+    border: 1px red solid;
+}
+.campo{
+    display: flex;
+    flex-direction: column;
+    margin: 10px;
+}
+#info{
+    display: flex;
+
+}
+#info2{
+    display: flex;
+}

@@ -192,11 +192,8 @@ document.addEventListener('DOMContentLoaded', function () {
         }
       }
     };
-
-    const paymentMethod = obtenerMetodoPago();
     const data = {
-      cartItems: cartItemsArr,
-      paymentMethod: paymentMethod
+      cartItems: cartItemsArr
     };
 
     xhr.send(JSON.stringify(data));
@@ -212,35 +209,6 @@ document.addEventListener('DOMContentLoaded', function () {
     toggleCart();
   }
 
-
-  //Fin Code Carrito
-  let metodoPagoSeleccionado = '';
-
-  const deb = document.querySelector('#debito');
-  deb.addEventListener('click', function () {
-    metodoPagoSeleccionado = 'Tarjeta';
-    checkout();
-    openModal4();
-  });
-
-
-
-
-
-  function obtenerMetodoPago() {
-    return metodoPagoSeleccionado;
-  }
-
-  //Modales
-
-  const trans2 = document.querySelector('#transferencia');
-  trans2.addEventListener('click', function () {
-    openModal2();
-  });
-  const cmodal1 = document.querySelector('#cmodal1');
-  cmodal1.addEventListener('click', closeModal);
-
-
   const pago = document.querySelector('#pago');
   pago.addEventListener('click', function () {
     // Obtener el elemento <h1> con la clase "session"
@@ -252,11 +220,15 @@ document.addEventListener('DOMContentLoaded', function () {
       var valorH1 = h1Element.textContent;
 
       if (valorH1 === "invitado") {
-        openModalInvitado();
+        document.getElementById("modalinv").style.display = "block";
+        checkout()
       }
     }
     else {
-      openModal();
+      checkout();
+      setTimeout(function () {
+        window.location.href = "resumen";
+      }, 0);
     }
   });
 
@@ -271,67 +243,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function invitado() {
       document.getElementById("modalinv").style.display = "none";
-      document.getElementById("modal").style.display = "block";
-
+      document.getElementById("modalinvd").style.display = "block";
     }
-  }
+    function closeinv() {
+      document.getElementById("modalinv").style.display = "none";
+    }
 
 
 
-
-
-  const cmodal2 = document.querySelector('#cmodal2');
-  cmodal2.addEventListener('click', closeModal2);
-
-  const cmodal3 = document.querySelector('#cmodal3');
-  cmodal3.addEventListener('click', closeModal3);
-
-  const conf = document.querySelector('#conf');
-  conf.addEventListener('click', function () {
-    confmodal3();
-  });
-
-  const conftrans = document.querySelector('#conftrans');
-  conftrans.addEventListener('click', function () {
-    metodoPagoSeleccionado = 'Transferencia';
-    checkout();
-    closeModal2();
-  });
-
-  function openModalInvitado() {
-    document.getElementById("modalinv").style.display = "block";
-  }
-
-  function closeinv() {
-    document.getElementById("modalinv").style.display = "none";
-  }
-  function openModal() {
-    document.getElementById("modal").style.display = "block";
-  }
-  function closeModal() {
-    document.getElementById("modal").style.display = "none";
-  }
-  function openModal2() {
-    document.getElementById("modal2").style.display = "block";
-    document.getElementById("modal").style.display = "none";
-  }
-  function closeModal2() {
-    document.getElementById("modal2").style.display = "none";
-  }
-  function openModal3() {
-    document.getElementById("modal2").style.display = "none";
-    document.getElementById("modal3").style.display = "block";
-  }
-  function confmodal3() {
-    document.getElementById("modal3").style.display = "none";
-  }
-  function closeModal3() {
-    document.getElementById("modal3").style.display = "none";
-  }
-  //Fin Modales
-  function openModal4() {
-    document.getElementById("modal").style.display = "none";
-    document.getElementById("modal3").style.display = "block";
   }
 });
 

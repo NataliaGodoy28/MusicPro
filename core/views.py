@@ -6,6 +6,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.files.storage import default_storage
 from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.cache import never_cache
 import json
 from django.http import JsonResponse, HttpResponseRedirect
 from urllib.parse import quote
@@ -16,6 +17,9 @@ boletaGlobal = 0
 boleta2 = 0
 
 dolar = None
+
+
+
 
 
 @csrf_exempt
@@ -31,7 +35,6 @@ def crearBoletacarro(request):
     if request.method == 'POST':
         data = json.loads(request.body)
         cart_items = data.get("cartItems", [])
-        pago = data.get("paymentMethod")
         productos = []
 
         for item in cart_items:
@@ -75,30 +78,9 @@ def crearBoletacarro(request):
                 total_boleta += total_producto
                 total_cantidad += cantidad
 
-            if request.session.get('usuario') == "invitado" or not request.session.get('usuario'):
-                # Aplicar descuento del 15% si hay más de 4 productos
-                if pago == "Transferencia":
-                    boleta.est_pago = "Pendiente"
-                boleta.tipo_pago = pago
-                boleta.total = total_boleta.quantize(decimal.Decimal('0'), rounding=decimal.ROUND_HALF_UP)
-                boleta.save()
-                print("no registrado")
-            else:
-                if total_cantidad > 4:
-                    descuento = total_boleta * decimal.Decimal('0.15')
-                    total_boleta -= descuento
-                    if pago == "Transferencia":
-                        boleta.est_pago = "Pendiente"
-                    boleta.tipo_pago = pago
-                    boleta.total = total_boleta.quantize(decimal.Decimal('0'), rounding=decimal.ROUND_HALF_UP)
-                    boleta.save()
-                    print("entro correcto")
-                else:
-                    if pago == "Transferencia":
-                        boleta.est_pago = "Pendiente"
-                    boleta.tipo_pago = pago
-                    boleta.total = total_boleta.quantize(decimal.Decimal('0'), rounding=decimal.ROUND_HALF_UP)
-                    boleta.save()
+            
+            boleta.total = total_boleta.quantize(decimal.Decimal('0'), rounding=decimal.ROUND_HALF_UP)
+            boleta.save()
 
             # Obtener todos los detalles de la boleta para mostrar en la vista
             detalles_boleta = DetalleBoleta.objects.filter(boleta=boleta)
@@ -120,7 +102,7 @@ def crearBoletacarro(request):
             messages.error(request, 'El producto no existe.', extra_tags='alert-danger')
             # Redireccionar al usuario a la página de vendedor
             return redirect('index')
-
+    index()
     # Si el método HTTP no es POST, se muestra el formulario inicial o cualquier otra lógica que desees implementar
     return render(request, 'core/index.html')
 
@@ -183,7 +165,37 @@ def editar_producto(request, producto_id):
 
 def index(request):
     global dolar
-    
+
+    try:
+        boleta = Boleta.objects.latest('id')
+    except Boleta.DoesNotExist:
+        boleta = None
+
+    if boleta:
+        datos = {
+            'inv': InvitadoForms(initial={'id_boleta_id': boleta.id})
+        }
+    else:
+        datos = {
+            'inv': None
+        }
+
+    if request.method == "POST":
+        invfor = InvitadoForms(request.POST)
+        if invfor.is_valid():
+            # Crear una instancia del modelo Invitado sin guardarla aún
+            invitado = invfor.save(commit=False)
+            # Asignar el valor del campo id_boleta_id a partir de la boleta
+            invitado.id_boleta_id = boleta.id
+            # Guardar el formulario y obtener la instancia del modelo guardado
+            invitado.save()
+            messages.success(request, 'Formulario guardado')
+            return redirect('resumen')  # redireccionar a la misma vista
+        else:
+            messages.error(request, 'Error en el formulario')
+            print(invfor.errors)  # Imprimir los errores del formulario
+
+
     if dolar is None:
         valor_dolar()
    
@@ -204,7 +216,7 @@ def index(request):
         precioD = float(producto.precio)
         producto.precio_dolar = round(precioD / float(dolar), 2)            
 
-    return render(request, 'core/index.html', {'productos': productos, 'productosCategoria1':productosCategoria1,  'productosCategoria2':productosCategoria2})
+    return render(request, 'core/index.html', {'productos': productos, 'productosCategoria1':productosCategoria1,  'productosCategoria2':productosCategoria2, 'datos':datos})
 
 def bodeguero(request):
 
@@ -420,7 +432,6 @@ def vendedor(request):
 
     return render(request, 'core/vendedor.html', {'boletas': boletas})
 
-
 @login_required
 def crearBoleta(request):
 
@@ -437,7 +448,6 @@ def crearBoleta(request):
     # Por ejemplo, redireccionar al usuario a la página de detalle de la nueva boleta
     # return redirect('añadirElemento')
     return render(request, 'core/vendedor.html', {'boletas': boletas})
-
 
 def añadirElemento(request):
     global boletaGlobal
@@ -505,7 +515,6 @@ def añadirElemento(request):
     # Si el método HTTP no es POST, se muestra el formulario inicial o cualquier otra lógica que desees implementar
     return render(request, 'core/vendedor.html')
 
-
 def generar_pago(request):
 
     global boletaGlobal
@@ -519,7 +528,6 @@ def generar_pago(request):
     boletas.save()
 
     return redirect('vendedor')
-
 
 def verBoleta(request, id):
 
@@ -559,7 +567,6 @@ def boletaAceptada(request, id):
 
     return render(request, 'core/boletaAceptada.html', datos)
 
-
 def verBoletaVendedor(request, id):
 
     print(id)
@@ -580,7 +587,6 @@ def verBoletaVendedor(request, id):
 
     return render(request, 'core/detalleBoletaVendedor.html', datos)
 
-
 def vendedorProducto(request):
     productos = Producto.objects.all()
 
@@ -595,8 +601,6 @@ def vendedorProducto(request):
         'boletasAceptadas':boletas_aceptadas}
 
     return render(request, 'core/vendedorProducto.html', datos)
-
-
 
 def valor_dolar():
     global dolar
@@ -614,8 +618,6 @@ def valor_dolar():
     print(dolar)
     print("dolar")
 
-
-
 def prueba(request):
     global dolar
     
@@ -627,10 +629,6 @@ def prueba(request):
     data = {'api_data': total}
 
     return render(request, 'core/prueba.html', data)
-
-
-
-
 # API WEBPAY PLUS
 def get_ws(data, method, type, endpoint):
     if type == 'live':
@@ -652,6 +650,7 @@ def get_ws(data, method, type, endpoint):
     return response.json()
 
 def transbank(request):
+
     baseurl = request.build_absolute_uri('http://127.0.0.1:8000/transbank')
 
     action = request.GET.get("action", "init")
@@ -713,6 +712,7 @@ def transbank(request):
         }
         
         boletaw = Boleta.objects.latest('id')
+        boletaw.tipo_pago = "Tarjeta"
         boletaw.est_pago = response.get("status")
         boletaw.save()
         
@@ -769,3 +769,43 @@ def transbank(request):
         return JsonResponse(response)
 
     return JsonResponse({'message': message})
+
+@never_cache
+def resumen(request):
+    ultimo_boleta = Boleta.objects.latest('id')
+    ultimo_id_boleta = ultimo_boleta.id
+    detalle_boleta_ids = DetalleBoleta.objects.filter(boleta=ultimo_boleta).values_list('id', flat=True)
+
+    detalles_boleta = DetalleBoleta.objects.filter(id__in=detalle_boleta_ids)
+    productos = Producto.objects.filter(id__in=detalles_boleta.values_list('producto_id', flat=True))
+
+    datosinv = None
+    datosregi = None
+
+    if request.session.get('usuario') == 'invitado':
+        datosinv = Invitado.objects.filter(id_boleta=ultimo_boleta)
+    else:
+        usuario = request.session['usuario']
+        datosregi = Cliente.objects.filter(nombreCliente=usuario)
+
+
+    data = {
+        'ultimo_id_boleta': ultimo_id_boleta,
+        'detalles_boleta': detalles_boleta,
+        'productos': productos,
+        'datosinv' :datosinv,
+        'datosregi' : datosregi
+    }
+
+    return render(request, 'core/resumen.html', data)
+
+def transferencia(request):
+    boleta = Boleta.objects.latest('id')
+    boleta.tipo_pago = "Transferencia"
+    boleta.est_pago = "Pendiente"
+    boleta.save()
+
+    return redirect('index')
+
+    
+    

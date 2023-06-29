@@ -25,3 +25,8 @@ class ProductoForms(ModelForm):
     class Meta:
         model = Producto
         fields = ['codigo','nombre','descripcion','stock','imagen','precio']
+
+class InvitadoForms(ModelForm):
+    class Meta:
+        model = Invitado
+        fields = ['correo','direccion']

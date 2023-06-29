@@ -220,46 +220,35 @@
 
         </div>
     </div>
+    
+    <div id="modalinvd" class="modal">
+        <div class="modal-content">
+            <span class="close" id="cmodalinvd">&times;</span>
+            <h1>Invitado</h1>
+            {% if datos %}
+            <form method="POST">
+                {% csrf_token %} <!-- Agrega el token CSRF para proteger el formulario -->
+                <div class="camppr">
+                    {{ datos.inv.correo.label_tag }}
+                    {{ datos.inv.correo }}
+                </div>
+                <div class="camppr">
+                    {{ datos.inv.direccion.label_tag }}
+                    {{ datos.inv.direccion }}
+                </div>
+                
+                <button type="submit" class="btn btn-danger">Guardar</button>
+            </form>
+            {% endif %}
+            
+        </div>
+    </div>
     <h1 class="session" style="display: none;">invitado</h1>
     {% endif %}
 
 
 
 
-    <div id="modal" class="modal">
-        <div class="modal-content">
-            <span class="close" id="cmodal1">&times;</span>
-            <h1>Metodos de pago</h1>
-            <button id="debito" class="botonespr">Tarjetas</button>
-            <button id="transferencia" class="botonespr">Transferencia</button>
-        </div>
-    </div>
-
-    <div id="modal2" class="modal">
-        <div class="modal-content">
-            <span class="close" id="cmodal2">&times;</span>
-            <h1>Datos de Transferencia</h1>
-            <p>Rut: 20.880.577-0</p>
-            <p>Banco: Banco Estado</p>
-            <p>Cuenta: Vista</p>
-            <p>Numero cuenta: 20880577</p>
-            <p>Correo: wi.menares@duoc.cl</p>
-            <button id="conftrans" class="botonespr">Transferido</button>
-        </div>
-    </div>
-
-    <div id="modal3" class="modal">
-        <div class="modal-content">
-            <span class="close" id="cmodal3">&times;</span>
-            <h1>Gracias por su compra</h1>
-            <p>Clickeando el boton sera enviado a pagar</p>
-            <form action="{% url 'transbank' %}" method="post">
-                {% csrf_token %}
-                <button class="botonespr" id="conf">Ir a pagar</button>
-                        
-            </form>
-
-        </div>
-    </div>
+    
 
     {% endblock %}
