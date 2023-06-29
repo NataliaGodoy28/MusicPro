@@ -196,6 +196,14 @@ def index(request):
         precioD = float(producto.precio)
         producto.precio_dolar = round(precioD / float(dolar), 2)
 
+    for producto in productosCategoria1:
+        precioD = float(producto.precio)
+        producto.precio_dolar = round(precioD / float(dolar), 2)
+
+    for producto in productosCategoria2:
+        precioD = float(producto.precio)
+        producto.precio_dolar = round(precioD / float(dolar), 2)            
+
     return render(request, 'core/index.html', {'productos': productos, 'productosCategoria1':productosCategoria1,  'productosCategoria2':productosCategoria2})
 
 def bodeguero(request):
@@ -596,13 +604,15 @@ def valor_dolar():
     clave = "SmBc4syUBeoa"
     Usuario = "206039035"
     serie = "F073.TCO.PRE.Z.D"
-    url = "https://si3.bcentral.cl/SieteRestWS/SieteRestWS.ashx?user=206039035&pass=SmBc4syUBeoa&firstdate=2023-06-10&lastdate=2023-06-12&timeseries=F073.TCO.PRE.Z.D&function=GetSeries"
+    # url = "https://si3.bcentral.cl/SieteRestWS/SieteRestWS.ashx?user=206039035&pass=SmBc4syUBeoa&firstdate=2023-06-10&lastdate=2023-06-12&timeseries=F073.TCO.PRE.Z.D&function=GetSeries"
+    url = f"https://si3.bcentral.cl/SieteRestWS/SieteRestWS.ashx?user={Usuario}&pass={clave}&firstdate=2023-06-10&lastdate=2023-06-12&timeseries={serie}&function=GetSeries"
 
     response = requests.get(url)
     data = response.json()
     
     dolar = data.get("Series", {}).get("Obs", [])[0].get("value")
-
+    print(dolar)
+    print("dolar")
 
 
 
