@@ -24,7 +24,7 @@ class Login(ModelForm):
 class ProductoForms(ModelForm):
     class Meta:
         model = Producto
-        fields = ['codigo','nombre','descripcion','stock','imagen','precio']
+        fields = ['codigo','nombre','descripcion','stock','imagen','precio','categoria']
 
 class InvitadoForms(ModelForm):
     class Meta:

@@ -46,7 +46,11 @@
                               </td>
                                                           <td  data-label="nombre">{{e.vendedor}}</td>
                             <td  data-label="nombre">{{e.total}}</td>
-                            <td  data-label="nombre">{% if e.estado %}Pagado{% else %}Sin Pago{% endif %}</td>
+                            <td  data-label="nombre">{% if e.est_pago == "Aceptado" or e.est_pago == "AUTHORIZED" %}
+                                Pagado
+                                {% else %}
+                                Sin Pago
+                                {% endif %}</td>
                             <!-- Button trigger modal -->
                             <td>
 
@@ -106,7 +110,11 @@
                               </td>
                             <td data-label="nombre">{{e.vendedor}}</td>
                             <td data-label="nombre">{{e.total}}</td>
-                            <td data-label="nombre">{% if e.estado %}Pagado{% else %}Sin Pago{% endif %}</td>
+                            <td data-label="nombre">{% if e.est_pago == "Aceptado" or e.est_pago == "AUTHORIZED" %}
+                                Pagado
+                                {% else %}
+                                Sin Pago
+                                {% endif %}</td>
                             <!-- Button trigger modal -->
                             <td>
 

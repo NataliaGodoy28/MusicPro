@@ -34,10 +34,14 @@
                                 <td data-label="nombre">{{e.id}}</td>
                                 <td data-label="nombre">{{e.fecha}}</td>
                                 <td data-label="nombre">{{e.vendedor}}</td>
-                                <td data-label="nombre">{% if e.estado %}Pagado{% else %}Sin Pago{% endif %}</td>
+                                <td data-label="nombre">{% if e.est_pago == "Aceptado" or e.est_pago == "AUTHORIZED" %}
+                                    Pagado
+                                    {% else %}
+                                    Sin Pago
+                                    {% endif %}</td>
 
 
-                               
+
                             </tr>
 
                             {% endfor %}
@@ -63,7 +67,7 @@
                                 <h5 class="card-title">N° Orden: {{e.id}} </h5>
                                 <h5>Fecha: {{e.fecha}} </h5>
                             </div>
-                            <p class="card-text">Vendedor:  {{e.vendedor}} </p>
+                            <p class="card-text">Vendedor: {{e.vendedor}} </p>
 
                         </div>
                         {% endfor %}
@@ -80,12 +84,12 @@
                             <tbody>
 
                                 {% for e in detalle %}
-                        
+
                                 <tr>
                                     <td data-label="nombre">{{e.producto}}</td>
                                     <td data-label="nombre">{{e.cantidad}}</td>
                                 </tr>
-                                {% endfor %}    
+                                {% endfor %}
 
                             </tbody>
                         </table>

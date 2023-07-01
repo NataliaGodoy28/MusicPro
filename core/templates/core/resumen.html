@@ -95,11 +95,19 @@
             </script>
         </div>
 
-        <form id="form_transferencia" action="{% url 'transferencia' %}" method="post">
-            {% csrf_token %}
-            <button>Ir a pagar</button>
-        </form>
-
+         <button id="trans">Ir a pagar</button>
+       
+         <div id="modaltrans" class="modal">
+            <div class="modal-content">
+                <span class="close" id="cmodaltrans">&times;</span>
+                <h1>Datos de Transferencia</h1>
+                <p>Rut: 208805770</p>
+                <p>Banco: Banco del Estado</p>
+                <p>Nro Cuenta: 20880577</p>
+                <p>Nombre: William Alexander Menares Diaz</p>
+                <button id="comodal">Confirmo Transferencia</button>
+            </div>
+        </div>    
         <form id="form_tarjeta" action="{% url 'transbank' %}" method="post">
             {% csrf_token %}
             <button>Ir a pagar</button>
@@ -107,7 +115,7 @@
         <script>
             const selectElement = document.getElementById('metodo_pago');
             const formTarjeta = document.getElementById('form_tarjeta');
-            const formTransferencia = document.getElementById('form_transferencia');
+            const formTransferencia = document.getElementById('trans');
 
             // Ocultar los formularios al cargar la página
             formTarjeta.style.display = 'none';

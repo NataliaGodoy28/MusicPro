@@ -180,7 +180,7 @@
                     <th scope="col">Vendedor</th>
                     <th scope="col">Total</th>
                     <th scope="col">Estado</th>
-
+                    <th scope="col">Ver</th>
                 </tr>
             </thead>
         </table>
@@ -195,7 +195,11 @@
                             <td data-label="nombre">{{e.fecha}}</td>
                             <td data-label="nombre">{{e.vendedor}}</td>
                             <td data-label="nombre">{{e.total}}</td>
-                            <td data-label="nombre">{% if e.estado %}Pagado{% else %}Sin Pago{% endif %}</td>
+                            <td data-label="nombre">{% if e.est_pago == "Aceptado" or e.est_pago == "AUTHORIZED" %}
+                                Pagado
+                                {% else %}
+                                Sin Pago
+                                {% endif %}</td>
                             <!-- Button trigger modal -->
                             <td>
 

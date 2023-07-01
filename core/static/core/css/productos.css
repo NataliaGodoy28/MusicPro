@@ -10,11 +10,11 @@
 #todito{ 
     padding: 15px 0 15px 0;
     display: flex;
+    flex-direction: column;
     justify-content: space-around;
     align-items: center;
     width: 100%;
     height: 100%;
-    border: 1px red solid;
 }
 .camppr{
     display: flex;
@@ -24,9 +24,25 @@
 }
 #formulario{
     width: 35%;
-    border: 1px red solid;
+
 }
 #tblproducto{
     width: 40%;
-    border: 1px red solid;
+
+}
+#productos{
+    display: flex;
+    width: 100%;
+    justify-content: space-around;
+}
+#ventas{
+    display: flex;
+    width: 100%;
+    justify-content: space-around;
+}
+#tblresumen{
+    width: 40%;
+}
+#tblventas{
+    width: 40%;
 }

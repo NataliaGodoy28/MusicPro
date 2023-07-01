@@ -6,6 +6,8 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.files.storage import default_storage
 from django.views.decorators.csrf import csrf_exempt
+from django.db.models import Sum
+from django.db.models.functions import ExtractMonth, TruncMonth
 from django.views.decorators.cache import never_cache
 import json
 from django.http import JsonResponse, HttpResponseRedirect
@@ -108,6 +110,8 @@ def crearBoletacarro(request):
 
 def productos(request):
     datos = {
+        'ventas' : Boleta.objects.all(),
+        'rventas': Boleta.objects.filter(est_pago__in=['Aceptado', 'AUTHORIZED']).annotate(month=TruncMonth('fecha')).values('month').annotate(total=Sum('total')),
         'pformu': ProductoForms(),
         'productos': Producto.objects.all()
     }
@@ -139,6 +143,7 @@ def editar_producto(request, producto_id):
         nueva_descripcion = request.POST.get('nueva_descripcion')
         nuevo_stock = request.POST.get('nuevo_stock')
         nuevo_precio = request.POST.get('nuevo_precio')
+        nuevo_categoria = request.POST.get('nuevo_categoria')
 
         # Obtener la nueva imagen del formulario
         nueva_imagen = request.FILES.get('nueva_imagen')
@@ -149,6 +154,7 @@ def editar_producto(request, producto_id):
         producto.descripcion = nueva_descripcion
         producto.stock = nuevo_stock
         producto.precio = nuevo_precio
+        producto.categoria = nuevo_categoria
 
         # Verificar si se proporcionó una nueva imagen
         if nueva_imagen:
@@ -221,6 +227,7 @@ def index(request):
 def bodeguero(request):
 
     boletas_aceptadas = Boleta.objects.filter(estadopedido__estadoVendedor='Aceptado', estadopedido__estado__isnull=True).order_by('-id')
+
 
 
     # boletas_sin_aceptar = Boleta.objects.exclude(estadopedido__estado='Aceptado').order_by('-id')
@@ -524,7 +531,7 @@ def generar_pago(request):
     print(boletas)
 
     # Actualizar el estado de la boleta a True
-    boletas.estado = True
+    boletas.est_pago = "Aceptado"
     boletas.save()
 
     return redirect('vendedor')
@@ -799,6 +806,7 @@ def resumen(request):
 
     return render(request, 'core/resumen.html', data)
 
+@csrf_exempt
 def transferencia(request):
     boleta = Boleta.objects.latest('id')
     boleta.tipo_pago = "Transferencia"
