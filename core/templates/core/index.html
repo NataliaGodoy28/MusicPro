@@ -71,66 +71,44 @@
         <h2>Descripción</h2>
         <ul class="desc-item"></ul>
     </div>
+    
+
+
+
     <!-- Detalle del producto -->
     <div class="container col-12">
-        <h4>Instrumentos</h4>
+        {% for cat in categoria %}
+        <h4>{{cat.nombre}}</h4>
         <div class="cl" style="display:flex;flex-direction:row; justify-content:space-evenly">
-            {% for pr in productosCategoria1 %}
-            <div class="product">
-                <div class="product">
-                    <img src="{{ pr.imagen.url }}" alt="{{ pr.nombre }}">
-                    <h3>{{ pr.nombre }}</h3>
-                    <p class="codigo">{{ pr.codigo }}</p>
-                    <p class="desc">{{ pr.descripcion }}</p>
-                    <p class="price chileno"><strong>${{ pr.precio }}</strong> </p>
-                    <p class="priced dolar" style="display: none;"><strong>${{ pr.precio_dolar }}</strong> </p>
+            {% for pr in productos %}
+                {% if pr.categoria == cat %}
+                    <div class="product">
+                        <div class="product">
+                            <img src="{{ pr.imagen.url }}" alt="{{ pr.nombre }}">
+                            <h3>{{ pr.nombre }}</h3>
+                            <p class="codigo">{{ pr.codigo }}</p>
+                            <p class="desc">{{ pr.descripcion }}</p>
+                            <p class="price chileno"><strong>${{ pr.precio }}</strong> </p>
+                            <p class="priced dolar" style="display: none;"><strong>${{ pr.precio_dolar }}</strong> </p>
 
 
 
-                    <a style="color: red !important; text-decoration: none" class="ver-descripcion"
-                        data-id="{{ pr.id }}">Ver descripción</a>
+                            <a style="color: red !important; text-decoration: none" class="ver-descripcion"
+                                data-id="{{ pr.id }}">Ver descripción</a>
 
-                    <p class="detalle" style="visibility: hidden;">{{ pr.detalle }}</p>
-                    <button class="add-to-cart botonespr" data-id="{{ pr.id }}">Agregar al carrito</button>
-                </div>
-            </div>
+                            <p class="detalle" style="visibility: hidden;">{{ pr.detalle }}</p>
+                            <button class="add-to-cart botonespr" data-id="{{ pr.id }}">Agregar al carrito</button>
+                        </div>
+                    </div>
+                {% endif %}
             {% endfor %}
         </div>
+        {% endfor %}
     </div>
     <br>
 
-     <!-- Detalle del producto -->
-     <div class="descripcion">
-        <span class="closes botonespr">X</span>
-        <h2>Descripción</h2>
-        <ul class="desc-item"></ul>
-    </div>
-    <!-- Detalle del producto -->
-    <div class="container col-12">
-        <h4>Amplificadores</h4>
-        <div class="cl" style="display:flex;flex-direction:row; justify-content:space-evenly">
-            {% for pr in productosCategoria2 %}
-            <div class="product">
-                <div class="product">
-                    <img src="{{ pr.imagen.url }}" alt="{{ pr.nombre }}">
-                    <h3>{{ pr.nombre }}</h3>
-                    <p class="codigo">{{ pr.codigo }}</p>
-                    <p class="desc">{{ pr.descripcion }}</p>
-                    <p class="price chileno"><strong>${{ pr.precio }}</strong> </p>
-                    <p class="priced dolar" style="display: none;"><strong>${{ pr.precio_dolar }}</strong> </p>
-
-
-
-                    <a style="color: red !important; text-decoration: none" class="ver-descripcion"
-                        data-id="{{ pr.id }}">Ver descripción</a>
-
-                    <p class="detalle" style="visibility: hidden;">{{ pr.detalle }}</p>
-                    <button class="add-to-cart botonespr" data-id="{{ pr.id }}">Agregar al carrito</button>
-                </div>
-            </div>
-            {% endfor %}
-        </div>
-    </div>
+     
+    
 
     <!-- Detalle del Carrito -->
     <div class="overlay"></div>

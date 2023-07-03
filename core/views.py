@@ -113,7 +113,9 @@ def productos(request):
         'ventas' : Boleta.objects.all(),
         'rventas': Boleta.objects.filter(est_pago__in=['Aceptado', 'AUTHORIZED']).annotate(month=TruncMonth('fecha')).values('month').annotate(total=Sum('total')),
         'pformu': ProductoForms(),
-        'productos': Producto.objects.all()
+        'productos': Producto.objects.all(),
+        'cformu' : CategoriaForm(),
+        'categoria' : Categoria.objects.all()
     }
     if request.method == "POST":
         pform = ProductoForms(request.POST, request.FILES)
@@ -125,6 +127,17 @@ def productos(request):
             return redirect('productos')  # redireccionar a la misma vista
         else:
             print(pform.errors)  # Imprimir los errores del formulario
+
+        cform = CategoriaForm(request.POST)
+
+        if cform.is_valid():
+            # Guardar el formulario y obtener la instancia del modelo guardado
+            instance = cform.save()
+            print(f"Formulario guardado: {instance}")
+            return redirect('productos')  # redireccionar a la misma vista
+        else:
+            print(cform.errors)  # Imprimir los errores del formulario
+
     return render(request, 'core/productos.html', datos)
 
 def eliminar_producto(request, producto_id):
@@ -143,7 +156,7 @@ def editar_producto(request, producto_id):
         nueva_descripcion = request.POST.get('nueva_descripcion')
         nuevo_stock = request.POST.get('nuevo_stock')
         nuevo_precio = request.POST.get('nuevo_precio')
-        nuevo_categoria = request.POST.get('nuevo_categoria')
+        nuevo_categoria_id = request.POST.get('nuevo_categoria')
 
         # Obtener la nueva imagen del formulario
         nueva_imagen = request.FILES.get('nueva_imagen')
@@ -154,7 +167,10 @@ def editar_producto(request, producto_id):
         producto.descripcion = nueva_descripcion
         producto.stock = nuevo_stock
         producto.precio = nuevo_precio
-        producto.categoria = nuevo_categoria
+
+        # Obtener la nueva categoría y asignarla al producto
+        nueva_categoria = Categoria.objects.get(id=nuevo_categoria_id)
+        producto.categoria = nueva_categoria
 
         # Verificar si se proporcionó una nueva imagen
         if nueva_imagen:
@@ -168,6 +184,43 @@ def editar_producto(request, producto_id):
         return redirect('productos')
 
     return render(request, 'productos.html', {'producto': producto})
+
+
+def editar_categoria(request, categoria_id):
+
+    categoria = get_object_or_404(Categoria, id=categoria_id)
+
+    if request.method == 'POST':
+        # Obtener los nuevos datos del producto del formulario
+        
+        nuevo_nombre = request.POST.get('nuevo_nombre')
+        
+
+        # Actualizar los campos del producto con los nuevos datos
+        
+        categoria.nombre = nuevo_nombre
+       
+        categoria.save()
+
+        # Redirigir a la vista deseada después de la edición
+        return redirect('productos')
+
+    return render(request, 'productos.html', {'categoria': categoria})
+
+def eliminar_categoria(request, categoria_id):
+    categoria = get_object_or_404(Categoria, id=categoria_id)
+
+    # Verificar si algún producto tiene asignada esta categoría
+    productos_con_categoria = Producto.objects.filter(categoria=categoria)
+    if productos_con_categoria.exists():
+        # Si hay productos con esta categoría, mostrar mensaje de alerta
+        messages.error(request, 'No se puede eliminar la categoría. Hay productos asociados a ella.')
+    else:
+        # Si no hay productos con esta categoría, proceder a eliminarla
+        categoria.delete()
+        messages.success(request, 'Categoría eliminada correctamente.')
+
+    return redirect('productos')
 
 def index(request):
     global dolar
@@ -204,25 +257,14 @@ def index(request):
 
     if dolar is None:
         valor_dolar()
-   
-    productos = Producto.objects.all()
-    productosCategoria1 = Producto.objects.filter(categoria=1)
-
-    productosCategoria2 = Producto.objects.filter(categoria=2)
+    categorias = Categoria.objects.all()
+    productos = Producto.objects.all()           
 
     for producto in productos:
         precioD = float(producto.precio)
         producto.precio_dolar = round(precioD / float(dolar), 2)
 
-    for producto in productosCategoria1:
-        precioD = float(producto.precio)
-        producto.precio_dolar = round(precioD / float(dolar), 2)
-
-    for producto in productosCategoria2:
-        precioD = float(producto.precio)
-        producto.precio_dolar = round(precioD / float(dolar), 2)            
-
-    return render(request, 'core/index.html', {'productos': productos, 'productosCategoria1':productosCategoria1,  'productosCategoria2':productosCategoria2, 'datos':datos})
+    return render(request, 'core/index.html', {'productos': productos, 'categoria':categorias, 'datos':datos})
 
 def bodeguero(request):
 
@@ -801,7 +843,8 @@ def resumen(request):
         'detalles_boleta': detalles_boleta,
         'productos': productos,
         'datosinv' :datosinv,
-        'datosregi' : datosregi
+        'datosregi' : datosregi,
+        'boleta' : ultimo_boleta
     }
 
     return render(request, 'core/resumen.html', data)

@@ -46,3 +46,9 @@
 #tblventas{
     width: 40%;
 }
+#tablas{
+    display: flex;
+    justify-content: space-around;
+
+    flex-direction: column;
+}

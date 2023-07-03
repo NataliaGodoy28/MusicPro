@@ -94,10 +94,16 @@
                 }
             </script>
         </div>
+        <div class="campo">
+            <h1>Total:{{ boleta.total }}</p>
 
-         <button id="trans">Ir a pagar</button>
-       
-         <div id="modaltrans" class="modal">
+            </h1>
+
+        </div>
+
+        <button id="trans">Ir a pagar</button>
+
+        <div id="modaltrans" class="modal">
             <div class="modal-content">
                 <span class="close" id="cmodaltrans">&times;</span>
                 <h1>Datos de Transferencia</h1>
@@ -107,7 +113,7 @@
                 <p>Nombre: William Alexander Menares Diaz</p>
                 <button id="comodal">Confirmo Transferencia</button>
             </div>
-        </div>    
+        </div>
         <form id="form_tarjeta" action="{% url 'transbank' %}" method="post">
             {% csrf_token %}
             <button>Ir a pagar</button>

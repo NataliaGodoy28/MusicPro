@@ -7,7 +7,7 @@ class ClienteForm(ModelForm):
     
     class Meta:
         model = Cliente
-        fields = ['nombreCliente','apellidoCliente','mailCliente','claveCliente']
+        fields = ['nombreCliente','apellidoCliente','mailCliente','claveCliente','direccion']
 
 class FRegistroEntrega(ModelForm):
     fecha = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'}))
@@ -30,3 +30,8 @@ class InvitadoForms(ModelForm):
     class Meta:
         model = Invitado
         fields = ['correo','direccion']
+
+class CategoriaForm(ModelForm):
+    class Meta:
+        model = Categoria
+        fields = ['nombre']
