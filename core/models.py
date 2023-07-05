@@ -25,7 +25,16 @@ class RegistroEntrega(models.Model):
     cliente = models.CharField(max_length=255)
 
 
+class Trabajador(models.Model):
+    id = models.AutoField(primary_key=True)
+    nombretr = models.CharField(max_length=50)
+    rut = models.CharField(max_length=50)
+    mail = models.CharField(max_length=60)
+    clave=models.CharField(max_length=20)
+    
 
+    def __str__ (self):
+        return self.rut
 
 class Categoria(models.Model):
     id = models.AutoField(primary_key=True)

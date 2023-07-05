@@ -3,6 +3,7 @@ from .models import *
 from .forms import *
 from django.shortcuts import get_object_or_404
 from django.contrib import messages
+from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.core.files.storage import default_storage
 from django.views.decorators.csrf import csrf_exempt
@@ -112,18 +113,20 @@ def productos(request):
     datos = {
         'ventas' : Boleta.objects.all(),
         'rventas': Boleta.objects.filter(est_pago__in=['Aceptado', 'AUTHORIZED']).annotate(month=TruncMonth('fecha')).values('month').annotate(total=Sum('total')),
-        'pformu': ProductoForms(),
+        'pform': ProductoForms(),
         'productos': Producto.objects.all(),
-        'cformu' : CategoriaForm(),
-        'categoria' : Categoria.objects.all()
+        'cform' : CategoriaForm(),
+        'categoria' : Categoria.objects.all(),
+        'tform': RegistroTrabajador(),
+        'trabajadores' : Trabajador.objects.all()
     }
     if request.method == "POST":
         pform = ProductoForms(request.POST, request.FILES)
 
         if pform.is_valid():
             # Guardar el formulario y obtener la instancia del modelo guardado
-            instance = pform.save()
-            print(f"Formulario guardado: {instance}")
+            instance1 = pform.save()
+            print(f"Formulario guardado: {instance1}")
             return redirect('productos')  # redireccionar a la misma vista
         else:
             print(pform.errors)  # Imprimir los errores del formulario
@@ -132,12 +135,22 @@ def productos(request):
 
         if cform.is_valid():
             # Guardar el formulario y obtener la instancia del modelo guardado
-            instance = cform.save()
-            print(f"Formulario guardado: {instance}")
+            instance2 = cform.save()
+            print(f"Formulario guardado: {instance2}")
             return redirect('productos')  # redireccionar a la misma vista
         else:
             print(cform.errors)  # Imprimir los errores del formulario
+        
+        tform = RegistroTrabajador(request.POST)
 
+        if tform.is_valid():
+            instance3 = tform.save()
+            print(f"Formulario RegistroTrabajador guardado: {instance3}")
+            return redirect('productos')
+        else:
+            print(tform.errors)
+
+            
     return render(request, 'core/productos.html', datos)
 
 def eliminar_producto(request, producto_id):
@@ -858,5 +871,60 @@ def transferencia(request):
 
     return redirect('index')
 
-    
-    
+
+def iniciar_sesion(request):
+    print(f"{request.POST.getlist('tags')}")
+    datos = {
+        'form': LoginTrabajador()
+    }
+
+    if request.method == "POST":
+        login = LoginTrabajador(request.POST)
+        if login.is_valid():
+            print("sdxdssxaxadadxad")
+            usuario = Trabajador.objects.filter(
+                rut__contains=login.cleaned_data["rut"])
+            contra = Trabajador.objects.filter(
+                clave__contains=login.cleaned_data["clave"])
+            print(usuario)
+            print(contra)
+            if usuario.exists() and contra.exists():
+                # Almacena el ID del usuario en la sesión
+                request.session['usuario'] = usuario.first().nombretr
+                return redirect(to='contador')
+
+    return render(request, 'core/login.html', datos)
+
+
+def editartrabajador(request, tr_id):
+
+    trabajador = get_object_or_404(Trabajador, id=tr_id)
+
+    if request.method == 'POST':
+        # Obtener los nuevos datos del producto del formulario
+        
+        nuevo_nombre = request.POST.get('nuevo_nombretr')
+        nuevo_mail = request.POST.get('nuevo_mail')
+        nuevo_rut = request.POST.get('nuevo_rut')
+        nuevo_clave = request.POST.get('nuevo_clave')
+
+        # Actualizar los campos del producto con los nuevos datos
+        
+        trabajador.nombretr = nuevo_nombre
+        trabajador.mail = nuevo_mail
+        trabajador.rut = nuevo_rut
+        trabajador.clave = nuevo_clave
+       
+        trabajador.save()
+
+        # Redirigir a la vista deseada después de la edición
+        return redirect('productos')
+
+    return render(request, 'productos.html', {'trabajadores': trabajador})
+
+def eliminartrabajador(request, tr_id):
+    trabajador = get_object_or_404(Trabajador, id=tr_id)
+    trabajador.delete()
+    messages.success(request, 'Trabajador eliminada correctamente.')
+
+    return redirect('productos')

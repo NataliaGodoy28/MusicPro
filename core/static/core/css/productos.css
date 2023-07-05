@@ -52,3 +52,8 @@
 
     flex-direction: column;
 }
+#todotra{
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+}

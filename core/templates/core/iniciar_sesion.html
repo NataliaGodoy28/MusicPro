@@ -1,0 +1,29 @@
+{% extends 'core/plantillaGlobal.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block contenido %}
+
+<link rel="stylesheet" href="../../static/core/css/login.css">
+
+<div class="container" id="log" >
+    
+<div class="formulario" >
+    <div class="card">
+        <div class="card-body">
+            <div>
+                <img src=" {% static '#' %} " alt="">
+            </div>
+            
+            <form action="" method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <br>
+                <button type="submit"   class="btn btn-danger">Enviar</button>
+            </form>
+           
+        </div>
+    </div>
+</div>
+</div>
+
+{% endblock %}

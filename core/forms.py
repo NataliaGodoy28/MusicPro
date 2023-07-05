@@ -35,3 +35,15 @@ class CategoriaForm(ModelForm):
     class Meta:
         model = Categoria
         fields = ['nombre']
+
+class RegistroTrabajador(ModelForm):
+    clave = forms.CharField(widget=forms.PasswordInput())
+    class Meta:
+        model = Trabajador
+        fields = ['nombretr','rut','mail','clave']
+
+class LoginTrabajador(ModelForm):
+    clave = forms.CharField(widget=forms.PasswordInput());
+    class Meta:
+        model = Trabajador
+        fields = ['rut', 'clave']
